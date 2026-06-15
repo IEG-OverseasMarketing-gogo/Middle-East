@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IEG × ALAT — 12-Month Market Entry Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #D6EEFF;
+    --surface:   #EAF5FF;
+    --glass:     rgba(255,255,255,0.55);
+    --border:    rgba(30,100,180,0.15);
+    --blue-hi:   #1566C0;
+    --blue-mid:  #1F6FD4;
+    --gold:      #A0700A;
+    --gold-lt:   #7A5200;
+    --silver:    #2C4A6A;
+    --text:      #0D2A45;
+    --muted:     #4A6E90;
+    --white:     #0A1E33;
+
+    /* Phase accent colors */
+    --p1: #1566C0;
+    --p2: #007A65;
+    --p3: #8A5C00;
+    --p4: #C0392B;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── WAFER GRID BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(100,180,255,0.18) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(180,220,255,0.15) 0%, transparent 50%),
+      repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(30,100,200,0.05) 59px, rgba(30,100,200,0.05) 60px),
+      repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(30,100,200,0.05) 59px, rgba(30,100,200,0.05) 60px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  main { position: relative; z-index: 1; }
+
+  /* ── HEADER ── */
+  header {
+    padding: 72px 48px 56px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 32px; height: 1px;
+    background: var(--gold);
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--gold-lt);
+    position: relative;
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 36px;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta-value {
+    font-size: 14px;
+    color: var(--silver);
+    font-weight: 500;
+  }
+
+  /* ── STRATEGY STRIP ── */
+  .strategy-strip {
+    max-width: 1100px;
+    margin: 48px auto;
+    padding: 0 48px;
+  }
+
+  .strategy-card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 8px;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .strategy-icon {
+    font-size: 28px;
+    line-height: 1;
+    padding-top: 4px;
+  }
+
+  .strategy-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gold-lt);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .strategy-card p {
+    font-size: 13.5px;
+    color: var(--silver);
+    line-height: 1.65;
+  }
+
+  .strategy-card strong { color: var(--white); }
+
+  /* ── PHASE LEGEND ── */
+  .legend {
+    max-width: 1100px;
+    margin: 0 auto 16px;
+    padding: 0 48px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── TIMELINE WRAPPER ── */
+  .timeline-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px 80px;
+  }
+
+  /* ── PHASE SECTION ── */
+  .phase {
+    margin-bottom: 4px;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 0;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .phase-bar {
+    width: 6px;
+    border-radius: 4px 0 0 4px;
+    flex-shrink: 0;
+  }
+
+  .phase-title-block {
+    flex: 1;
+    background: rgba(255,255,255,0.8);
+    border: 1px solid var(--border);
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    transition: background 0.2s;
+  }
+
+  .phase-title-block:hover { background: rgba(255,255,255,0.95); }
+
+  .phase-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .phase-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .phase-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .phase-period {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .phase-tag {
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  .phase-chevron {
+    color: var(--muted);
+    font-size: 14px;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  /* Phase content */
+  .phase-content {
+    display: none;
+    border-left: 6px solid transparent;
+    border-radius: 0 0 8px 8px;
+    margin-bottom: 12px;
+  }
+
+  .phase-content.open { display: block; }
+
+  .phase-inner {
+    background: rgba(255,255,255,0.4);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+  }
+
+  /* Months grid inside phase */
+  .months-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .month-card {
+    background: rgba(255,255,255,0.75);
+    padding: 24px;
+    position: relative;
+  }
+
+  .month-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .month-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .deliverables {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .deliverables li {
+    font-size: 12.5px;
+    color: var(--silver);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .deliverables li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    font-size: 10px;
+    line-height: 1.9;
+  }
+
+  /* Outcome bar */
+  .phase-outcome {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.6);
+  }
+
+  .outcome-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .outcome-text {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* Revenue badge */
+  .rev-badge {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ── CONNECTOR ARROWS between phases ── */
+  .phase-connector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0 8px 60px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  .connector-line {
+    width: 2px;
+    height: 28px;
+    background: linear-gradient(to bottom, var(--border), transparent);
+    margin-left: 2px;
+  }
+
+  /* ── SUMMARY TABLE ── */
+  .summary-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px 80px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(100,160,255,0.06);
+    transition: background 0.15s;
+  }
+
+  tbody tr:hover { background: rgba(255,255,255,0.6); }
+
+  tbody td {
+    padding: 14px 16px;
+    color: var(--silver);
+    vertical-align: top;
+  }
+
+  tbody td:first-child {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  tbody td.highlight {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  .dot-p1 { color: var(--p1); }
+  .dot-p2 { color: var(--p2); }
+  .dot-p3 { color: var(--p3); }
+  .dot-p4 { color: var(--p4); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.01em;
+  }
+
+  /* ── PROGRESS BAR (decorative) ── */
+  .progress-wrap {
+    max-width: 1100px;
+    margin: 0 auto 40px;
+    padding: 0 48px;
+  }
+
+  .progress-bar-outer {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .progress-segments {
+    display: flex;
+    height: 100%;
+  }
+
+  .seg {
+    height: 100%;
+    flex-shrink: 0;
+  }
+
+  .progress-labels {
+    display: flex;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  .progress-labels span { flex: 1; }
+  .progress-labels span:not(:first-child) { text-align: center; }
+  .progress-labels span:last-child { text-align: right; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    header, .strategy-strip, .legend, .timeline-wrap, .summary-section, footer { padding-left: 20px; padding-right: 20px; }
+    .months-grid { grid-template-columns: 1fr; }
+    .header-meta { gap: 24px; }
+    .phase-connector { padding-left: 20px; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+<!-- HEADER -->
+<header>
+  <div class="eyebrow">IEG Co., Ltd. × ALAT Saudi Arabia &mdash; Semiconductor TVET Partnership</div>
+  <h1>12-Month <em>Foot-in-the-Door</em><br>Market Entry Roadmap</h1>
+  <p style="color:var(--silver); max-width:620px; font-size:14px;">
+    A sequenced entry strategy where <strong style="color:var(--white)">Track ③ (Digital Walkthrough Content) + ⑤ (Curriculum Localization)</strong> generate first revenue and trust within 12 months — while laying the foundation for the main play: <strong style="color:var(--gold-lt)">Track ① Model C Cleanroom Package</strong>.
+  </p>
+  <div class="header-meta">
+    <div class="meta-item">
+      <span class="meta-label">Lead Organisation</span>
+      <span class="meta-value">IEG Co., Ltd. (주식회사 아이지)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Target Partner</span>
+      <span class="meta-value">ALAT / TAFE SA (Saudi Arabia)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Roadmap Horizon</span>
+      <span class="meta-value">12 Months (4 Phases)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">End Goal</span>
+      <span class="meta-value">Model C Cleanroom Hardware Proposal</span>
+    </div>
+  </div>
+</header>
+
+<!-- STRATEGY CARD -->
+<div class="strategy-strip">
+  <div class="strategy-card">
+    <div class="strategy-icon">🎯</div>
+    <div>
+      <h3>Core Logic: "Layer-by-Layer" Entry</h3>
+      <p>
+        Like a semiconductor deposition process, each phase adds a functional layer before the next begins.
+        <strong>Tracks ③ + ⑤ are not preliminaries — they are revenue-generating deliverables in their own right</strong>, producing a Digital Walkthrough and a TTT Pilot that TAFE SA can immediately deploy.
+        The relationship, credibility, and pilot data these produce are the necessary substrate on which the
+        <strong>Track ① hardware proposal</strong> (Model C Cleanroom Package, targeting ALAT Phase 2–3 budget cycles) is then deposited.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-wrap">
+  <div class="progress-bar-outer">
+    <div class="progress-segments">
+      <div class="seg" style="background:var(--p1); width:16.6%;"></div>
+      <div class="seg" style="background:var(--p2); width:33.3%;"></div>
+      <div class="seg" style="background:var(--p3); width:33.3%;"></div>
+      <div class="seg" style="background:var(--p4); width:16.6%;"></div>
+    </div>
+  </div>
+  <div class="progress-labels">
+    <span>M1</span><span>M3</span><span>M6</span><span>M9</span><span>M12</span>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--p1)"></div> Phase 1 · Foundation (M1–2)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--p2)"></div> Phase 2 · Proposal (M3–5)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--p3)"></div> Phase 3 · Pilot Execution (M6–9)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--p4)"></div> Phase 4 · Hardware Pivot (M10–12)</div>
+</div>
+
+<!-- TIMELINE -->
+<div class="timeline-wrap">
+
+  <!-- ── PHASE 1 ── -->
+  <div class="phase">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-bar" style="background:var(--p1)"></div>
+      <div class="phase-title-block">
+        <div class="phase-left">
+          <span class="phase-num">01 / 04</span>
+          <div>
+            <div class="phase-name">Foundation &amp; Content Production</div>
+            <div class="phase-period">Month 1 – 2</div>
+          </div>
+        </div>
+        <span class="phase-tag" style="background:rgba(75,158,255,0.12); color:var(--p1); border:1px solid rgba(75,158,255,0.25)">Track ③ + ⑤</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-content open">
+      <div class="phase-inner">
+        <div class="months-grid">
+          <div class="month-card">
+            <div class="month-label">Month 1 — Curriculum Localization</div>
+            <h4>Meister High → English BTEC Mapping</h4>
+            <ul class="deliverables">
+              <li>Select 2–3 flagship IEG Meister-school curriculum units (PLC, Smart Factory, Pneumatics)</li>
+              <li>Translate learning objectives, NCS competency codes → English</li>
+              <li>Produce BTEC Unit 4039 / 4040 mapping table (NCS ↔ BTEC ↔ NQF Level 3–4)</li>
+              <li>Identify gaps requiring new assessment evidence for TAFE SA recognition</li>
+            </ul>
+          </div>
+          <div class="month-card">
+            <div class="month-label">Month 2 — Digital Content Prototype</div>
+            <h4>Semiconductor 8-Process Digital Walkthrough (VR/XR Concept)</h4>
+            <ul class="deliverables">
+              <li>Define 8 process stations: Wafer Prep → Oxidation → Photolithography → Etching → Doping → CVD → Metallisation → Testing</li>
+              <li>Script interactive narration for each station (EN/AR bilingual placeholders)</li>
+              <li>Produce 1 high-fidelity XR storyboard + UI wireframe per station (Unity-ready brief)</li>
+              <li>Package as "Digital Walkthrough Concept Deck" for TAFE SA review</li>
+            </ul>
+          </div>
+        </div>
+        <div class="phase-outcome">
+          <span class="outcome-label">Phase Output</span>
+          <span class="outcome-text">BTEC Mapping Table (PDF) + Digital Walkthrough Concept Deck (PDF/HTML) — ready for TAFE SA first presentation</span>
+          <span class="rev-badge" style="background:rgba(75,158,255,0.1); color:var(--p1); border:1px solid rgba(75,158,255,0.2)">No Revenue Yet — Relationship Asset</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-connector">
+    <div class="connector-line"></div>
+    Content package shipped to TAFE SA &rarr; proposal window opens
+  </div>
+
+  <!-- ── PHASE 2 ── -->
+  <div class="phase">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-bar" style="background:var(--p2)"></div>
+      <div class="phase-title-block">
+        <div class="phase-left">
+          <span class="phase-num">02 / 04</span>
+          <div>
+            <div class="phase-name">Model C Concept Book &amp; TTT Pilot Proposal</div>
+            <div class="phase-period">Month 3 – 5</div>
+          </div>
+        </div>
+        <span class="phase-tag" style="background:rgba(0,197,163,0.12); color:var(--p2); border:1px solid rgba(0,197,163,0.25)">Track ③ + ⑤ → TAFE SA</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-content open">
+      <div class="phase-inner">
+        <div class="months-grid">
+          <div class="month-card">
+            <div class="month-label">Month 3 — Document Delivery</div>
+            <h4>"Model C Concept Book" Submission to TAFE SA</h4>
+            <ul class="deliverables">
+              <li>Formal submission of Model C Cleanroom concept: layout, equipment list, learning pathway</li>
+              <li>Position as <em>vision document</em> (no pricing yet) — trigger TAFE SA internal review</li>
+              <li>Include BTEC mapping table as Annex A showing curriculum alignment readiness</li>
+              <li>Attach Digital Walkthrough Concept Deck as Annex B (XR learning environment preview)</li>
+            </ul>
+          </div>
+          <div class="month-card">
+            <div class="month-label">Month 4 — TTT Proposal</div>
+            <h4>Train-the-Trainer Pilot Proposal (5–10 Instructors)</h4>
+            <ul class="deliverables">
+              <li>Draft "Korea Technology Tour" format: 5–10 TAFE SA / ALAT instructors visit IEG HQ + Polytech Korea</li>
+              <li>Propose 5–7 day itinerary: IEG Showroom, Korea Polytechnic campus, KRIVET briefing</li>
+              <li>Define TTT curriculum scope: PLC/smart factory hands-on + XR demo session</li>
+              <li>Include fee structure (per-person training fee + accommodation/logistics estimate)</li>
+            </ul>
+          </div>
+          <div class="month-card">
+            <div class="month-label">Month 5 — Negotiation &amp; Schedule Lock</div>
+            <h4>Itinerary Confirmation &amp; MOU Drafting</h4>
+            <ul class="deliverables">
+              <li>Receive TAFE SA feedback on Model C Concept Book; incorporate revision requests</li>
+              <li>Finalize TTT dates and participant list (target: 5–10 instructors, Q3 window)</li>
+              <li>Draft bilateral MOU or Letter of Intent: IEG ↔ TAFE SA / ALAT</li>
+              <li>Confirm IEG Showroom readiness + Korea Polytechnic coordination (Siheung / Incheon campus)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="phase-outcome">
+          <span class="outcome-label">Phase Output</span>
+          <span class="outcome-text">Signed TTT schedule + LOI / MOU with TAFE SA — first committed revenue event confirmed</span>
+          <span class="rev-badge" style="background:rgba(0,197,163,0.1); color:var(--p2); border:1px solid rgba(0,197,163,0.2)">Revenue Pipeline: Training Fee</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-connector">
+    <div class="connector-line"></div>
+    LOI signed &rarr; TTT pilot preparation begins
+  </div>
+
+  <!-- ── PHASE 3 ── -->
+  <div class="phase">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-bar" style="background:var(--p3)"></div>
+      <div class="phase-title-block">
+        <div class="phase-left">
+          <span class="phase-num">03 / 04</span>
+          <div>
+            <div class="phase-name">TTT Pilot Execution — First Revenue</div>
+            <div class="phase-period">Month 6 – 9</div>
+          </div>
+        </div>
+        <span class="phase-tag" style="background:rgba(201,168,76,0.12); color:var(--gold-lt); border:1px solid rgba(201,168,76,0.25)">First Revenue Event 💰</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-content open">
+      <div class="phase-inner">
+        <div class="months-grid">
+          <div class="month-card">
+            <div class="month-label">Month 6 — Preparation</div>
+            <h4>IEG Showroom &amp; Korea Polytechnic Readiness</h4>
+            <ul class="deliverables">
+              <li>Prepare IEG HQ Showroom: live demo stations (PLC, MPS, Pneumatics, XR Digital Twin)</li>
+              <li>Coordinate Korea Polytechnic guest-instructor day (lecture + lab access)</li>
+              <li>Finalize bilingual (EN/AR) TTT workbook and competency assessment rubrics</li>
+              <li>Arrange logistics: TAFE SA instructor visas, accommodation (Pangyo/Seongnam area), airport pickup</li>
+            </ul>
+          </div>
+          <div class="month-card">
+            <div class="month-label">Month 7 — TTT Pilot Week</div>
+            <h4>Korea Technology Tour Execution</h4>
+            <ul class="deliverables">
+              <li><strong>Day 1–2:</strong> IEG HQ — product briefing, PLC/MPS hands-on, XR walkthrough demo</li>
+              <li><strong>Day 3:</strong> Korea Polytechnic campus — curriculum structure, Korean TVET system briefing</li>
+              <li><strong>Day 4:</strong> Smart factory site visit (optional: Samsung/LG partner facility)</li>
+              <li><strong>Day 5:</strong> Co-design workshop — TAFE SA course adaptation + certificate of completion</li>
+            </ul>
+          </div>
+          <div class="month-card">
+            <div class="month-label">Month 8–9 — Follow-up</div>
+            <h4>Pilot Evaluation &amp; Relationship Deepening</h4>
+            <ul class="deliverables">
+              <li>Collect participant feedback (competency confidence pre/post scores)</li>
+              <li>Produce TTT Pilot Report: outcomes, curriculum adaptation notes, equipment performance log</li>
+              <li>Initiate Digital Showcase production: video testimonials, demo clips, infographic outcomes</li>
+              <li>First formal discussion: "What would a permanent TVET Centre require?" (hardware needs scoping)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="phase-outcome">
+          <span class="outcome-label">Phase Output</span>
+          <span class="outcome-text">TTT Pilot Report + Digital Showcase Package + informal hardware needs assessment from TAFE SA</span>
+          <span class="rev-badge" style="background:rgba(201,168,76,0.15); color:var(--gold-lt); border:1px solid rgba(201,168,76,0.3)">★ First Revenue: Training Fees Received</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-connector">
+    <div class="connector-line"></div>
+    Pilot data + trust in hand &rarr; hardware proposal activated
+  </div>
+
+  <!-- ── PHASE 4 ── -->
+  <div class="phase">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-bar" style="background:var(--p4)"></div>
+      <div class="phase-title-block">
+        <div class="phase-left">
+          <span class="phase-num">04 / 04</span>
+          <div>
+            <div class="phase-name">Hardware Proposal — The Main Game</div>
+            <div class="phase-period">Month 10 – 12</div>
+          </div>
+        </div>
+        <span class="phase-tag" style="background:rgba(224,94,74,0.12); color:var(--p4); border:1px solid rgba(224,94,74,0.25)">Track ① · Model C Cleanroom</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-content open">
+      <div class="phase-inner">
+        <div class="months-grid">
+          <div class="month-card">
+            <div class="month-label">Month 10 — Package Assembly</div>
+            <h4>Pilot Results → Hardware Proposal Backbone</h4>
+            <ul class="deliverables">
+              <li>Bundle TTT Pilot Report + Digital Showcase into "Proof of Concept" evidence package</li>
+              <li>Use hardware needs assessment from Phase 3 to scope Model C Cleanroom Package (equipment list, layout, specs)</li>
+              <li>Develop ROI model: training throughput × ALAT workforce targets × equipment lifespan</li>
+              <li>Align proposal with ALAT Phase 2–3 procurement budget cycle (confirm window with TAFE SA contact)</li>
+            </ul>
+          </div>
+          <div class="month-card">
+            <div class="month-label">Month 11 — Proposal Submission</div>
+            <h4>Model C Cleanroom Package — Formal Bid</h4>
+            <ul class="deliverables">
+              <li>Submit full hardware proposal: Model C Cleanroom Package with BTEC-aligned curriculum bundle</li>
+              <li>Include financing pathway options (EDCF, Saudi-Korea bilateral fund, direct commercial)</li>
+              <li>Present as "turnkey TVET solution" (hardware + curriculum + TTT support + XR digital twin)</li>
+              <li>Request formal evaluation meeting with ALAT / TAFE SA procurement team</li>
+            </ul>
+          </div>
+          <div class="month-card">
+            <div class="month-label">Month 12 — Negotiation &amp; Pipeline Lock</div>
+            <h4>Bid Defence &amp; Phase 2 Pipeline Confirmation</h4>
+            <ul class="deliverables">
+              <li>Respond to technical/commercial queries from ALAT evaluation committee</li>
+              <li>Confirm intent to proceed (LOI or contract) for hardware Phase 1 delivery</li>
+              <li>Identify Scale-up pathway: additional Cleanroom units for other ALAT sites</li>
+              <li>Establish recurring revenue stream: annual curriculum update + XR content licensing</li>
+            </ul>
+          </div>
+        </div>
+        <div class="phase-outcome">
+          <span class="outcome-label">Phase Output</span>
+          <span class="outcome-text">Model C Cleanroom Package LOI / contract signed — hardware deal pipeline confirmed for Year 2</span>
+          <span class="rev-badge" style="background:rgba(224,94,74,0.12); color:var(--p4); border:1px solid rgba(224,94,74,0.25)">★★ Main Revenue: Hardware Contract</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SUMMARY TABLE -->
+<div class="summary-section">
+  <h2 class="section-title">12-Month Milestone Summary</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th>Phase</th>
+        <th>Key Deliverable</th>
+        <th>Track</th>
+        <th>Revenue Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>M1</td>
+        <td class="highlight dot-p1">■ Foundation</td>
+        <td>Meister High curriculum EN translation + BTEC 4039/4040 mapping table</td>
+        <td>⑤ Curriculum</td>
+        <td style="color:var(--muted)">—</td>
+      </tr>
+      <tr>
+        <td>M2</td>
+        <td class="highlight dot-p1">■ Foundation</td>
+        <td>8-Process Digital Walkthrough concept deck (VR/XR storyboard)</td>
+        <td>③ Digital Content</td>
+        <td style="color:var(--muted)">—</td>
+      </tr>
+      <tr>
+        <td>M3</td>
+        <td class="highlight dot-p2">■ Proposal</td>
+        <td>Model C Concept Book submitted to TAFE SA</td>
+        <td>① + ③</td>
+        <td style="color:var(--muted)">—</td>
+      </tr>
+      <tr>
+        <td>M4</td>
+        <td class="highlight dot-p2">■ Proposal</td>
+        <td>TTT Pilot Proposal (Korea Technology Tour, 5–10 instructors)</td>
+        <td>⑤ TTT</td>
+        <td style="color:var(--p2)">Pipeline confirmed</td>
+      </tr>
+      <tr>
+        <td>M5</td>
+        <td class="highlight dot-p2">■ Proposal</td>
+        <td>LOI / MOU signed, TTT dates locked, participant list confirmed</td>
+        <td>⑤ TTT</td>
+        <td style="color:var(--p2)">Contract signed</td>
+      </tr>
+      <tr>
+        <td>M6</td>
+        <td class="highlight dot-p3">■ Pilot</td>
+        <td>IEG Showroom + Korea Polytechnic readiness; logistics finalised</td>
+        <td>⑤ TTT</td>
+        <td style="color:var(--muted)">Prep</td>
+      </tr>
+      <tr>
+        <td>M7</td>
+        <td class="highlight dot-p3">■ Pilot</td>
+        <td><strong style="color:var(--gold-lt)">★ Korea Technology Tour executed — training fees received</strong></td>
+        <td>⑤ TTT</td>
+        <td style="color:var(--gold-lt)">★ First Revenue</td>
+      </tr>
+      <tr>
+        <td>M8–9</td>
+        <td class="highlight dot-p3">■ Pilot</td>
+        <td>TTT Pilot Report + Digital Showcase + hardware needs assessment</td>
+        <td>③ + ①</td>
+        <td style="color:var(--p2)">Revenue received</td>
+      </tr>
+      <tr>
+        <td>M10</td>
+        <td class="highlight dot-p4">■ Hardware</td>
+        <td>Pilot evidence packaged; Model C Cleanroom spec scoped; ROI model built</td>
+        <td>① Cleanroom</td>
+        <td style="color:var(--muted)">Proposal prep</td>
+      </tr>
+      <tr>
+        <td>M11</td>
+        <td class="highlight dot-p4">■ Hardware</td>
+        <td>Model C Cleanroom Package — formal bid submitted to ALAT</td>
+        <td>① Cleanroom</td>
+        <td style="color:var(--muted)">Under evaluation</td>
+      </tr>
+      <tr>
+        <td>M12</td>
+        <td class="highlight dot-p4">■ Hardware</td>
+        <td><strong style="color:var(--p4)">★★ Model C LOI / contract signed — hardware pipeline locked</strong></td>
+        <td>① Cleanroom</td>
+        <td style="color:var(--p4)">★★ Main Contract</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <p>IEG Co., Ltd. — Overseas Marketing / Global Business Development</p>
+    <p style="margin-top:4px;">7, Sunhwan-ro 198beon-gil, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea</p>
+  </div>
+  <div class="footer-logo">IEG × ALAT</div>
+</footer>
+
+</main>
+
+<script>
+function togglePhase(headerEl) {
+  const phase = headerEl.parentElement;
+  const content = phase.querySelector('.phase-content');
+  const chevron = headerEl.querySelector('.phase-chevron');
+  const isOpen = content.classList.contains('open');
+  content.classList.toggle('open', !isOpen);
+  chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
+// Initialize chevrons for already-open phases
+document.querySelectorAll('.phase-content.open').forEach(c => {
+  const chevron = c.closest('.phase').querySelector('.phase-chevron');
+  if (chevron) chevron.style.transform = 'rotate(180deg)';
+});
+</script>
+</body>
+</html>
