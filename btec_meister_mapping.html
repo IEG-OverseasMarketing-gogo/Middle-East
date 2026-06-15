@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTEC Unit 36 × IEG Meister High — Back-End Semiconductor Curriculum Mapping</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #E8F4FD;
+  --surface:  #F5FBFF;
+  --white:    #FFFFFF;
+  --border:   rgba(20,90,170,0.13);
+  --text:     #0C2340;
+  --muted:    #3A6080;
+  --faint:    #6B90AA;
+
+  --btec:     #1455A8;
+  --btec-lt:  #E0ECFB;
+  --meister:  #0A7A55;
+  --meister-lt:#DCF2EA;
+  --eq:       #7A4A00;
+  --eq-lt:    #FEF3DC;
+  --gap:      #A0200A;
+  --gap-lt:   #FDEAE7;
+
+  --a: #1455A8;
+  --b: #0B7EA0;
+  --c: #0A7A55;
+  --d: #6B3DAA;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── PAGE GRID ── */
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px 80px;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 56px 0 40px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 40px;
+}
+
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--btec);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: '';
+  width: 28px; height: 1px;
+  background: var(--btec);
+  display: inline-block;
+}
+
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(24px, 4vw, 42px);
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+h1 span { color: var(--btec); }
+
+.subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 700px;
+  line-height: 1.65;
+}
+
+.meta-row {
+  display: flex;
+  gap: 32px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.meta-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 14px;
+}
+
+.meta-chip strong { color: var(--text); }
+
+/* ── LEGEND ── */
+.legend {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+  padding: 18px 20px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.legend-pill {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.05em;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ── SCOPE BANNER ── */
+.scope-banner {
+  background: linear-gradient(135deg, #0A7A55 0%, #0B7EA0 100%);
+  border-radius: 10px;
+  padding: 20px 28px;
+  margin-bottom: 36px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.scope-banner .icon { font-size: 24px; flex-shrink: 0; padding-top: 2px; }
+.scope-banner p { color: rgba(255,255,255,0.92); font-size: 13.5px; line-height: 1.65; }
+.scope-banner strong { color: #fff; }
+
+/* ── SECTION HEADING ── */
+.section-head {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 44px 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.aim-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+}
+
+/* ── TABLE ── */
+.map-table-wrap {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background: var(--white);
+}
+
+thead th {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 12px 16px;
+  text-align: left;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(20,90,170,0.06);
+  transition: background 0.12s;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #F0F8FF; }
+
+tbody td {
+  padding: 13px 16px;
+  vertical-align: top;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+td.sub-code {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  width: 80px;
+}
+
+td.btec-content {
+  width: 22%;
+  font-size: 12.5px;
+}
+
+td.meister-subject {
+  width: 20%;
+  font-weight: 500;
+}
+
+td.meister-equipment {
+  width: 20%;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+td.alignment { width: 14%; }
+
+td.gap-col { width: 18%; font-size: 12.5px; }
+
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-right: 4px;
+  margin-bottom: 3px;
+  letter-spacing: 0.04em;
+}
+
+.tag-strong { background: var(--meister-lt); color: var(--meister); }
+.tag-partial { background: var(--eq-lt); color: var(--eq); }
+.tag-gap    { background: var(--gap-lt); color: var(--gap); }
+.tag-btec   { background: var(--btec-lt); color: var(--btec); }
+
+/* alignment indicator */
+.align-bar {
+  height: 6px;
+  border-radius: 3px;
+  margin-bottom: 4px;
+}
+.align-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+/* ── SUMMARY MATRIX ── */
+.matrix-wrap {
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+.matrix-table {
+  border-collapse: collapse;
+  font-size: 12px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  min-width: 700px;
+}
+.matrix-table th, .matrix-table td {
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  text-align: center;
+}
+.matrix-table th {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--surface);
+  color: var(--muted);
+}
+.matrix-table td.row-label {
+  text-align: left;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface);
+  white-space: nowrap;
+  font-size: 12.5px;
+}
+.cell-full   { background: #DCF2EA; color: #0A7A55; font-weight: 700; font-family: 'DM Mono', monospace; font-size: 11px; }
+.cell-partial{ background: #FEF3DC; color: #7A4A00; font-weight: 600; font-family: 'DM Mono', monospace; font-size: 11px; }
+.cell-gap    { background: #FDEAE7; color: #A0200A; font-weight: 600; font-family: 'DM Mono', monospace; font-size: 11px; }
+.cell-na     { background: #F3F5F7; color: #AAB8C2; font-family: 'DM Mono', monospace; font-size: 11px; }
+
+/* ── RECOMMENDATIONS ── */
+.reco-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.reco-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+.reco-card h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.reco-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.reco-card li {
+  font-size: 12.5px;
+  color: var(--muted);
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.5;
+}
+.reco-card li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--btec);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 24px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+footer p {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--faint);
+}
+
+@media (max-width: 640px) {
+  .page { padding: 0 16px 60px; }
+  header { padding: 36px 0 28px; }
+  .meta-row { gap: 12px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<header>
+  <div class="eyebrow">Curriculum Alignment Document · IEG Co., Ltd.</div>
+  <h1>BTEC International Level 3 <span>Unit 36</span><br>× IEG Meister High Curriculum<br>Back-End Semiconductor Mapping</h1>
+  <p class="subtitle">
+    A detailed cross-reference between Pearson BTEC International L3 Engineering Unit 36 (Programmable Logic Controllers) Learning Aims A–D and the IEG Korea Semiconductor Meister High School curriculum — scoped specifically to <strong>back-end process and packaging operations</strong>, including Die Bonding, Molding, Sawing, Wire Bonding, and Post-Process Testing.
+  </p>
+  <div class="meta-row">
+    <div class="meta-chip"><strong>BTEC Qualification</strong> Pearson BTEC Int'l L3 Engineering</div>
+    <div class="meta-chip"><strong>Unit</strong> Unit 36: PLCs</div>
+    <div class="meta-chip"><strong>IEG Source</strong> Meister High Proposal (Apr 2025)</div>
+    <div class="meta-chip"><strong>Focus</strong> Back-End &amp; Packaging Process</div>
+    <div class="meta-chip"><strong>NQF Equivalence</strong> Level 3–4 (KSQ ↔ BTEC)</div>
+  </div>
+</header>
+
+<!-- SCOPE NOTE -->
+<div class="scope-banner">
+  <div class="icon">🔬</div>
+  <p>
+    <strong>Scope rationale:</strong> IEG's primary product strength and ALAT/TAFE SA's semiconductor TVET need centres on <strong>back-end process and cleanroom packaging</strong> (post-wafer-fab). This mapping therefore prioritises subjects from the IEG Meister High curriculum that directly relate to back-end operations — Die Bonding, Wire Bonding, Molding, Saw/Dicing, Package Testing, and related control/automation systems — and maps these to the BTEC Unit 36 framework where PLC-based control of these automated processes is the core learning vehicle.
+  </p>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><span class="legend-pill tag-strong">STRONG</span> Full alignment — content maps directly</div>
+  <div class="legend-item"><span class="legend-pill tag-partial">PARTIAL</span> Partial alignment — adaptation needed</div>
+  <div class="legend-item"><span class="legend-pill tag-gap">GAP</span> Content gap — new material required</div>
+  <div class="legend-item"><span class="legend-pill tag-btec">BTEC+</span> BTEC assessment requirement to add</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     LEARNING AIM A
+════════════════════════════════════════════ -->
+<div class="section-head">
+  <span class="aim-badge" style="background:#E0ECFB; color:#1455A8;">Aim A</span>
+  Investigate the Technology Used in Industrial PLC Systems
+  <span style="font-size:13px; font-weight:400; color:var(--muted); margin-left:auto;">A1 Features &amp; Functions · A2 Hardware · A3 Internal Operation</span>
+</div>
+
+<div class="map-table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th>BTEC Sub-Code</th>
+      <th>BTEC Content Requirement</th>
+      <th>Meister High Subject / Module</th>
+      <th>IEG Equipment / Lab</th>
+      <th>Alignment</th>
+      <th>Gap / Action Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="sub-code">A1</td>
+      <td class="btec-content">Features and functions of PLCs: scan cycle, I/O mapping, memory types, program execution</td>
+      <td class="meister-subject">자동화설비 (Automation Equipment) · 자동제어시스템 운영 (Auto-Control System Operation)</td>
+      <td class="meister-equipment">PLC/HMI Control Trainers; Relay &amp; Sequence Control Kits; IEG Smart Factory Testbed</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--meister); width:85%;"></div>
+        <span class="align-label tag-strong" style="font-size:10px; font-family:'DM Mono',monospace;">STRONG</span>
+      </td>
+      <td class="gap-col">PLC scan-cycle theory covered in Meister curriculum. <span class="tag tag-btec">BTEC+</span> Require formal written comparison of two industrial PLC types used in back-end lines (e.g. Die Bonder vs Mold Press controller).</td>
+    </tr>
+    <tr>
+      <td class="sub-code">A2</td>
+      <td class="btec-content">PLC hardware: CPU modules, I/O modules, power supplies, communication interfaces (Profibus, EtherCAT, DeviceNet)</td>
+      <td class="meister-subject">반도체장비 전장조립 (Equipment Electrical Assembly) · 장비부품도면 해석 (Equipment Drawing Interpretation)</td>
+      <td class="meister-equipment">Electrical Wiring Kits; PLC/Relay panels; IEG Die Bonder &amp; Molding Press PLC Interface</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--eq); width:60%;"></div>
+        <span class="align-label tag-partial" style="font-size:10px; font-family:'DM Mono',monospace;">PARTIAL</span>
+      </td>
+      <td class="gap-col">Meister covers wiring and I/O; fieldbus protocols (EtherCAT, Profinet) used in back-end automation lines are <span class="tag tag-gap">GAP</span>. Add module on industrial network protocols for Die Bonder / AOI integration.</td>
+    </tr>
+    <tr>
+      <td class="sub-code">A3</td>
+      <td class="btec-content">Internal operation of PLCs: memory maps, ladder logic interpretation, function blocks, data types</td>
+      <td class="meister-subject">프로그래밍 기초 / 심화 (Programming Basics / Advanced) · 디지털 논리회로 (Digital Logic Circuits)</td>
+      <td class="meister-equipment">PLC IDE Software (Mitsubishi GX Works / Siemens TIA Portal); Logic Gate Trainer</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--meister); width:80%;"></div>
+        <span class="align-label tag-strong" style="font-size:10px; font-family:'DM Mono',monospace;">STRONG</span>
+      </td>
+      <td class="gap-col">Strong coverage. <span class="tag tag-btec">BTEC+</span> Evidence requirement: annotated ladder diagram printout from an actual back-end equipment scenario (e.g. Saw/Dicing sequence logic).</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     LEARNING AIM B
+════════════════════════════════════════════ -->
+<div class="section-head">
+  <span class="aim-badge" style="background:#DCF0FA; color:#0B7EA0;">Aim B</span>
+  Explore Programming Structures and Methods to Control PLCs
+  <span style="font-size:13px; font-weight:400; color:var(--muted); margin-left:auto;">B1 IDE · B2 Programming Skills · B3 Test &amp; Debug</span>
+</div>
+
+<div class="map-table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th>BTEC Sub-Code</th>
+      <th>BTEC Content Requirement</th>
+      <th>Meister High Subject / Module</th>
+      <th>IEG Equipment / Lab</th>
+      <th>Alignment</th>
+      <th>Gap / Action Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="sub-code">B1</td>
+      <td class="btec-content">Use of Integrated Development Environment (IDE): project structure, online/offline modes, variable tables, force functions</td>
+      <td class="meister-subject">프로그래밍 심화 (Advanced Programming) · 장비 검증 실습 (Equipment Verification Practice)</td>
+      <td class="meister-equipment">Siemens TIA Portal / Mitsubishi GX Works on IEG Smart Factory Testbed; HMI Touch Panel</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--meister); width:90%;"></div>
+        <span class="align-label tag-strong" style="font-size:10px; font-family:'DM Mono',monospace;">STRONG</span>
+      </td>
+      <td class="gap-col">Meister High uses same IDEs. <span class="tag tag-btec">BTEC+</span> Require screenshots + program listings from IDE for back-end context scenario (e.g. molding press cycle). Add force-function and online monitoring evidence.</td>
+    </tr>
+    <tr>
+      <td class="sub-code">B2-a</td>
+      <td class="btec-content">Basic instructions: contacts, coils, timers (TON/TOF), counters (CTU/CTD), set/reset</td>
+      <td class="meister-subject">자동화설비 운영 (Automation Equipment Operation) · PLC/HMI 연동 실습</td>
+      <td class="meister-equipment">IEG PLC Trainer + Die Bonder Sequence Simulator; Conveyor I/O Control Kit</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--meister); width:95%;"></div>
+        <span class="align-label tag-strong" style="font-size:10px; font-family:'DM Mono',monospace;">STRONG</span>
+      </td>
+      <td class="gap-col">Directly taught. Context upgrade recommended: link timer/counter programs to real back-end scenarios — e.g. dwell time in molding press, strip count on saw machine.</td>
+    </tr>
+    <tr>
+      <td class="sub-code">B2-b</td>
+      <td class="btec-content">Intermediate programming: subroutines, data registers, analog I/O handling, HMI integration</td>
+      <td class="meister-subject">HMI + 센서제어 + 릴레이 통합 (HMI + Sensor Control Integration) · 자동화설비 구축</td>
+      <td class="meister-equipment">IEG HMI Smart Factory Line; Wire Bonder HMI Interface Demo; Die Attach Control Panel</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--eq); width:65%;"></div>
+        <span class="align-label tag-partial" style="font-size:10px; font-family:'DM Mono',monospace;">PARTIAL</span>
+      </td>
+      <td class="gap-col">HMI integration taught; analog I/O (e.g. temperature profile control for molding press, epoxy dispense volume) is a <span class="tag tag-gap">GAP</span>. Add: analog PID control module using mold press temperature as real-world application.</td>
+    </tr>
+    <tr>
+      <td class="sub-code">B2-c</td>
+      <td class="btec-content">Back-end specific PLC applications: automated pick-and-place sequencing, vision sensor integration, reject handling logic</td>
+      <td class="meister-subject">후공정 장비 실습 (Back-End Equipment Practice) · 후공정 검사장비 운용</td>
+      <td class="meister-equipment">Die Bonder; Wire Bonder; Molding System; AOI / Bond Tester; Saw/Dicing System (IEG Back-End Lab)</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--eq); width:55%;"></div>
+        <span class="align-label tag-partial" style="font-size:10px; font-family:'DM Mono',monospace;">PARTIAL</span>
+      </td>
+      <td class="gap-col">Equipment operation is covered; PLC ladder logic <em>for</em> these machines is <span class="tag tag-gap">GAP</span>. Develop: structured ladder-logic exercise set controlling a simplified Die Attach → Wire Bond → Mold sequence with reject divert logic.</td>
+    </tr>
+    <tr>
+      <td class="sub-code">B3</td>
+      <td class="btec-content">Test and debug: online monitoring, cross-reference, forcing I/O, fault injection scenarios</td>
+      <td class="meister-subject">장비 검증 실습 (Equipment Verification) · 유지보수 실습 (Maintenance Practice) — fault diagnosis scenarios</td>
+      <td class="meister-equipment">PLC Trainer with I/O Force Function; IEG Equipment Fault Simulator; Maintenance Certification Kit</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--meister); width:80%;"></div>
+        <span class="align-label tag-strong" style="font-size:10px; font-family:'DM Mono',monospace;">STRONG</span>
+      </td>
+      <td class="gap-col">Fault diagnosis practical well developed (유지보수 실습). <span class="tag tag-btec">BTEC+</span> Evidence needed: observation record / witness statement for test/debug session on a back-end machine PLC scenario.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     LEARNING AIM C
+════════════════════════════════════════════ -->
+<div class="section-head">
+  <span class="aim-badge" style="background:#DCF2EA; color:#0A7A55;">Aim C</span>
+  Develop an Industrial PLC System to Solve an Engineering Problem
+  <span style="font-size:13px; font-weight:400; color:var(--muted); margin-left:auto;">C1 Problem Definition · C2 Physical Design · C3 Software Tools · C4 Program Dev · C5 Testing</span>
+</div>
+
+<div class="map-table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th>BTEC Sub-Code</th>
+      <th>BTEC Content Requirement</th>
+      <th>Meister High Subject / Module</th>
+      <th>IEG Equipment / Lab</th>
+      <th>Alignment</th>
+      <th>Gap / Action Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="sub-code">C1</td>
+      <td class="btec-content">Problem definition: I/O list, hardware specification, safety considerations, engineering brief</td>
+      <td class="meister-subject">반도체 프로젝트 실습 (Semiconductor Project Practice) · 장비부품도면 설계 (Equipment Part Drawing Design)</td>
+      <td class="meister-equipment">Project Design Template; CAD/Inventor Workstation; IEG Back-End Line Layout Drawing Kit</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--meister); width:75%;"></div>
+        <span class="align-label tag-strong" style="font-size:10px; font-family:'DM Mono',monospace;">STRONG</span>
+      </td>
+      <td class="gap-col">Project proposal format exists in Meister curriculum. Localise to BTEC Project Proposal Form. <strong>Recommended scenario:</strong> "Design a PLC system to automate the reject-bin divert sequence on a dicing saw station." Includes I/O list, safety E-stop, sensor selection.</td>
+    </tr>
+    <tr>
+      <td class="sub-code">C2</td>
+      <td class="btec-content">Physical design and assembly: panel layout, cable routing, earthing, IP ratings for cleanroom environment</td>
+      <td class="meister-subject">반도체장비 전장조립 검증 (Electrical Assembly Verification) · 동력배관공사 / 전기배선공사</td>
+      <td class="meister-equipment">Electrical Panel Assembly Kit; IEG Cleanroom Equipment Wiring Rig; CDA/Exhaust Pipe Layout Demo</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--eq); width:70%;"></div>
+        <span class="align-label tag-partial" style="font-size:10px; font-family:'DM Mono',monospace;">PARTIAL</span>
+      </td>
+      <td class="gap-col">Electrical assembly well covered. <span class="tag tag-gap">GAP</span>: Cleanroom-specific requirements (ESD-safe wiring, particle-generating avoidance, stainless fittings for CDA/UPW) not explicitly in Meister syllabus. Add: "Cleanroom Panel Design Constraints" module — 1 session.</td>
+    </tr>
+    <tr>
+      <td class="sub-code">C3</td>
+      <td class="btec-content">Software design tools: flowcharts, pseudocode, state diagrams, SFC (Sequential Function Chart)</td>
+      <td class="meister-subject">6시그마 통계분석 / 빅데이터 분석; CAD 응용 (AutoCAD/Inventor) — process flow diagramming</td>
+      <td class="meister-equipment">AutoCAD / Inventor Workstation; PLC IDE SFC editor; IEG Process Flow Design Templates</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--eq); width:50%;"></div>
+        <span class="align-label tag-partial" style="font-size:10px; font-family:'DM Mono',monospace;">PARTIAL</span>
+      </td>
+      <td class="gap-col"><span class="tag tag-gap">GAP</span>: Meister covers CAD and data analysis but PLC-specific design tools (SFC, state diagrams, pseudocode for sequence control) are not formalised. Add: dedicated 2-session "PLC Software Design Methods" module using back-end process scenarios.</td>
+    </tr>
+    <tr>
+      <td class="sub-code">C4</td>
+      <td class="btec-content">Program development: iterative coding from design, version control, comment standards, structured text (ST) or ladder (LD)</td>
+      <td class="meister-subject">종합 프로젝트 (Integrated Project): 장비 + 공정 + 품질 통합 설계</td>
+      <td class="meister-equipment">TIA Portal / GX Works IDE; IEG Integrated Back-End Automation Demo Line (Die Bond → Wire Bond → Mold → Test)</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--meister); width:85%;"></div>
+        <span class="align-label tag-strong" style="font-size:10px; font-family:'DM Mono',monospace;">STRONG</span>
+      </td>
+      <td class="gap-col">Meister's integrated project is an excellent vehicle for BTEC C4. Align project brief explicitly to a back-end scenario. <span class="tag tag-btec">BTEC+</span> Require: program version history log, comment standards checklist, photographic evidence of build.</td>
+    </tr>
+    <tr>
+      <td class="sub-code">C5</td>
+      <td class="btec-content">Testing: I/O verification, functional test matrix, witness statement, pass/fail criteria</td>
+      <td class="meister-subject">웨이퍼 테스트 / 패키지 테스트 (Wafer Test / Package Test); 후공정 검사장비 운용</td>
+      <td class="meister-equipment">Bond Tester; X-ray Inspection System; AOI; SEM; PLC I/O Test Panel; IEG Functional Test Rig</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--meister); width:90%;"></div>
+        <span class="align-label tag-strong" style="font-size:10px; font-family:'DM Mono',monospace;">STRONG</span>
+      </td>
+      <td class="gap-col">Back-end testing is one of Meister High's strongest areas. <span class="tag tag-btec">BTEC+</span> Formalise with BTEC test matrix table (input → expected output → actual → pass/fail) and 1 tutor witness statement per learner for the final system test session.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     LEARNING AIM D
+════════════════════════════════════════════ -->
+<div class="section-head">
+  <span class="aim-badge" style="background:#EDE6FB; color:#6B3DAA;">Aim D</span>
+  Review Development and Reflect on Own Performance
+  <span style="font-size:13px; font-weight:400; color:var(--muted); margin-left:auto;">D1 Lessons Learned · D2 Personal Performance</span>
+</div>
+
+<div class="map-table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th>BTEC Sub-Code</th>
+      <th>BTEC Content Requirement</th>
+      <th>Meister High Subject / Module</th>
+      <th>IEG Equipment / Lab</th>
+      <th>Alignment</th>
+      <th>Gap / Action Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="sub-code">D1</td>
+      <td class="btec-content">Lessons learned: technical review of PLC system outcomes, what worked, what failed, engineering improvements</td>
+      <td class="meister-subject">종합 발표 및 결과 보고서 작성 (Final Presentation &amp; Report); 공정 분석 (Process Analysis) — 불량률 분석</td>
+      <td class="meister-equipment">Quality Report Templates; 6-Sigma Analysis Tools; IEG Process Outcome Logbook</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--meister); width:85%;"></div>
+        <span class="align-label tag-strong" style="font-size:10px; font-family:'DM Mono',monospace;">STRONG</span>
+      </td>
+      <td class="gap-col">Meister's 16-week project cycle ends with PPT presentation and report — well matched to D1. <span class="tag tag-btec">BTEC+</span> Require explicit "lessons learned" section structured around: (1) technical issues, (2) back-end process understanding, (3) proposed engineering improvement.</td>
+    </tr>
+    <tr>
+      <td class="sub-code">D2</td>
+      <td class="btec-content">Personal performance: self-management, time management, adaptability, communication with team / industry</td>
+      <td class="meister-subject">인재육성 목표 (Human Talent Development Goals): 반도체 장비 개선/보수/관리 전문가 육성</td>
+      <td class="meister-equipment">Portfolio Logbook; Peer Review Forms; IEG Industry Partner Evaluation Sheet</td>
+      <td class="alignment">
+        <div class="align-bar" style="background:var(--eq); width:60%;"></div>
+        <span class="align-label tag-partial" style="font-size:10px; font-family:'DM Mono',monospace;">PARTIAL</span>
+      </td>
+      <td class="gap-col">Meister focuses on technical competence goals; formal personal reflection (BTEC D2 style) is not structurally present. <span class="tag tag-gap">GAP</span>: Add structured self-evaluation rubric (strengths / areas for development / what I would do differently) completed individually at project end.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SUMMARY MATRIX
+════════════════════════════════════════════ -->
+<div class="section-head">
+  Alignment Summary Matrix
+</div>
+
+<div class="matrix-wrap">
+<table class="matrix-table">
+  <thead>
+    <tr>
+      <th style="text-align:left; min-width:200px;">Meister High Module</th>
+      <th>Aim A<br>PLC Technology</th>
+      <th>Aim B<br>Programming</th>
+      <th>Aim C<br>System Dev</th>
+      <th>Aim D<br>Reflection</th>
+      <th>Overall</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="row-label">자동화설비 / 자동제어시스템 운영</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-partial">PARTIAL</td>
+      <td class="cell-na">—</td>
+      <td class="cell-full">STRONG</td>
+    </tr>
+    <tr>
+      <td class="row-label">후공정 장비 실습 (Die Bond / Wire Bond / Mold / Saw)</td>
+      <td class="cell-partial">PARTIAL</td>
+      <td class="cell-partial">PARTIAL</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-na">—</td>
+      <td class="cell-partial">PARTIAL</td>
+    </tr>
+    <tr>
+      <td class="row-label">후공정 검사장비 (Bond Test / AOI / X-ray / SEM)</td>
+      <td class="cell-na">—</td>
+      <td class="cell-partial">PARTIAL</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-full">STRONG</td>
+    </tr>
+    <tr>
+      <td class="row-label">반도체장비 전장조립 / 전장조립 검증</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-partial">PARTIAL</td>
+      <td class="cell-na">—</td>
+      <td class="cell-full">STRONG</td>
+    </tr>
+    <tr>
+      <td class="row-label">프로그래밍 기초 / 심화</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-partial">PARTIAL</td>
+      <td class="cell-na">—</td>
+      <td class="cell-full">STRONG</td>
+    </tr>
+    <tr>
+      <td class="row-label">유지보수 실습 (Fault Diagnosis)</td>
+      <td class="cell-partial">PARTIAL</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-full">STRONG</td>
+    </tr>
+    <tr>
+      <td class="row-label">종합 프로젝트 (Capstone Project)</td>
+      <td class="cell-partial">PARTIAL</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-full">STRONG</td>
+      <td class="cell-full">STRONG</td>
+    </tr>
+    <tr>
+      <td class="row-label">PLC/HMI 아날로그 I/O (Mold Temp / Dispense)</td>
+      <td class="cell-partial">PARTIAL</td>
+      <td class="cell-gap">GAP</td>
+      <td class="cell-gap">GAP</td>
+      <td class="cell-na">—</td>
+      <td class="cell-gap">GAP</td>
+    </tr>
+    <tr>
+      <td class="row-label">산업 네트워크 프로토콜 (EtherCAT / Profinet)</td>
+      <td class="cell-gap">GAP</td>
+      <td class="cell-gap">GAP</td>
+      <td class="cell-partial">PARTIAL</td>
+      <td class="cell-na">—</td>
+      <td class="cell-gap">GAP</td>
+    </tr>
+    <tr>
+      <td class="row-label">SFC / 소프트웨어 설계 도구 (State Diagram, Flowchart)</td>
+      <td class="cell-na">—</td>
+      <td class="cell-gap">GAP</td>
+      <td class="cell-gap">GAP</td>
+      <td class="cell-na">—</td>
+      <td class="cell-gap">GAP</td>
+    </tr>
+    <tr>
+      <td class="row-label">클린룸 패널 설계 제약 (ESD, Particle Control)</td>
+      <td class="cell-partial">PARTIAL</td>
+      <td class="cell-na">—</td>
+      <td class="cell-gap">GAP</td>
+      <td class="cell-na">—</td>
+      <td class="cell-gap">GAP</td>
+    </tr>
+    <tr>
+      <td class="row-label">개인 성과 자기평가 (Personal Reflection Rubric)</td>
+      <td class="cell-na">—</td>
+      <td class="cell-na">—</td>
+      <td class="cell-na">—</td>
+      <td class="cell-gap">GAP</td>
+      <td class="cell-gap">GAP</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     RECOMMENDATIONS
+════════════════════════════════════════════ -->
+<div class="section-head">
+  Recommended Actions to Close Gaps
+</div>
+
+<div class="reco-grid">
+  <div class="reco-card">
+    <h4>🔌 Gap 1 — Industrial Network Protocols</h4>
+    <ul>
+      <li>Add 1 standalone module: "Industrial Fieldbus for Semiconductor Back-End Lines"</li>
+      <li>Cover EtherCAT (common in Die Bonder / Saw), Profinet (Siemens ecosystems), DeviceNet</li>
+      <li>Practical: configure IEG Testbed PLC to communicate with a simulated vision sensor via EtherCAT</li>
+      <li>Maps to: A2, B2-b</li>
+    </ul>
+  </div>
+
+  <div class="reco-card">
+    <h4>🌡️ Gap 2 — Analog I/O &amp; PID Control</h4>
+    <ul>
+      <li>Add module: "Analog Control in Back-End Processes" — temperature profiling for mold press, epoxy volume control for die attach</li>
+      <li>Use IEG Oxidation Furnace or Mold Press temperature input as real analog signal source</li>
+      <li>Practical: PLC PID block tuning; compare set vs. actual temperature over cycle</li>
+      <li>Maps to: B2-b, C2</li>
+    </ul>
+  </div>
+
+  <div class="reco-card">
+    <h4>📐 Gap 3 — PLC Software Design Methods</h4>
+    <ul>
+      <li>Add 2-session module: "Software Design Tools for PLC Systems"</li>
+      <li>Content: Sequential Function Charts (SFC), state diagrams, pseudocode for sequence control</li>
+      <li>Scenario: design a Die Bond → Wire Bond → Mold → Eject sequence using SFC before coding</li>
+      <li>Maps to: C3</li>
+    </ul>
+  </div>
+
+  <div class="reco-card">
+    <h4>🧹 Gap 4 — Cleanroom Design Constraints</h4>
+    <ul>
+      <li>Add 1-session insert: "Control Panel Design for Cleanroom Environments"</li>
+      <li>Cover: ESD-safe cable selection, sealed enclosure ratings, stainless CDA/UPW fittings, particle-shedding avoidance</li>
+      <li>Reference: actual IEG Cleanroom equipment panel as case study</li>
+      <li>Maps to: C2</li>
+    </ul>
+  </div>
+
+  <div class="reco-card">
+    <h4>📝 Gap 5 — Personal Reflection Rubric (D2)</h4>
+    <ul>
+      <li>Develop bilingual (KO/EN) self-evaluation form: 4 sections — technical skills, time management, communication, industry-readiness</li>
+      <li>Completed by each learner at end of capstone project</li>
+      <li>Assessed by tutor against BTEC D2 descriptors (Pass / Merit / Distinction)</li>
+      <li>Maps to: D2</li>
+    </ul>
+  </div>
+
+  <div class="reco-card">
+    <h4>📋 Gap 6 — BTEC Evidence Formalisation</h4>
+    <ul>
+      <li>Existing Meister content is strong but evidence format does not match BTEC requirements</li>
+      <li>Create: BTEC Evidence Tracker (per learner): links each Meister lab activity to a specific BTEC assessment criterion</li>
+      <li>Add tutor observation records + witness statements for Aims B and C practical sessions</li>
+      <li>Maps to: A1, B3, C5, D1</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FOOTNOTE / NQF EQUIVALENCE NOTE
+════════════════════════════════════════════ -->
+<div style="background:var(--white); border:1px solid var(--border); border-radius:10px; padding:20px 24px; margin-bottom:40px;">
+  <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:10px;">NQF / Credit Equivalence Note</div>
+  <p style="font-size:13px; color:var(--muted); line-height:1.7;">
+    The IEG Meister High curriculum operates at <strong style="color:var(--text)">Korean Specification of Qualification Framework (KSQ) Level 3–4</strong>, broadly equivalent to <strong style="color:var(--text)">BTEC International Level 3 / NQF Level 3</strong>. The back-end semiconductor subjects (Years 2–3) align most closely with BTEC L3 Unit 36 at <strong style="color:var(--text)">Merit–Distinction boundary</strong> due to the industrial depth and equipment complexity involved. Formal credit recognition would require Pearson approval of an <strong style="color:var(--text)">Approved Centre (AC)</strong> status for IEG or partner institution, and submission of a <strong style="color:var(--text)">Centre-Devised Assignment (CDA)</strong> for Aims C and D using the back-end semiconductor scenarios documented above.
+  </p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>IEG Co., Ltd. · 7, Sunhwan-ro 198beon-gil, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea</p>
+  <p>Reference: Pearson BTEC Int'l L3 Engineering Unit 36 Delivery Guide (Oct 2019) · IEG Meister High Proposal (Apr 2025)</p>
+</footer>
+
+</div>
+</body>
+</html>
