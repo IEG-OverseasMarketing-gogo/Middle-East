@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IEG Semiconductor 8-Process Digital Walkthrough</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #eef2f7;
+  --surface: #ffffff;
+  --surface-2: #f5f7fb;
+  --surface-3: #e4eaf3;
+  --border: rgba(0,0,0,.09);
+  --border-2: rgba(0,0,0,.18);
+  --text: #0d1520;
+  --text-2: #243550;
+  --text-3: #4a6280;
+  --gold: #a07820;
+  --gold-lt: rgba(160,120,32,.09);
+  --mono: 'IBM Plex Mono', monospace;
+  --body: 'Inter', sans-serif;
+  --display: 'Space Grotesk', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── PROCESS COLORS ── */
+.p1 { --pc: #4f9cf9; --pc-lt: rgba(79,156,249,.12); }
+.p2 { --pc: #f97316; --pc-lt: rgba(249,115,22,.12); }
+.p3 { --pc: #a78bfa; --pc-lt: rgba(167,139,250,.12); }
+.p4 { --pc: #34d399; --pc-lt: rgba(52,211,153,.12); }
+.p5 { --pc: #f472b6; --pc-lt: rgba(244,114,182,.12); }
+.p6 { --pc: #facc15; --pc-lt: rgba(250,204,21,.12); }
+.p7 { --pc: #60a5fa; --pc-lt: rgba(96,165,250,.12); }
+.p8 { --pc: #fb923c; --pc-lt: rgba(251,146,60,.12); }
+
+/* ── HEADER ── */
+.site-header {
+  border-bottom: 1px solid var(--border);
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: rgba(238,242,247,.96);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.logo-badge {
+  background: #0d1520;
+  color: #f5c842;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: .02em;
+}
+.logo-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-2);
+  letter-spacing: .08em;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-3);
+}
+.progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.progress-bar {
+  width: 120px;
+  height: 3px;
+  background: var(--surface-3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: width .4s ease;
+  width: 12.5%;
+}
+
+/* ── LAYOUT ── */
+.app-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: calc(100vh - 65px);
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  overflow-y: auto;
+  position: sticky;
+  top: 65px;
+  height: calc(100vh - 65px);
+}
+.sidebar-title {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: 0 20px 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+.step-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  text-align: left;
+  transition: background .15s;
+  position: relative;
+}
+.step-btn:hover { background: var(--surface-2); }
+.step-btn.active {
+  background: var(--surface-3);
+}
+.step-btn.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--pc);
+  border-radius: 0 2px 2px 0;
+}
+.step-btn.completed .step-num {
+  background: rgba(52,211,153,.2);
+  color: #34d399;
+  border-color: rgba(52,211,153,.4);
+}
+.step-num {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-3);
+  background: var(--surface-2);
+  transition: all .2s;
+}
+.step-btn.active .step-num {
+  background: var(--pc-lt);
+  border-color: var(--pc);
+  color: var(--pc);
+}
+.step-info { flex: 1; min-width: 0; }
+.step-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 1px;
+}
+.step-name {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #243550;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.step-btn.active .step-name { color: #0d1520; font-weight: 600; }
+.check-icon {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: #34d399;
+  display: none;
+}
+.step-btn.completed .check-icon { display: block; }
+
+/* ── MAIN CONTENT ── */
+.main-content {
+  padding: 40px;
+  max-width: 900px;
+}
+
+/* ── PROCESS PANEL ── */
+.process-panel { display: none; }
+.process-panel.active { display: block; }
+
+.panel-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--pc);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.panel-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 20px; height: 1px;
+  background: var(--pc);
+  opacity: .6;
+}
+
+.panel-title {
+  font-family: var(--display);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.panel-subtitle {
+  font-size: 14px;
+  color: #2d4060;
+  margin-bottom: 32px;
+  line-height: 1.7;
+}
+
+/* ── WAFER VISUALIZER ── */
+.visualizer {
+  background: #fff;
+  border: 1px solid var(--border-2);
+  border-radius: 12px;
+  padding: 28px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.visualizer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 20% 50%, var(--pc-lt) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* SVG wafer diagrams */
+.wafer-svg { width: 100%; max-width: 600px; }
+
+/* ── INFO GRID ── */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+.info-card-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #4a6280;
+  margin-bottom: 10px;
+}
+.info-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.info-card ul li {
+  font-size: 13px;
+  color: #1e3452;
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.5;
+}
+.info-card ul li::before {
+  content: '·';
+  position: absolute;
+  left: 2px;
+  color: var(--pc);
+  font-size: 16px;
+  top: -2px;
+}
+
+/* ── IEG EQUIPMENT CALLOUT ── */
+.ieg-callout {
+  background: #fffbec;
+  border: 1px solid #e8c84a;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.ieg-callout-badge {
+  flex-shrink: 0;
+  background: #0d1520;
+  color: #f5c842;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: .03em;
+  margin-top: 1px;
+}
+.ieg-callout-text {
+  font-size: 13px;
+  color: #2d3f1f;
+  line-height: 1.65;
+}
+.ieg-callout-text strong { color: #0d1520; font-weight: 600; }
+
+/* ── PARAMETERS ── */
+.params-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.param-card {
+  background: #fff;
+  border: 1px solid var(--border-2);
+  border-radius: 8px;
+  padding: 14px 16px;
+  text-align: center;
+}
+.param-value {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--pc);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.param-label {
+  font-size: 11px;
+  color: #4a6280;
+  font-weight: 500;
+}
+
+/* ── QUIZ ── */
+.quiz-section {
+  background: #fff;
+  border: 1px solid var(--border-2);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin-bottom: 28px;
+}
+.quiz-q {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0d1520;
+  margin-bottom: 14px;
+}
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.quiz-opt {
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: 7px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #243550;
+  cursor: pointer;
+  transition: all .15s;
+  text-align: left;
+}
+.quiz-opt:hover { border-color: #8aabcc; color: #0d1520; background: #e8edf4; }
+.quiz-opt.correct { border-color: #16a34a; background: #dcfce7; color: #14532d; font-weight: 500; }
+.quiz-opt.wrong   { border-color: #dc2626; background: #fee2e2; color: #7f1d1d; }
+.quiz-feedback {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #1e3a5f;
+  display: none;
+  line-height: 1.6;
+  background: #f0f6ff;
+  border-left: 3px solid #3b82f6;
+  padding: 10px 14px;
+  border-radius: 0 6px 6px 0;
+}
+.quiz-feedback.show { display: block; }
+
+/* ── NAV BUTTONS ── */
+.nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  border: none;
+  font-family: var(--body);
+}
+.btn-ghost {
+  background: #fff;
+  color: #243550;
+  border: 1px solid var(--border-2);
+}
+.btn-ghost:hover { color: #0d1520; border-color: #8aabcc; background: #eef2f7; }
+.btn-primary {
+  background: var(--pc);
+  color: #000;
+  font-weight: 600;
+}
+.btn-primary:hover { opacity: .88; }
+.btn:disabled { opacity: .35; cursor: not-allowed; }
+
+/* ── COMPLETION ── */
+.completion-screen {
+  display: none;
+  text-align: center;
+  padding: 60px 40px;
+}
+.completion-screen.show { display: block; }
+.completion-icon { font-size: 48px; margin-bottom: 20px; }
+.completion-title {
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #a07820;
+}
+.completion-sub { font-size: 15px; color: #2d4060; margin-bottom: 32px; }
+.cert-box {
+  background: #fffbec;
+  border: 1px solid #e8c84a;
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 480px;
+  margin: 0 auto 32px;
+}
+.cert-box .cert-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #a07820;
+  margin-bottom: 12px;
+}
+.cert-box .cert-name {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 600;
+  color: #0d1520;
+  margin-bottom: 6px;
+}
+.cert-box .cert-desc { font-size: 13px; color: #2d4060; }
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.score-item { text-align: center; }
+.score-val {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 500;
+  color: #a07820;
+}
+.score-lbl { font-size: 11px; color: #4a6280; font-weight: 500; }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">
+    <span class="logo-badge">IEG</span>
+    <span class="logo-text">Semiconductor 8-Process · Digital Walkthrough</span>
+  </div>
+  <div class="header-right">
+    <div class="progress-wrap">
+      <span id="progress-label">Station 1 / 8</span>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+    <span id="score-label">Score: 0 / 8</span>
+    <a href="#inquiry" style="background:#0d1520; color:#f5c842; font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; padding:6px 14px; border-radius:5px; text-decoration:none; letter-spacing:.04em; white-space:nowrap;">✉ Inquiry</a>
+  </div>
+</header>
+
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-title">Process Stations</div>
+
+    <button class="step-btn p1 active" onclick="goTo(0)" id="btn-0">
+      <div class="step-num">1</div>
+      <div class="step-info">
+        <div class="step-label">Station 01</div>
+        <div class="step-name">Wafer Preparation</div>
+      </div>
+      <span class="check-icon">✓</span>
+    </button>
+    <button class="step-btn p2" onclick="goTo(1)" id="btn-1">
+      <div class="step-num">2</div>
+      <div class="step-info">
+        <div class="step-label">Station 02</div>
+        <div class="step-name">Thermal Oxidation</div>
+      </div>
+      <span class="check-icon">✓</span>
+    </button>
+    <button class="step-btn p3" onclick="goTo(2)" id="btn-2">
+      <div class="step-num">3</div>
+      <div class="step-info">
+        <div class="step-label">Station 03</div>
+        <div class="step-name">Photolithography</div>
+      </div>
+      <span class="check-icon">✓</span>
+    </button>
+    <button class="step-btn p4" onclick="goTo(3)" id="btn-3">
+      <div class="step-num">4</div>
+      <div class="step-info">
+        <div class="step-label">Station 04</div>
+        <div class="step-name">Etching</div>
+      </div>
+      <span class="check-icon">✓</span>
+    </button>
+    <button class="step-btn p5" onclick="goTo(4)" id="btn-4">
+      <div class="step-num">5</div>
+      <div class="step-info">
+        <div class="step-label">Station 05</div>
+        <div class="step-name">Ion Implantation</div>
+      </div>
+      <span class="check-icon">✓</span>
+    </button>
+    <button class="step-btn p6" onclick="goTo(5)" id="btn-5">
+      <div class="step-num">6</div>
+      <div class="step-info">
+        <div class="step-label">Station 06</div>
+        <div class="step-name">CVD / Thin Film</div>
+      </div>
+      <span class="check-icon">✓</span>
+    </button>
+    <button class="step-btn p7" onclick="goTo(6)" id="btn-6">
+      <div class="step-num">7</div>
+      <div class="step-info">
+        <div class="step-label">Station 07</div>
+        <div class="step-name">Metallisation</div>
+      </div>
+      <span class="check-icon">✓</span>
+    </button>
+    <button class="step-btn p8" onclick="goTo(7)" id="btn-7">
+      <div class="step-num">8</div>
+      <div class="step-info">
+        <div class="step-label">Station 08</div>
+        <div class="step-name">Testing & Packaging</div>
+      </div>
+      <span class="check-icon">✓</span>
+    </button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- ── STATION 1 ── -->
+    <section class="process-panel p1 active" id="panel-0">
+      <div class="panel-eyebrow">Station 01 · Wafer Preparation</div>
+      <h1 class="panel-title">Wafer Preparation<br><span style="font-weight:300; font-size:22px; color:var(--text-2)">& Surface Cleaning</span></h1>
+      <p class="panel-subtitle">The foundation of all semiconductor manufacturing. A silicon ingot is sliced, lapped, and chemically cleaned to atomic-level purity before any process begins.</p>
+
+      <div class="visualizer p1">
+        <svg class="wafer-svg" viewBox="0 0 580 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Ingot -->
+          <rect x="10" y="30" width="70" height="100" rx="35" fill="rgba(79,156,249,.15)" stroke="#4f9cf9" stroke-width="1.5"/>
+          <text x="45" y="85" text-anchor="middle" fill="#4f9cf9" font-size="11" font-family="IBM Plex Mono">Si Ingot</text>
+          <!-- Arrow -->
+          <line x1="90" y1="80" x2="120" y2="80" stroke="#4f9cf9" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <polygon points="120,75 130,80 120,85" fill="#4f9cf9"/>
+          <text x="105" y="70" text-anchor="middle" fill="#1a5fbd" font-size="9" font-family="IBM Plex Mono">slice</text>
+          <!-- Wafer stack -->
+          <ellipse cx="175" cy="80" rx="42" ry="12" fill="rgba(79,156,249,.2)" stroke="#4f9cf9" stroke-width="1.5"/>
+          <ellipse cx="175" cy="68" rx="42" ry="12" fill="rgba(79,156,249,.25)" stroke="#4f9cf9" stroke-width="1.5"/>
+          <ellipse cx="175" cy="56" rx="42" ry="12" fill="rgba(79,156,249,.3)" stroke="#4f9cf9" stroke-width="1.5"/>
+          <text x="175" y="60" text-anchor="middle" fill="#4f9cf9" font-size="10" font-family="IBM Plex Mono">Wafers</text>
+          <!-- Arrow -->
+          <line x1="222" y1="80" x2="252" y2="80" stroke="#4f9cf9" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <polygon points="252,75 262,80 252,85" fill="#4f9cf9"/>
+          <text x="237" y="70" text-anchor="middle" fill="#1a5fbd" font-size="9" font-family="IBM Plex Mono">clean</text>
+          <!-- Clean wafer -->
+          <ellipse cx="320" cy="80" rx="55" ry="55" fill="rgba(79,156,249,.08)" stroke="#4f9cf9" stroke-width="1.5"/>
+          <ellipse cx="320" cy="80" rx="42" ry="42" fill="rgba(79,156,249,.12)" stroke="rgba(79,156,249,.4)" stroke-width="1" stroke-dasharray="3,3"/>
+          <circle cx="320" cy="80" r="5" fill="#4f9cf9"/>
+          <text x="320" y="148" text-anchor="middle" fill="#1a5fbd" font-size="10" font-family="IBM Plex Mono">Clean Wafer (300mm)</text>
+          <!-- Specs -->
+          <rect x="400" y="36" width="170" height="88" rx="6" fill="rgba(79,156,249,.05)" stroke="rgba(79,156,249,.2)" stroke-width="1"/>
+          <text x="412" y="54" fill="#1a5fbd" font-size="9" font-family="IBM Plex Mono">SPECIFICATION</text>
+          <text x="412" y="70" fill="#2d4060" font-size="10" font-family="IBM Plex Mono">Diameter  300mm</text>
+          <text x="412" y="85" fill="#2d4060" font-size="10" font-family="IBM Plex Mono">Thickness  775µm</text>
+          <text x="412" y="100" fill="#2d4060" font-size="10" font-family="IBM Plex Mono">Resistivity  1–10 Ω·cm</text>
+          <text x="412" y="115" fill="#2d4060" font-size="10" font-family="IBM Plex Mono">Purity  99.9999999%</text>
+        </svg>
+      </div>
+
+      <div class="ieg-callout">
+        <div class="ieg-callout-badge">IEG REF</div>
+        <div class="ieg-callout-text">
+          <strong>Incheon Semiconductor High School</strong> — IEG supplied the complete 8-process semiconductor testbed, including wafer preparation and inspection stations, enabling students to handle actual 300mm Si wafers in a controlled educational cleanroom environment.
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-label">Key Process Steps</div>
+          <ul>
+            <li>Crystal growing (Czochralski method)</li>
+            <li>Ingot slicing with wire saw (±5µm precision)</li>
+            <li>Lapping & edge grinding</li>
+            <li>RCA cleaning (SC-1 + SC-2 chemical bath)</li>
+            <li>DI water rinse + spin-dry</li>
+            <li>Surface inspection (particle count &lt; 0.3)</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Common Defect Modes</div>
+          <ul>
+            <li>Metallic contamination → HF dip required</li>
+            <li>Organic residue → piranha clean (H₂SO₄/H₂O₂)</li>
+            <li>Scratches → rewire saw or reject</li>
+            <li>Warp / bow → affects lithography alignment</li>
+            <li>Particle adhesion → ultrasonic bath treatment</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="params-row">
+        <div class="param-card p1">
+          <div class="param-value">300mm</div>
+          <div class="param-label">Wafer Diameter</div>
+        </div>
+        <div class="param-card p1">
+          <div class="param-value">&lt;0.5ppb</div>
+          <div class="param-label">Metal Contamination</div>
+        </div>
+        <div class="param-card p1">
+          <div class="param-value">9N</div>
+          <div class="param-label">Silicon Purity</div>
+        </div>
+      </div>
+
+      <div class="quiz-section" id="quiz-0">
+        <div class="quiz-q">Assessment: What is the primary purpose of RCA cleaning in wafer preparation?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(0,0,false)">A. To slice the ingot into thin wafers</button>
+          <button class="quiz-opt" onclick="answer(0,1,true)">B. To remove organic, ionic, and metallic contaminants from the wafer surface</button>
+          <button class="quiz-opt" onclick="answer(0,2,false)">C. To deposit a protective oxide layer</button>
+          <button class="quiz-opt" onclick="answer(0,3,false)">D. To measure wafer thickness and resistivity</button>
+        </div>
+        <div class="quiz-feedback" id="fb-0">✓ RCA cleaning (developed at RCA Laboratories) uses a two-step chemical bath — SC-1 (NH₄OH/H₂O₂/H₂O) removes organics and particles, SC-2 (HCl/H₂O₂/H₂O) removes metallic ions. This establishes the contamination-free baseline that all subsequent processes depend on.</div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-ghost" disabled>← Previous</button>
+        <button class="btn btn-primary p1" style="background:var(--pc)" onclick="goTo(1)">Next Station →</button>
+      </div>
+    </section>
+
+    <!-- ── STATION 2 ── -->
+    <section class="process-panel p2" id="panel-1">
+      <div class="panel-eyebrow">Station 02 · Thermal Oxidation</div>
+      <h1 class="panel-title">Thermal Oxidation<br><span style="font-weight:300; font-size:22px; color:var(--text-2)">SiO₂ Gate Insulator Growth</span></h1>
+      <p class="panel-subtitle">Silicon wafers are heated in a furnace at 800–1200°C. Silicon atoms react with O₂ or H₂O to form a thermally grown SiO₂ layer — the most critical insulator in MOSFET fabrication.</p>
+
+      <div class="visualizer p2">
+        <svg class="wafer-svg" viewBox="0 0 580 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Furnace tube -->
+          <rect x="20" y="50" width="260" height="60" rx="30" fill="rgba(249,115,22,.08)" stroke="#f97316" stroke-width="1.5"/>
+          <rect x="50" y="62" width="200" height="36" rx="4" fill="rgba(249,115,22,.12)"/>
+          <!-- Wafer inside -->
+          <rect x="130" y="65" width="4" height="30" rx="1" fill="#f97316" opacity=".6"/>
+          <rect x="148" y="65" width="4" height="30" rx="1" fill="#f97316" opacity=".7"/>
+          <rect x="166" y="65" width="4" height="30" rx="1" fill="#f97316" opacity=".8"/>
+          <text x="150" y="112" text-anchor="middle" fill="#b84900" font-size="9" font-family="IBM Plex Mono">Furnace @ 1000°C</text>
+          <!-- O2 gas in -->
+          <line x1="20" y1="80" x2="50" y2="80" stroke="#f97316" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <polygon points="50,75 60,80 50,85" fill="#f97316"/>
+          <text x="10" y="70" fill="#b84900" font-size="9" font-family="IBM Plex Mono">O₂</text>
+          <!-- Result wafer cross-section -->
+          <rect x="320" y="60" width="100" height="40" rx="2" fill="rgba(249,115,22,.1)" stroke="rgba(249,115,22,.3)" stroke-width="1"/>
+          <rect x="320" y="60" width="100" height="8" rx="2" fill="#c86000" stroke="#f97316" stroke-width="1"/>
+          <rect x="320" y="92" width="100" height="8" rx="2" fill="#c86000" stroke="#f97316" stroke-width="1"/>
+          <text x="370" y="82" text-anchor="middle" fill="#2d4060" font-size="10" font-family="IBM Plex Mono">Si substrate</text>
+          <text x="370" y="57" text-anchor="middle" fill="#f97316" font-size="9" font-family="IBM Plex Mono">SiO₂ (top)</text>
+          <text x="370" y="116" text-anchor="middle" fill="#f97316" font-size="9" font-family="IBM Plex Mono">SiO₂ (bottom)</text>
+          <!-- Label -->
+          <rect x="440" y="56" width="130" height="48" rx="5" fill="rgba(249,115,22,.05)" stroke="rgba(249,115,22,.2)" stroke-width="1"/>
+          <text x="452" y="72" fill="#c05000" font-size="9" font-family="IBM Plex Mono">DRY OXIDATION</text>
+          <text x="452" y="86" fill="#2d4060" font-size="10" font-family="IBM Plex Mono">Si + O₂ → SiO₂</text>
+          <text x="452" y="98" fill="#2d4060" font-size="10" font-family="IBM Plex Mono">Rate: ~10nm/min</text>
+        </svg>
+      </div>
+
+      <div class="ieg-callout">
+        <div class="ieg-callout-badge">IEG REF</div>
+        <div class="ieg-callout-text">
+          <strong>Korea Polytechnic University, Asan Campus</strong> — IEG delivered the Semiconductor Photolithography Equipment suite, which includes the pre-lithography oxidation furnace station. Students observe real Deal-Grove oxide growth kinetics on 200mm wafers.
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-label">Dry vs. Wet Oxidation</div>
+          <ul>
+            <li>Dry (O₂): slow, dense, high quality — gate oxide</li>
+            <li>Wet (H₂O steam): fast, lower density — field oxide</li>
+            <li>Deal-Grove model governs growth kinetics</li>
+            <li>Approximately 54% of oxide grows into Si wafer</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Critical Control Parameters</div>
+          <ul>
+            <li>Temperature: 800–1200°C (±0.5°C precision)</li>
+            <li>Gas flow rate: O₂ or H₂O vapour (slpm)</li>
+            <li>Time: seconds (thin gate) to hours (field)</li>
+            <li>Ambient pressure: atmospheric or reduced</li>
+            <li>Post-oxide anneal in N₂ for interface quality</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="params-row">
+        <div class="param-card p2">
+          <div class="param-value">1000°C</div>
+          <div class="param-label">Furnace Temp.</div>
+        </div>
+        <div class="param-card p2">
+          <div class="param-value">2–5nm</div>
+          <div class="param-label">Gate Oxide Thickness</div>
+        </div>
+        <div class="param-card p2">
+          <div class="param-value">3.9</div>
+          <div class="param-label">SiO₂ Dielectric Const.</div>
+        </div>
+      </div>
+
+      <div class="quiz-section" id="quiz-1">
+        <div class="quiz-q">Assessment: Which oxidation method produces higher-quality, denser oxide for use as a gate insulator?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(1,0,true)">A. Dry oxidation using O₂ gas</button>
+          <button class="quiz-opt" onclick="answer(1,1,false)">B. Wet oxidation using H₂O steam</button>
+          <button class="quiz-opt" onclick="answer(1,2,false)">C. Chemical vapour deposition (CVD)</button>
+          <button class="quiz-opt" onclick="answer(1,3,false)">D. Plasma-enhanced oxidation at room temperature</button>
+        </div>
+        <div class="quiz-feedback" id="fb-1">✓ Dry oxidation produces a denser, higher-quality SiO₂ layer with fewer defects at the Si/SiO₂ interface, making it the preferred method for gate insulators despite its slower growth rate. Wet oxidation is faster but produces a more porous oxide suited to thick field isolation layers.</div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="goTo(0)">← Previous</button>
+        <button class="btn btn-primary p2" style="background:var(--pc)" onclick="goTo(2)">Next Station →</button>
+      </div>
+    </section>
+
+    <!-- ── STATION 3 ── -->
+    <section class="process-panel p3" id="panel-2">
+      <div class="panel-eyebrow">Station 03 · Photolithography</div>
+      <h1 class="panel-title">Photolithography<br><span style="font-weight:300; font-size:22px; color:var(--text-2)">Pattern Transfer via Light</span></h1>
+      <p class="panel-subtitle">The defining process of semiconductor manufacturing. Circuit patterns on a photomask are projected onto a photoresist-coated wafer, transferred with nanometre precision using UV or EUV light.</p>
+
+      <div class="visualizer p3">
+        <svg class="wafer-svg" viewBox="0 0 580 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Mask -->
+          <rect x="60" y="20" width="120" height="40" rx="3" fill="rgba(167,139,250,.1)" stroke="#a78bfa" stroke-width="1.5"/>
+          <rect x="80" y="26" width="18" height="28" fill="#6b3ec0"/>
+          <rect x="110" y="26" width="12" height="28" fill="#6b3ec0"/>
+          <rect x="136" y="26" width="24" height="28" fill="#6b3ec0"/>
+          <text x="120" y="12" text-anchor="middle" fill="#5a2fb0" font-size="9" font-family="IBM Plex Mono">Photomask</text>
+          <!-- UV light rays -->
+          <line x1="80" y1="60" x2="120" y2="90" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3,2" opacity=".5"/>
+          <line x1="120" y1="60" x2="120" y2="90" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3,2" opacity=".7"/>
+          <line x1="160" y1="60" x2="120" y2="90" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3,2" opacity=".5"/>
+          <text x="210" y="50" fill="#5a2fb0" font-size="9" font-family="IBM Plex Mono">ArF UV 193nm</text>
+          <!-- Wafer cross-section -->
+          <rect x="60" y="90" width="160" height="12" rx="1" fill="rgba(167,139,250,.35)" stroke="#a78bfa" stroke-width="1"/>
+          <rect x="60" y="102" width="160" height="18" rx="1" fill="rgba(167,139,250,.08)" stroke="rgba(167,139,250,.3)" stroke-width="1"/>
+          <text x="140" y="122" text-anchor="middle" fill="#6b3ec0" font-size="9" font-family="IBM Plex Mono">Photoresist</text>
+          <text x="140" y="134" text-anchor="middle" fill="#7a50c8" font-size="9" font-family="IBM Plex Mono">Si Wafer</text>
+          <!-- After develop -->
+          <text x="290" y="80" text-anchor="middle" fill="#7a50c8" font-size="18" font-family="IBM Plex Mono">→</text>
+          <rect x="330" y="90" width="40" height="12" rx="1" fill="rgba(167,139,250,.45)" stroke="#a78bfa" stroke-width="1"/>
+          <rect x="390" y="90" width="30" height="12" rx="1" fill="rgba(167,139,250,.45)" stroke="#a78bfa" stroke-width="1"/>
+          <rect x="330" y="102" width="120" height="18" rx="1" fill="rgba(167,139,250,.08)" stroke="rgba(167,139,250,.3)" stroke-width="1"/>
+          <text x="390" y="75" text-anchor="middle" fill="#5a2fb0" font-size="9" font-family="IBM Plex Mono">After Develop</text>
+          <text x="390" y="130" text-anchor="middle" fill="#7a50c8" font-size="9" font-family="IBM Plex Mono">Pattern transferred</text>
+          <!-- Key number -->
+          <text x="510" y="65" text-anchor="middle" fill="#7a50c8" font-size="9" font-family="IBM Plex Mono">RESOLUTION</text>
+          <text x="510" y="85" text-anchor="middle" fill="#a78bfa" font-size="22" font-weight="600" font-family="Space Grotesk">7nm</text>
+          <text x="510" y="100" text-anchor="middle" fill="#7a50c8" font-size="9" font-family="IBM Plex Mono">EUV node</text>
+        </svg>
+      </div>
+
+      <div class="ieg-callout">
+        <div class="ieg-callout-badge">IEG REF</div>
+        <div class="ieg-callout-text">
+          <strong>Korea Polytechnic University, Asan Campus</strong> — IEG's dedicated Semiconductor Photolithography Equipment set covers coating, exposure, bake, and develop (COBD) sequences. Trainers use a mask aligner with UV lamp to expose real photoresist patterns on training wafers.
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-label">COBD Process Sequence</div>
+          <ul>
+            <li>HMDS prime — improves PR adhesion to oxide</li>
+            <li>Spin coat — 3000–5000 rpm → 1µm film</li>
+            <li>Soft bake (PEB) — 90°C, 60s to evaporate solvent</li>
+            <li>Alignment & exposure — mask aligner, UV 365nm</li>
+            <li>Post-exposure bake (PEB) — 110°C, activates acid</li>
+            <li>Development — positive or negative PR removal</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Resolution Limit (Rayleigh)</div>
+          <ul>
+            <li>R = k₁ × λ / NA</li>
+            <li>i-line (365nm): ~350nm resolution</li>
+            <li>KrF (248nm): ~130nm resolution</li>
+            <li>ArF (193nm): ~65nm (with immersion)</li>
+            <li>EUV (13.5nm): &lt;7nm (cutting-edge nodes)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="params-row">
+        <div class="param-card p3">
+          <div class="param-value">193nm</div>
+          <div class="param-label">ArF Wavelength</div>
+        </div>
+        <div class="param-card p3">
+          <div class="param-value">±2nm</div>
+          <div class="param-label">Overlay Accuracy</div>
+        </div>
+        <div class="param-card p3">
+          <div class="param-value">&gt;100</div>
+          <div class="param-label">Layers per Chip</div>
+        </div>
+      </div>
+
+      <div class="quiz-section" id="quiz-2">
+        <div class="quiz-q">Assessment: In the Rayleigh resolution equation R = k₁·λ/NA, which change would MOST improve (reduce) the minimum printable feature size?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(2,0,false)">A. Increasing the wavelength (λ) of the light source</button>
+          <button class="quiz-opt" onclick="answer(2,1,false)">B. Decreasing the numerical aperture (NA) of the lens</button>
+          <button class="quiz-opt" onclick="answer(2,2,true)">C. Decreasing λ and increasing NA simultaneously</button>
+          <button class="quiz-opt" onclick="answer(2,3,false)">D. Increasing the k₁ process factor</button>
+        </div>
+        <div class="quiz-feedback" id="fb-2">✓ Resolution improves (smaller R) when λ decreases or NA increases. The industry has pursued both — moving from 365nm → 248nm → 193nm → 13.5nm (EUV), while increasing NA to 1.35 (immersion) and now &gt;0.55 (High-NA EUV). k₁ has also been reduced through OPC and multiple patterning techniques.</div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="goTo(1)">← Previous</button>
+        <button class="btn btn-primary p3" style="background:var(--pc)" onclick="goTo(3)">Next Station →</button>
+      </div>
+    </section>
+
+    <!-- ── STATION 4 ── -->
+    <section class="process-panel p4" id="panel-3">
+      <div class="panel-eyebrow">Station 04 · Etching</div>
+      <h1 class="panel-title">Etching<br><span style="font-weight:300; font-size:22px; color:var(--text-2)">Material Removal & Pattern Definition</span></h1>
+      <p class="panel-subtitle">After lithography defines the pattern in photoresist, etching transfers it into underlying layers — oxide, metal, or silicon — using wet chemical solutions or plasma (dry etching).</p>
+
+      <div class="visualizer p4">
+        <svg class="wafer-svg" viewBox="0 0 580 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Wet etch -->
+          <rect x="20" y="40" width="200" height="80" rx="6" fill="rgba(52,211,153,.05)" stroke="rgba(52,211,153,.3)" stroke-width="1"/>
+          <text x="120" y="56" text-anchor="middle" fill="#0a7050" font-size="9" font-family="IBM Plex Mono">WET ETCH</text>
+          <rect x="50" y="64" width="18" height="10" rx="1" fill="rgba(52,211,153,.4)" stroke="#34d399" stroke-width="1"/>
+          <rect x="100" y="64" width="18" height="10" rx="1" fill="rgba(52,211,153,.4)" stroke="#34d399" stroke-width="1"/>
+          <rect x="50" y="74" width="140" height="20" rx="1" fill="rgba(52,211,153,.12)" stroke="rgba(52,211,153,.3)" stroke-width="1"/>
+          <text x="120" y="88" text-anchor="middle" fill="#0a7050" font-size="9" font-family="IBM Plex Mono">Isotropic — undercutting</text>
+          <text x="120" y="108" text-anchor="middle" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">HF, BOE for SiO₂</text>
+          <!-- Dry etch -->
+          <rect x="250" y="40" width="200" height="80" rx="6" fill="rgba(52,211,153,.05)" stroke="rgba(52,211,153,.3)" stroke-width="1"/>
+          <text x="350" y="56" text-anchor="middle" fill="#0a7050" font-size="9" font-family="IBM Plex Mono">DRY ETCH (RIE/ICP)</text>
+          <rect x="280" y="60" width="18" height="30" rx="1" fill="rgba(52,211,153,.4)" stroke="#34d399" stroke-width="1"/>
+          <rect x="330" y="60" width="18" height="30" rx="1" fill="rgba(52,211,153,.4)" stroke="#34d399" stroke-width="1"/>
+          <rect x="270" y="90" width="160" height="20" rx="1" fill="rgba(52,211,153,.12)" stroke="rgba(52,211,153,.3)" stroke-width="1"/>
+          <text x="350" y="105" text-anchor="middle" fill="#0a7050" font-size="9" font-family="IBM Plex Mono">Anisotropic — vertical walls</text>
+          <text x="350" y="118" text-anchor="middle" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">CF₄/O₂ plasma</text>
+          <!-- Selectivity note -->
+          <rect x="470" y="50" width="100" height="60" rx="5" fill="rgba(52,211,153,.05)" stroke="rgba(52,211,153,.2)" stroke-width="1"/>
+          <text x="520" y="65" text-anchor="middle" fill="#0a7050" font-size="9" font-family="IBM Plex Mono">Selectivity</text>
+          <text x="520" y="82" text-anchor="middle" fill="#34d399" font-size="18" font-family="Space Grotesk" font-weight="600">&gt;50:1</text>
+          <text x="520" y="96" text-anchor="middle" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">Oxide vs Si</text>
+        </svg>
+      </div>
+
+      <div class="ieg-callout">
+        <div class="ieg-callout-badge">IEG REF</div>
+        <div class="ieg-callout-text">
+          <strong>Korea Semiconductor Academy</strong> — IEG supplied Plasma Equipment for process control and semiconductor etch training. Trainees operate a parallel-plate RIE chamber, setting RF power, gas flow, and pressure parameters to achieve target etch profiles.
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-label">Wet vs. Dry Etch</div>
+          <ul>
+            <li>Wet: isotropic, high selectivity, low cost, &gt;100nm</li>
+            <li>Dry (RIE): anisotropic, vertical profiles, &lt;10nm capable</li>
+            <li>Selectivity = etch rate of target ÷ mask material</li>
+            <li>Endpoint detection by OES (optical emission spectroscopy)</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Etch Rate Control</div>
+          <ul>
+            <li>RF power — ion energy & plasma density</li>
+            <li>Gas chemistry — CF₄, Cl₂, HBr, SF₆</li>
+            <li>Chamber pressure — mean free path of ions</li>
+            <li>Temperature — controls chemical reactivity</li>
+            <li>Bias voltage — directionality of ion bombardment</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="params-row">
+        <div class="param-card p4">
+          <div class="param-value">&lt;10nm</div>
+          <div class="param-label">Etch Precision (RIE)</div>
+        </div>
+        <div class="param-card p4">
+          <div class="param-value">&gt;50:1</div>
+          <div class="param-label">Selectivity Ratio</div>
+        </div>
+        <div class="param-card p4">
+          <div class="param-value">±1nm</div>
+          <div class="param-label">CD Uniformity</div>
+        </div>
+      </div>
+
+      <div class="quiz-section" id="quiz-3">
+        <div class="quiz-q">Assessment: Why is dry (plasma) etching preferred over wet etching for sub-micron feature patterning?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(3,0,false)">A. It is cheaper and uses fewer hazardous chemicals</button>
+          <button class="quiz-opt" onclick="answer(3,1,false)">B. It etches faster in all directions uniformly</button>
+          <button class="quiz-opt" onclick="answer(3,2,true)">C. It achieves anisotropic (vertical) profiles, preventing undercutting of small features</button>
+          <button class="quiz-opt" onclick="answer(3,3,false)">D. It works at room temperature without any plasma</button>
+        </div>
+        <div class="quiz-feedback" id="fb-3">✓ Dry etching uses directional ion bombardment to etch preferentially in the vertical direction. This anisotropy is essential when feature widths are smaller than the etch depth — wet chemical etching undercuts the mask equally in all directions, destroying the pattern integrity at sub-micron scales.</div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="goTo(2)">← Previous</button>
+        <button class="btn btn-primary p4" style="background:var(--pc)" onclick="goTo(4)">Next Station →</button>
+      </div>
+    </section>
+
+    <!-- ── STATION 5 ── -->
+    <section class="process-panel p5" id="panel-4">
+      <div class="panel-eyebrow">Station 05 · Ion Implantation</div>
+      <h1 class="panel-title">Ion Implantation<br><span style="font-weight:300; font-size:22px; color:var(--text-2)">Dopant Introduction by Acceleration</span></h1>
+      <p class="panel-subtitle">Dopant ions (boron, phosphorus, arsenic) are accelerated to 10–200keV and shot into the silicon wafer. The depth and concentration are precisely controlled by energy and dose — far more precise than diffusion.</p>
+
+      <div class="visualizer p5">
+        <svg class="wafer-svg" viewBox="0 0 580 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Ion beam source -->
+          <rect x="10" y="60" width="80" height="40" rx="5" fill="rgba(244,114,182,.1)" stroke="#f472b6" stroke-width="1.5"/>
+          <text x="50" y="78" text-anchor="middle" fill="#f472b6" font-size="9" font-family="IBM Plex Mono">Ion Source</text>
+          <text x="50" y="90" text-anchor="middle" fill="rgba(244,114,182,.6)" font-size="9" font-family="IBM Plex Mono">B / P / As</text>
+          <!-- Beam -->
+          <line x1="90" y1="76" x2="200" y2="76" stroke="#f472b6" stroke-width="3" stroke-dasharray="6,3" opacity=".6"/>
+          <line x1="90" y1="84" x2="200" y2="84" stroke="#f472b6" stroke-width="3" stroke-dasharray="6,3" opacity=".4"/>
+          <text x="145" y="66" text-anchor="middle" fill="#a01060" font-size="9" font-family="IBM Plex Mono">100keV</text>
+          <!-- Wafer -->
+          <rect x="200" y="55" width="120" height="12" rx="1" fill="rgba(244,114,182,.2)" stroke="#f472b6" stroke-width="1"/>
+          <rect x="200" y="67" width="120" height="58" rx="1" fill="rgba(244,114,182,.06)" stroke="rgba(244,114,182,.3)" stroke-width="1"/>
+          <!-- Dopant distribution dots -->
+          <circle cx="230" cy="72" r="2" fill="#f472b6" opacity=".8"/>
+          <circle cx="250" cy="75" r="2" fill="#f472b6" opacity=".7"/>
+          <circle cx="270" cy="73" r="2" fill="#f472b6" opacity=".9"/>
+          <circle cx="290" cy="76" r="2" fill="#f472b6" opacity=".6"/>
+          <circle cx="240" cy="82" r="2" fill="#f472b6" opacity=".5"/>
+          <circle cx="260" cy="80" r="2" fill="#f472b6" opacity=".6"/>
+          <circle cx="280" cy="84" r="2" fill="#f472b6" opacity=".4"/>
+          <circle cx="300" cy="81" r="2" fill="#f472b6" opacity=".5"/>
+          <text x="260" y="118" text-anchor="middle" fill="#a01060" font-size="9" font-family="IBM Plex Mono">Gaussian depth profile</text>
+          <text x="260" y="44" text-anchor="middle" fill="#a01060" font-size="9" font-family="IBM Plex Mono">Photoresist mask</text>
+          <!-- Anneal step -->
+          <rect x="360" y="55" width="110" height="70" rx="6" fill="rgba(244,114,182,.05)" stroke="rgba(244,114,182,.2)" stroke-width="1"/>
+          <text x="415" y="72" text-anchor="middle" fill="#a01060" font-size="9" font-family="IBM Plex Mono">POST-ANNEAL</text>
+          <text x="415" y="86" text-anchor="middle" fill="#f472b6" font-size="16" font-family="Space Grotesk" font-weight="600">900°C</text>
+          <text x="415" y="100" text-anchor="middle" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">RTA 30 seconds</text>
+          <text x="415" y="113" text-anchor="middle" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">Activates dopants</text>
+        </svg>
+      </div>
+
+      <div class="ieg-callout">
+        <div class="ieg-callout-badge">IEG REF</div>
+        <div class="ieg-callout-text">
+          <strong>Gangwon Technopark</strong> — IEG supplied Semiconductor Maintenance Equipment covering the doping and implantation stages. Engineers learn to calibrate dose-energy relationships and interpret SIMS (Secondary Ion Mass Spectrometry) dopant profiles.
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-label">Key Parameters</div>
+          <ul>
+            <li>Dose (ions/cm²) — controls carrier concentration</li>
+            <li>Energy (keV) — controls implant depth (Rp)</li>
+            <li>Tilt angle — reduces channelling effects</li>
+            <li>Species: B (p-type), P / As (n-type)</li>
+            <li>Post-implant RTA to activate dopants &amp; repair lattice</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Advantages vs. Diffusion</div>
+          <ul>
+            <li>Precise depth control via energy selection</li>
+            <li>Precise dose control via beam current × time</li>
+            <li>Low-temperature process — no dopant redistribution</li>
+            <li>Works through thin oxide or nitride masks</li>
+            <li>Essential for retrograde wells and halo implants</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="params-row">
+        <div class="param-card p5">
+          <div class="param-value">10–200keV</div>
+          <div class="param-label">Ion Energy Range</div>
+        </div>
+        <div class="param-card p5">
+          <div class="param-value">10¹²–10¹⁶</div>
+          <div class="param-label">Dose (ions/cm²)</div>
+        </div>
+        <div class="param-card p5">
+          <div class="param-value">±7°</div>
+          <div class="param-label">Tilt Angle (channelling)</div>
+        </div>
+      </div>
+
+      <div class="quiz-section" id="quiz-4">
+        <div class="quiz-q">Assessment: What is the purpose of Rapid Thermal Annealing (RTA) after ion implantation?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(4,0,false)">A. To deposit an additional silicon layer on top</button>
+          <button class="quiz-opt" onclick="answer(4,1,true)">B. To activate the implanted dopants and repair crystal lattice damage</button>
+          <button class="quiz-opt" onclick="answer(4,2,false)">C. To remove the photoresist mask using thermal energy</button>
+          <button class="quiz-opt" onclick="answer(4,3,false)">D. To oxidise the doped region to form a p-n junction insulator</button>
+        </div>
+        <div class="quiz-feedback" id="fb-4">✓ Ion implantation physically damages the crystal lattice (amorphisation) and leaves dopant atoms in interstitial (inactive) positions. RTA at ~900–1000°C for 10–60 seconds repairs the crystal structure and moves dopant atoms onto lattice sites where they electrically activate — becoming electrically active carriers (holes or electrons).</div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="goTo(3)">← Previous</button>
+        <button class="btn btn-primary p5" style="background:var(--pc)" onclick="goTo(5)">Next Station →</button>
+      </div>
+    </section>
+
+    <!-- ── STATION 6 ── -->
+    <section class="process-panel p6" id="panel-5">
+      <div class="panel-eyebrow">Station 06 · CVD / Thin Film Deposition</div>
+      <h1 class="panel-title">CVD & Thin Films<br><span style="font-weight:300; font-size:22px; color:var(--text-2)">Chemical Vapour Deposition</span></h1>
+      <p class="panel-subtitle">Gaseous precursors react at the wafer surface to deposit thin films of dielectrics, polysilicon, or metals. CVD enables conformal, pinhole-free coverage at nanometre scale — impossible with physical methods alone.</p>
+
+      <div class="visualizer p6">
+        <svg class="wafer-svg" viewBox="0 0 580 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- CVD chamber outline -->
+          <rect x="30" y="30" width="220" height="100" rx="8" fill="rgba(250,204,21,.05)" stroke="#facc15" stroke-width="1.5"/>
+          <!-- Gas inlets -->
+          <rect x="30" y="50" width="30" height="12" rx="2" fill="rgba(250,204,21,.2)" stroke="#facc15" stroke-width="1"/>
+          <text x="10" y="60" fill="rgba(250,204,21,.6)" font-size="8" font-family="IBM Plex Mono">SiH₄</text>
+          <rect x="30" y="78" width="30" height="12" rx="2" fill="rgba(250,204,21,.2)" stroke="#facc15" stroke-width="1"/>
+          <text x="10" y="88" fill="rgba(250,204,21,.6)" font-size="8" font-family="IBM Plex Mono">N₂O</text>
+          <!-- Wafer on chuck -->
+          <rect x="100" y="105" width="110" height="8" rx="2" fill="rgba(250,204,21,.3)" stroke="#facc15" stroke-width="1"/>
+          <rect x="100" y="97" width="110" height="8" rx="1" fill="#7a5a00" stroke="#facc15" stroke-width="1.5"/>
+          <!-- Deposition particles -->
+          <circle cx="120" cy="82" r="3" fill="rgba(250,204,21,.6)"/>
+          <circle cx="145" cy="78" r="2" fill="rgba(250,204,21,.7)"/>
+          <circle cx="170" cy="80" r="3" fill="#7a5a00"/>
+          <circle cx="195" cy="76" r="2" fill="rgba(250,204,21,.8)"/>
+          <circle cx="135" cy="90" r="2" fill="rgba(250,204,21,.4)"/>
+          <circle cx="160" cy="88" r="3" fill="rgba(250,204,21,.6)"/>
+          <circle cx="185" cy="91" r="2" fill="#7a5a00"/>
+          <text x="140" y="130" text-anchor="middle" fill="#7a5a00" font-size="9" font-family="IBM Plex Mono">CVD Reactor</text>
+          <!-- Film types -->
+          <rect x="280" y="30" width="280" height="100" rx="6" fill="rgba(250,204,21,.03)" stroke="rgba(250,204,21,.2)" stroke-width="1"/>
+          <text x="420" y="48" text-anchor="middle" fill="#7a5a00" font-size="9" font-family="IBM Plex Mono">FILM TYPES</text>
+          <text x="295" y="64" fill="#facc15" font-size="10" font-family="IBM Plex Mono">Poly-Si</text>
+          <text x="295" y="78" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">Gate electrode, resistors</text>
+          <text x="295" y="96" fill="#facc15" font-size="10" font-family="IBM Plex Mono">SiO₂ / Si₃N₄</text>
+          <text x="295" y="110" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">Dielectric isolation layers</text>
+          <text x="430" y="64" fill="#facc15" font-size="10" font-family="IBM Plex Mono">W / TiN</text>
+          <text x="430" y="78" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">Contact plugs, barriers</text>
+          <text x="430" y="96" fill="#facc15" font-size="10" font-family="IBM Plex Mono">Low-k ILD</text>
+          <text x="430" y="110" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">Inter-layer dielectric</text>
+        </svg>
+      </div>
+
+      <div class="ieg-callout">
+        <div class="ieg-callout-badge">IEG REF</div>
+        <div class="ieg-callout-text">
+          <strong>Korea Semiconductor Academy</strong> — IEG's Process Control Operation Software Testing Equipment allows trainees to simulate and monitor PECVD (Plasma-Enhanced CVD) recipes digitally before running on actual chambers, reducing material waste and training risk.
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-label">CVD Variants</div>
+          <ul>
+            <li>LPCVD: 0.1–1 Torr, 550–900°C — best conformality</li>
+            <li>PECVD: plasma activation, low temp (&lt;400°C)</li>
+            <li>APCVD: atmospheric, fast rate, less conformal</li>
+            <li>ALD: atomic layer, 1 monolayer/cycle, &lt;400°C</li>
+            <li>HDP-CVD: high-density plasma, gap-fill capability</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Film Quality Metrics</div>
+          <ul>
+            <li>Thickness uniformity: &lt;±1% across 300mm wafer</li>
+            <li>Step coverage: &gt;90% in high-AR trenches</li>
+            <li>Refractive index (ellipsometry measurement)</li>
+            <li>Wet etch rate ratio (WERR) vs. thermal oxide</li>
+            <li>Stress: compressive vs. tensile (wafer bow)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="params-row">
+        <div class="param-card p6">
+          <div class="param-value">ALD</div>
+          <div class="param-label">Finest Deposition Mode</div>
+        </div>
+        <div class="param-card p6">
+          <div class="param-value">±1%</div>
+          <div class="param-label">Thickness Uniformity</div>
+        </div>
+        <div class="param-card p6">
+          <div class="param-value">&gt;90%</div>
+          <div class="param-label">Step Coverage</div>
+        </div>
+      </div>
+
+      <div class="quiz-section" id="quiz-5">
+        <div class="quiz-q">Assessment: Why is Atomic Layer Deposition (ALD) preferred over LPCVD for depositing high-k gate dielectrics at advanced nodes?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(5,0,false)">A. ALD is much faster and has higher throughput than LPCVD</button>
+          <button class="quiz-opt" onclick="answer(5,1,true)">B. ALD deposits exactly one atomic monolayer per cycle, enabling sub-nanometre thickness control and perfect conformality</button>
+          <button class="quiz-opt" onclick="answer(5,2,false)">C. ALD works at higher temperatures that improve film crystallinity</button>
+          <button class="quiz-opt" onclick="answer(5,3,false)">D. ALD uses liquid precursors that are cheaper than gaseous sources</button>
+        </div>
+        <div class="quiz-feedback" id="fb-5">✓ ALD alternates self-limiting surface reactions: each precursor pulse deposits exactly one monolayer before purging, ensuring perfect thickness control and &gt;99% step coverage in high-aspect-ratio features. At 2–3nm high-k dielectric thicknesses (HfO₂, Al₂O₃), even one atomic layer of variation is unacceptable — only ALD achieves this.</div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="goTo(4)">← Previous</button>
+        <button class="btn btn-primary p6" style="background:var(--pc); color:#000" onclick="goTo(6)">Next Station →</button>
+      </div>
+    </section>
+
+    <!-- ── STATION 7 ── -->
+    <section class="process-panel p7" id="panel-6">
+      <div class="panel-eyebrow">Station 07 · Metallisation</div>
+      <h1 class="panel-title">Metallisation<br><span style="font-weight:300; font-size:22px; color:var(--text-2)">Interconnect & Contact Formation</span></h1>
+      <p class="panel-subtitle">Metal layers connect transistors into circuits. Modern chips have 10–15+ metal layers of copper damascene wiring, each separated by low-k dielectrics and linked through tungsten or cobalt contacts and vias.</p>
+
+      <div class="visualizer p7">
+        <svg class="wafer-svg" viewBox="0 0 580 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Cross-section of multilayer metal -->
+          <rect x="30" y="120" width="320" height="16" rx="2" fill="rgba(96,165,250,.1)" stroke="rgba(96,165,250,.3)" stroke-width="1"/>
+          <text x="190" y="143" text-anchor="middle" fill="rgba(96,165,250,.4)" font-size="9" font-family="IBM Plex Mono">Si / FEOL devices</text>
+          <!-- Metal 1 -->
+          <rect x="50" y="104" width="40" height="16" rx="1" fill="rgba(96,165,250,.45)" stroke="#60a5fa" stroke-width="1"/>
+          <rect x="140" y="104" width="60" height="16" rx="1" fill="rgba(96,165,250,.45)" stroke="#60a5fa" stroke-width="1"/>
+          <rect x="250" y="104" width="50" height="16" rx="1" fill="rgba(96,165,250,.45)" stroke="#60a5fa" stroke-width="1"/>
+          <text x="190" y="100" text-anchor="middle" fill="#1050a0" font-size="9" font-family="IBM Plex Mono">Metal 1 (Cu) — ILD</text>
+          <!-- Vias -->
+          <rect x="80" y="86" width="10" height="18" rx="1" fill="rgba(96,165,250,.6)" stroke="#60a5fa" stroke-width="1"/>
+          <rect x="190" y="86" width="10" height="18" rx="1" fill="rgba(96,165,250,.6)" stroke="#60a5fa" stroke-width="1"/>
+          <rect x="270" y="86" width="10" height="18" rx="1" fill="rgba(96,165,250,.6)" stroke="#60a5fa" stroke-width="1"/>
+          <!-- Metal 2 -->
+          <rect x="60" y="72" width="60" height="14" rx="1" fill="rgba(96,165,250,.55)" stroke="#60a5fa" stroke-width="1.5"/>
+          <rect x="180" y="72" width="80" height="14" rx="1" fill="rgba(96,165,250,.55)" stroke="#60a5fa" stroke-width="1.5"/>
+          <text x="190" y="68" text-anchor="middle" fill="#1050a0" font-size="9" font-family="IBM Plex Mono">Metal 2 — Cu Damascene</text>
+          <!-- Sputtering label -->
+          <rect x="390" y="40" width="170" height="80" rx="6" fill="rgba(96,165,250,.05)" stroke="rgba(96,165,250,.2)" stroke-width="1"/>
+          <text x="475" y="58" text-anchor="middle" fill="#1050a0" font-size="9" font-family="IBM Plex Mono">PROCESS</text>
+          <text x="402" y="74" fill="#60a5fa" font-size="10" font-family="IBM Plex Mono">PVD sputtering</text>
+          <text x="402" y="87" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">TiN barrier layer</text>
+          <text x="402" y="100" fill="#60a5fa" font-size="10" font-family="IBM Plex Mono">ECD copper fill</text>
+          <text x="402" y="113" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">CMP planarisation</text>
+        </svg>
+      </div>
+
+      <div class="ieg-callout">
+        <div class="ieg-callout-badge">IEG REF</div>
+        <div class="ieg-callout-text">
+          <strong>Korea Polytechnic University, Incheon Campus</strong> — IEG supplied Semiconductor Packaging Equipment covering back-end metallisation and contact formation. Trainees learn PVD sputtering parameters and CMP endpoint control using IEG's simulation-linked training modules.
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-label">Copper Damascene Process</div>
+          <ul>
+            <li>Etch trenches/vias in low-k dielectric (ILD)</li>
+            <li>PVD TaN/Ta barrier layer deposition</li>
+            <li>PVD Cu seed layer</li>
+            <li>Electrochemical deposition (ECD) — fills trenches</li>
+            <li>CMP — removes overburden, planarises surface</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Why Copper Replaced Aluminium</div>
+          <ul>
+            <li>Cu resistivity: 1.68 µΩ·cm vs Al 2.65 µΩ·cm</li>
+            <li>Better electromigration resistance (longer lifetime)</li>
+            <li>Lower RC delay at advanced nodes</li>
+            <li>Challenge: Cu diffuses into Si → TaN barrier needed</li>
+            <li>Now: Co, Ru replacing Cu at &lt;5nm nodes</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="params-row">
+        <div class="param-card p7">
+          <div class="param-value">10–15</div>
+          <div class="param-label">Metal Layers (advanced)</div>
+        </div>
+        <div class="param-card p7">
+          <div class="param-value">1.68µΩ·cm</div>
+          <div class="param-label">Cu Resistivity</div>
+        </div>
+        <div class="param-card p7">
+          <div class="param-value">CMP</div>
+          <div class="param-label">Planarisation Method</div>
+        </div>
+      </div>
+
+      <div class="quiz-section" id="quiz-6">
+        <div class="quiz-q">Assessment: Why is a TaN/Ta barrier layer deposited before copper in the damascene process?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(6,0,false)">A. To improve the electrical conductivity of the copper wire</button>
+          <button class="quiz-opt" onclick="answer(6,1,false)">B. To reflect laser light during CMP endpoint detection</button>
+          <button class="quiz-opt" onclick="answer(6,2,true)">C. To prevent copper atoms from diffusing into the silicon and low-k dielectric, which would cause device failure</button>
+          <button class="quiz-opt" onclick="answer(6,3,false)">D. To act as an adhesion layer for the photoresist during patterning</button>
+        </div>
+        <div class="quiz-feedback" id="fb-6">✓ Copper is a fast diffuser in silicon and SiO₂. Even trace amounts cause deep-level traps and junction leakage, destroying MOSFET performance. The TaN diffusion barrier (deposited by PVD) is chemically inert and prevents Cu migration, while the Ta wetting layer improves Cu seed adhesion for ECD fill.</div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="goTo(5)">← Previous</button>
+        <button class="btn btn-primary p7" style="background:var(--pc)" onclick="goTo(7)">Next Station →</button>
+      </div>
+    </section>
+
+    <!-- ── STATION 8 ── -->
+    <section class="process-panel p8" id="panel-7">
+      <div class="panel-eyebrow">Station 08 · Testing & Packaging</div>
+      <h1 class="panel-title">Testing &amp; Packaging<br><span style="font-weight:300; font-size:22px; color:var(--text-2)">Wafer Probe, Dicing & Assembly</span></h1>
+      <p class="panel-subtitle">The final stage converts fabricated wafers into individual packaged chips ready for the market. Electrical testing identifies good dies (yield management), followed by dicing, wire bonding or flip-chip, and encapsulation.</p>
+
+      <div class="visualizer p8">
+        <svg class="wafer-svg" viewBox="0 0 580 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Wafer map -->
+          <rect x="20" y="30" width="110" height="100" rx="55" fill="rgba(251,146,60,.06)" stroke="#fb923c" stroke-width="1.5"/>
+          <circle cx="75" cy="80" r="42" fill="none" stroke="rgba(251,146,60,.2)" stroke-width="1" stroke-dasharray="2,2"/>
+          <!-- Die grid on wafer -->
+          <rect x="40" y="55" width="12" height="12" fill="#b04000" stroke="#fb923c" stroke-width=".5"/>
+          <rect x="55" y="55" width="12" height="12" fill="#b04000" stroke="#fb923c" stroke-width=".5"/>
+          <rect x="70" y="55" width="12" height="12" fill="#b04000" stroke="#fb923c" stroke-width=".5"/>
+          <rect x="85" y="55" width="12" height="12" fill="#b04000" stroke="#fb923c" stroke-width=".5"/>
+          <rect x="40" y="70" width="12" height="12" fill="#b04000" stroke="#fb923c" stroke-width=".5"/>
+          <rect x="55" y="70" width="12" height="12" fill="#f87171" stroke="#fb923c" stroke-width=".5" opacity=".6"/>
+          <rect x="70" y="70" width="12" height="12" fill="#b04000" stroke="#fb923c" stroke-width=".5"/>
+          <rect x="85" y="70" width="12" height="12" fill="#b04000" stroke="#fb923c" stroke-width=".5"/>
+          <rect x="100" y="70" width="12" height="12" fill="#b04000" stroke="#fb923c" stroke-width=".5"/>
+          <rect x="40" y="85" width="12" height="12" fill="#b04000" stroke="#fb923c" stroke-width=".5"/>
+          <rect x="55" y="85" width="12" height="12" fill="#b04000" stroke="#fb923c" stroke-width=".5"/>
+          <rect x="70" y="85" width="12" height="12" fill="#f87171" stroke="#fb923c" stroke-width=".5" opacity=".6"/>
+          <rect x="85" y="85" width="12" height="12" fill="#b04000" stroke="#fb923c" stroke-width=".5"/>
+          <rect x="100" y="85" width="12" height="12" fill="#b04000" stroke="#fb923c" stroke-width=".5"/>
+          <text x="75" y="148" text-anchor="middle" fill="#b04000" font-size="9" font-family="IBM Plex Mono">Wafer Map (red=fail)</text>
+          <!-- Arrow dicing -->
+          <line x1="135" y1="80" x2="165" y2="80" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <polygon points="165,75 175,80 165,85" fill="#fb923c"/>
+          <text x="150" y="70" text-anchor="middle" fill="rgba(251,146,60,.6)" font-size="8" font-family="IBM Plex Mono">dice</text>
+          <!-- Single die -->
+          <rect x="178" y="60" width="45" height="40" rx="3" fill="rgba(251,146,60,.2)" stroke="#fb923c" stroke-width="1.5"/>
+          <text x="200" y="84" text-anchor="middle" fill="#fb923c" font-size="9" font-family="IBM Plex Mono">Die</text>
+          <!-- Package -->
+          <line x1="230" y1="80" x2="260" y2="80" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <polygon points="260,75 270,80 260,85" fill="#fb923c"/>
+          <text x="245" y="70" text-anchor="middle" fill="rgba(251,146,60,.6)" font-size="8" font-family="IBM Plex Mono">package</text>
+          <rect x="272" y="52" width="80" height="56" rx="4" fill="rgba(251,146,60,.08)" stroke="#fb923c" stroke-width="1.5"/>
+          <rect x="285" y="65" width="54" height="30" rx="2" fill="rgba(251,146,60,.25)"/>
+          <line x1="272" y1="70" x2="252" y2="70" stroke="#fb923c" stroke-width="1"/>
+          <line x1="272" y1="80" x2="252" y2="80" stroke="#fb923c" stroke-width="1"/>
+          <line x1="272" y1="90" x2="252" y2="90" stroke="#fb923c" stroke-width="1"/>
+          <line x1="352" y1="70" x2="372" y2="70" stroke="#fb923c" stroke-width="1"/>
+          <line x1="352" y1="80" x2="372" y2="80" stroke="#fb923c" stroke-width="1"/>
+          <line x1="352" y1="90" x2="372" y2="90" stroke="#fb923c" stroke-width="1"/>
+          <text x="312" y="116" text-anchor="middle" fill="#b04000" font-size="9" font-family="IBM Plex Mono">BGA Package</text>
+          <!-- Yield -->
+          <rect x="400" y="40" width="165" height="80" rx="6" fill="rgba(251,146,60,.05)" stroke="rgba(251,146,60,.2)" stroke-width="1"/>
+          <text x="483" y="58" text-anchor="middle" fill="#b04000" font-size="9" font-family="IBM Plex Mono">YIELD METRICS</div>
+          <text x="415" y="75" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">Wafer probe yield</text>
+          <text x="548" y="75" text-anchor="end" fill="#fb923c" font-size="10" font-family="IBM Plex Mono">&gt;95%</text>
+          <text x="415" y="90" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">Package test yield</text>
+          <text x="548" y="90" text-anchor="end" fill="#fb923c" font-size="10" font-family="IBM Plex Mono">&gt;99%</text>
+          <text x="415" y="105" fill="#2d4060" font-size="9" font-family="IBM Plex Mono">Overall fab yield</text>
+          <text x="548" y="105" text-anchor="end" fill="#fb923c" font-size="10" font-family="IBM Plex Mono">80–95%</text>
+        </svg>
+      </div>
+
+      <div class="ieg-callout">
+        <div class="ieg-callout-badge">IEG REF</div>
+        <div class="ieg-callout-text">
+          <strong>Korea Polytechnic University, Incheon Campus</strong> — IEG's Semiconductor Packaging Equipment covers wafer probe testing, dicing saw operation, wire bonding, and final test (FT) simulation. Trainees generate and interpret wafer maps and calculate die yield using actual test data from IEG training wafers.
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-label">Back-End-of-Line (BEOL) Sequence</div>
+          <ul>
+            <li>Wafer probe test — electrical sort (E-sort)</li>
+            <li>Wafer thinning (grinding to &lt;100µm)</li>
+            <li>Dicing — blade, laser, or plasma saw</li>
+            <li>Die attach — epoxy or eutectic bond to substrate</li>
+            <li>Wire bonding or flip-chip bumping</li>
+            <li>Mould compound (EMC) encapsulation</li>
+            <li>Final test (FT) + burn-in at elevated temperature</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Package Types</div>
+          <ul>
+            <li>BGA — Ball Grid Array (high pin count)</li>
+            <li>QFN — Quad Flat No-lead (compact)</li>
+            <li>CSP — Chip Scale Package (mobile)</li>
+            <li>3D-IC — die stacking with TSV (HBM memory)</li>
+            <li>CoWoS — CoW on Substrate (AI accelerators)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="params-row">
+        <div class="param-card p8">
+          <div class="param-value">&gt;95%</div>
+          <div class="param-label">Wafer Probe Yield Target</div>
+        </div>
+        <div class="param-card p8">
+          <div class="param-value">&lt;100µm</div>
+          <div class="param-label">Thinned Wafer Thickness</div>
+        </div>
+        <div class="param-card p8">
+          <div class="param-value">25µm</div>
+          <div class="param-label">Wire Bond Diameter</div>
+        </div>
+      </div>
+
+      <div class="quiz-section" id="quiz-7">
+        <div class="quiz-q">Assessment: What does a wafer map showing clustered failing dies near the wafer edge most likely indicate?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(7,0,false)">A. Random defects from a particle contamination event during implantation</button>
+          <button class="quiz-opt" onclick="answer(7,1,false)">B. A design flaw in the die that causes electrical shorts</button>
+          <button class="quiz-opt" onclick="answer(7,2,true)">C. A process uniformity issue — edge effects from CVD, CMP, or lithography causing out-of-spec conditions at the wafer periphery</button>
+          <button class="quiz-opt" onclick="answer(7,3,false)">D. Normal yield loss expected in all semiconductor manufacturing</button>
+        </div>
+        <div class="quiz-feedback" id="fb-7">✓ Clustered edge failures are a strong signature of process uniformity problems. CVD tools may have non-uniform gas flow at the wafer edge; CMP pads wear non-uniformly; lithography steppers may have edge-of-field aberrations. A random scatter pattern suggests particle contamination; a repeating pattern across the wafer indicates a reticle or process recipe defect.</div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="goTo(6)">← Previous</button>
+        <button class="btn btn-primary p8" style="background:var(--pc)" onclick="complete()">Complete Walkthrough ✓</button>
+      </div>
+    </section>
+
+    <!-- COMPLETION -->
+    <div class="completion-screen" id="completion">
+      <div class="completion-icon">🎓</div>
+      <h2 class="completion-title">Walkthrough Complete</h2>
+      <p class="completion-sub">You have navigated all 8 semiconductor process stations.<br>IEG Digital Walkthrough — Semiconductor Process Fundamentals</p>
+
+      <div class="cert-box">
+        <div class="cert-label">IEG Certificate of Completion</div>
+        <div class="cert-name">Semiconductor 8-Process Digital Walkthrough</div>
+        <div class="cert-desc">Module IEG-SEM-01 · NQF Level 3–4 Reference · BTEC Unit 4039/4040 Aligned<br>Delivered as part of the IEG × ALAT Korea Technology Tour Programme</div>
+      </div>
+
+      <div class="score-grid">
+        <div class="score-item">
+          <div class="score-val" id="final-score">0</div>
+          <div class="score-lbl">Quiz Score</div>
+        </div>
+        <div class="score-item">
+          <div class="score-val">8</div>
+          <div class="score-lbl">Stations Completed</div>
+        </div>
+        <div class="score-item">
+          <div class="score-val" id="final-pct">0%</div>
+          <div class="score-lbl">Assessment Result</div>
+        </div>
+      </div>
+      <br>
+      <button class="btn btn-ghost" onclick="restart()" style="margin-top:20px;">↺ Restart Walkthrough</button>
+    </div>
+
+  </main>
+</div>
+
+<!-- ════════════════════════════════════════════
+     INQUIRY SECTION — Full width below layout
+════════════════════════════════════════════ -->
+<section class="inquiry-section" id="inquiry">
+  <div class="inquiry-inner">
+
+    <div class="inquiry-left">
+      <div class="inq-eyebrow">Contact IEG</div>
+      <h2 class="inq-title">Send an Inquiry</h2>
+      <p class="inq-desc">Questions about IEG's semiconductor training equipment, curriculum partnership, or the Korea Technology Tour? Leave your details and our Global Business team will respond within 2 business days.</p>
+
+      <div class="inq-contact-list">
+        <div class="inq-contact-item">
+          <span class="inq-contact-label">Email</span>
+          <span class="inq-contact-value">kellycho824@ieg.kr</span>
+        </div>
+        <div class="inq-contact-item">
+          <span class="inq-contact-label">Division</span>
+          <span class="inq-contact-value">Global Business Division</span>
+        </div>
+        <div class="inq-contact-item">
+          <span class="inq-contact-label">Company</span>
+          <span class="inq-contact-value">IEG Co., Ltd. · Seongnam, Korea</span>
+        </div>
+        <div class="inq-contact-item">
+          <span class="inq-contact-label">Response</span>
+          <span class="inq-contact-value">Within 2 business days</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="inquiry-right">
+      <form class="inq-form" id="inq-form"
+            action="https://formspree.io/f/kellycho824@ieg.kr"
+            method="POST">
+
+        <div class="inq-row">
+          <div class="inq-field">
+            <label class="inq-label" for="inq-name">Full Name <span class="req">*</span></label>
+            <input class="inq-input" type="text" id="inq-name" name="name" placeholder="e.g. Ahmed Al-Rashidi" required>
+          </div>
+          <div class="inq-field">
+            <label class="inq-label" for="inq-org">Organisation <span class="req">*</span></label>
+            <input class="inq-input" type="text" id="inq-org" name="organisation" placeholder="e.g. TAFE SA / ALAT" required>
+          </div>
+        </div>
+
+        <div class="inq-row">
+          <div class="inq-field">
+            <label class="inq-label" for="inq-email">Email Address <span class="req">*</span></label>
+            <input class="inq-input" type="email" id="inq-email" name="email" placeholder="your@email.com" required>
+          </div>
+          <div class="inq-field">
+            <label class="inq-label" for="inq-phone">Phone / WhatsApp</label>
+            <input class="inq-input" type="tel" id="inq-phone" name="phone" placeholder="+966 xx xxx xxxx">
+          </div>
+        </div>
+
+        <div class="inq-field" style="margin-bottom: 16px;">
+          <label class="inq-label" for="inq-topic">Inquiry Topic <span class="req">*</span></label>
+          <select class="inq-input inq-select" id="inq-topic" name="topic" required>
+            <option value="" disabled selected>Select a topic</option>
+            <option value="Curriculum Partnership (BTEC / TAFE SA)">Curriculum Partnership (BTEC / TAFE SA)</option>
+            <option value="Equipment Quotation (Model C Cleanroom)">Equipment Quotation (Model C Cleanroom)</option>
+            <option value="Korea Technology Tour (TTT Programme)">Korea Technology Tour (TTT Programme)</option>
+            <option value="XR Digital Walkthrough Licensing">XR Digital Walkthrough Licensing</option>
+            <option value="Phase 1 Budget Discussion">Phase 1 Budget Discussion</option>
+            <option value="General Enquiry">General Enquiry</option>
+          </select>
+        </div>
+
+        <div class="inq-field" style="margin-bottom: 16px;">
+          <label class="inq-label" for="inq-msg">Message <span class="req">*</span></label>
+          <textarea class="inq-input inq-textarea" id="inq-msg" name="message"
+                    placeholder="Please describe your inquiry in detail — including your training centre context, target learner group, and any specific equipment or curriculum questions." required></textarea>
+        </div>
+
+        <div class="inq-field" style="margin-bottom: 24px;">
+          <label class="inq-label" for="inq-other">Additional Notes</label>
+          <input class="inq-input" type="text" id="inq-other" name="notes" placeholder="Timeline, budget range, preferred contact time, etc.">
+        </div>
+
+        <!-- Hidden fields for context -->
+        <input type="hidden" name="_subject" value="[IEG Simulator] New Inquiry from Digital Walkthrough">
+        <input type="hidden" name="_replyto" id="hidden-reply">
+
+        <div class="inq-submit-row">
+          <div class="inq-privacy">
+            <span>✓</span> Your information is used solely to respond to this inquiry and will not be shared with third parties.
+          </div>
+          <button type="submit" class="btn-submit" id="inq-submit">
+            <span id="submit-label">Send Inquiry →</span>
+          </button>
+        </div>
+
+      </form>
+
+      <!-- Success state -->
+      <div class="inq-success" id="inq-success">
+        <div class="success-icon">✓</div>
+        <div class="success-title">Inquiry Sent Successfully</div>
+        <div class="success-desc">Thank you. Kelly Cho and the IEG Global Business team will review your message and respond to <span id="success-email"></span> within 2 business days.</div>
+        <button class="btn-reset" onclick="resetForm()">Send Another Inquiry</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+.inquiry-section {
+  background: #f5f8fc;
+  border-top: 1px solid rgba(0,0,0,.1);
+  padding: 64px 48px;
+}
+.inquiry-inner {
+  max-width: 1060px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 60px;
+  align-items: start;
+}
+@media (max-width: 800px) { .inquiry-inner { grid-template-columns: 1fr; gap: 36px; } }
+
+.inq-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #a07820;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.inq-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 18px; height: 1px;
+  background: #a07820;
+}
+.inq-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #0d1520;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+.inq-desc {
+  font-size: 13.5px;
+  color: #2d4060;
+  line-height: 1.75;
+  margin-bottom: 32px;
+}
+.inq-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.inq-contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.inq-contact-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #7a9ab8;
+}
+.inq-contact-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: #0d1520;
+}
+
+/* ── FORM ── */
+.inq-form {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 14px;
+  padding: 32px;
+}
+.inq-success {
+  display: none;
+  background: #fff;
+  border: 1px solid #16a34a;
+  border-radius: 14px;
+  padding: 40px 32px;
+  text-align: center;
+}
+.inq-success.show { display: block; }
+.success-icon {
+  width: 52px; height: 52px;
+  background: #dcfce7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #16a34a;
+  margin: 0 auto 16px;
+}
+.success-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0d1520;
+  margin-bottom: 10px;
+}
+.success-desc {
+  font-size: 13.5px;
+  color: #2d4060;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.success-desc span { font-weight: 600; color: #0d1520; }
+.btn-reset {
+  background: none;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 7px;
+  padding: 9px 20px;
+  font-size: 13px;
+  color: #2d4060;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all .15s;
+}
+.btn-reset:hover { background: #f5f8fc; color: #0d1520; }
+
+.inq-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+@media (max-width: 600px) { .inq-row { grid-template-columns: 1fr; } }
+
+.inq-field { display: flex; flex-direction: column; gap: 5px; }
+.inq-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e3452;
+  letter-spacing: .01em;
+}
+.req { color: #dc2626; }
+.inq-input {
+  background: #f5f8fc;
+  border: 1px solid rgba(0,0,0,.13);
+  border-radius: 7px;
+  padding: 10px 13px;
+  font-size: 13px;
+  color: #0d1520;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color .15s, background .15s;
+  width: 100%;
+}
+.inq-input::placeholder { color: #8aabcc; }
+.inq-input:focus {
+  border-color: #3b82f6;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.1);
+}
+.inq-select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238aabcc' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+.inq-textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.inq-submit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.inq-privacy {
+  font-size: 11.5px;
+  color: #5a7090;
+  line-height: 1.5;
+  flex: 1;
+}
+.inq-privacy span { color: #16a34a; font-weight: 700; }
+.btn-submit {
+  background: #0d1520;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: opacity .15s, transform .1s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-submit:hover { opacity: .85; }
+.btn-submit:active { transform: scale(.98); }
+.btn-submit:disabled { opacity: .5; cursor: not-allowed; }
+</style>
+
+<script>
+// ── INQUIRY FORM ──
+const inqForm = document.getElementById('inq-form');
+if (inqForm) {
+  inqForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('inq-submit');
+    const label = document.getElementById('submit-label');
+    const emailVal = document.getElementById('inq-email').value;
+    document.getElementById('hidden-reply').value = emailVal;
+
+    btn.disabled = true;
+    label.textContent = 'Sending…';
+
+    try {
+      const res = await fetch('https://formspree.io/f/kellycho824@ieg.kr', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(inqForm)
+      });
+      if (res.ok) {
+        inqForm.style.display = 'none';
+        const success = document.getElementById('inq-success');
+        document.getElementById('success-email').textContent = emailVal;
+        success.classList.add('show');
+      } else {
+        label.textContent = 'Failed — please retry';
+        btn.disabled = false;
+      }
+    } catch(err) {
+      label.textContent = 'Network error — retry';
+      btn.disabled = false;
+    }
+  });
+}
+
+function resetForm() {
+  document.getElementById('inq-form').reset();
+  document.getElementById('inq-form').style.display = 'block';
+  document.getElementById('inq-success').classList.remove('show');
+  document.getElementById('submit-label').textContent = 'Send Inquiry →';
+  document.getElementById('inq-submit').disabled = false;
+}
+
+// ── SIMULATOR ──
+let current = 0;
+let score = 0;
+let answered = new Array(8).fill(false);
+let correct  = new Array(8).fill(false);
+
+function goTo(idx) {
+  document.querySelectorAll('.process-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('completion').classList.remove('show');
+
+  const panel = document.getElementById('panel-' + idx);
+  if (panel) panel.classList.add('active');
+
+  const btn = document.getElementById('btn-' + idx);
+  if (btn) btn.classList.add('active');
+
+  current = idx;
+  updateHeader();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function answer(stationIdx, optIdx, isCorrect) {
+  if (answered[stationIdx]) return;
+  answered[stationIdx] = true;
+
+  const quiz = document.getElementById('quiz-' + stationIdx);
+  const opts = quiz.querySelectorAll('.quiz-opt');
+  const fb   = document.getElementById('fb-' + stationIdx);
+
+  opts.forEach((o, i) => {
+    o.disabled = true;
+    if (i === optIdx) o.classList.add(isCorrect ? 'correct' : 'wrong');
+    if (!isCorrect) {
+      // find the correct one
+      const allWrong = [0,1,2,3];
+      // mark answer btn correctly handled by isCorrect flag per btn
+    }
+  });
+
+  fb.classList.add('show');
+
+  if (isCorrect) {
+    score++;
+    correct[stationIdx] = true;
+    document.getElementById('btn-' + stationIdx).classList.add('completed');
+  }
+
+  updateHeader();
+}
+
+function updateHeader() {
+  const total = answered.filter(Boolean).length;
+  const fill  = ((current + 1) / 8) * 100;
+  document.getElementById('progress-fill').style.width = fill + '%';
+  document.getElementById('progress-label').textContent = 'Station ' + (current + 1) + ' / 8';
+  document.getElementById('score-label').textContent = 'Score: ' + score + ' / ' + total;
+}
+
+function complete() {
+  document.querySelectorAll('.process-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('completion').classList.add('show');
+
+  const total = answered.filter(Boolean).length || 8;
+  const pct   = Math.round((score / 8) * 100);
+  document.getElementById('final-score').textContent = score + '/8';
+  document.getElementById('final-pct').textContent   = pct + '%';
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('progress-label').textContent = 'Complete';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restart() {
+  current = 0;
+  score = 0;
+  answered = new Array(8).fill(false);
+  correct  = new Array(8).fill(false);
+
+  document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('completed', 'active'));
+  document.querySelectorAll('.quiz-opt').forEach(o => {
+    o.disabled = false;
+    o.classList.remove('correct', 'wrong');
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(f => f.classList.remove('show'));
+  document.getElementById('completion').classList.remove('show');
+  goTo(0);
+}
+
+// init
+updateHeader();
+</script>
+</body>
+</html>
