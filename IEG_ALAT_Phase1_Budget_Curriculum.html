@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IEG × ALAT — Phase 1 Budget & Curriculum Framework</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
+
+  :root {
+    --ink:       #0f1117;
+    --ink-2:     #2e3240;
+    --ink-3:     #5a6070;
+    --rule:      #dde1ea;
+    --bg:        #f8f9fc;
+    --surface:   #ffffff;
+    --surface-2: #f2f4f8;
+
+    /* accent system */
+    --gold:      #c9a84c;
+    --gold-lt:   #f5ecd4;
+    --teal:      #1a7f74;
+    --teal-lt:   #d4f0ec;
+    --red:       #c0392b;
+    --red-lt:    #fdecea;
+    --navy:      #1a2a4a;
+    --navy-lt:   #e8ecf4;
+    --violet:    #5e4b8b;
+    --violet-lt: #ede8f8;
+
+    --mono: 'IBM Plex Mono', monospace;
+    --body: 'Inter', sans-serif;
+    --display: 'Fraunces', serif;
+
+    --radius: 6px;
+    --shadow: 0 1px 4px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.05);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--body);
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  .page-header {
+    background: var(--navy);
+    color: #fff;
+    padding: 56px 48px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: rgba(201,168,76,.12);
+  }
+  .page-header .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .page-header h1 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(26px, 4vw, 40px);
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .page-header h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+  }
+  .page-header .sub {
+    font-size: 14px;
+    color: rgba(255,255,255,.6);
+    max-width: 620px;
+    margin-top: 10px;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .meta-item .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.45);
+  }
+  .meta-item .value {
+    font-size: 13px;
+    color: rgba(255,255,255,.9);
+    font-weight: 500;
+  }
+
+  /* ── NAV TABS ── */
+  .tab-nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--rule);
+    padding: 0 48px;
+    display: flex;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--body);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-3);
+    padding: 16px 20px 14px;
+    border-bottom: 2px solid transparent;
+    transition: color .2s, border-color .2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--ink); }
+  .tab-btn.active {
+    color: var(--navy);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ── LAYOUT ── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .container {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 48px 48px 80px;
+  }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--ink-3);
+    margin-bottom: 32px;
+  }
+  .divider {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 40px 0;
+  }
+
+  /* ── BUDGET SECTION ── */
+  .budget-intro {
+    background: var(--gold-lt);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 16px 20px;
+    font-size: 13.5px;
+    color: var(--ink-2);
+    margin-bottom: 36px;
+    line-height: 1.7;
+  }
+
+  .budget-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 36px;
+  }
+  @media (max-width: 720px) { .budget-split { grid-template-columns: 1fr; } }
+
+  .budget-card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .budget-card-header {
+    padding: 16px 20px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .budget-card-header .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+  .internal .budget-card-header { background: var(--navy-lt); }
+  .internal .badge { background: var(--navy); color: #fff; }
+  .external .budget-card-header { background: var(--teal-lt); }
+  .external .badge { background: var(--teal); color: #fff; }
+
+  .budget-card-header .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .budget-card-header .card-desc {
+    font-size: 11.5px;
+    color: var(--ink-3);
+    margin-top: 1px;
+  }
+
+  .budget-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .budget-table th {
+    background: var(--surface-2);
+    font-size: 10.5px;
+    font-family: var(--mono);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding: 9px 16px;
+    text-align: left;
+    font-weight: 500;
+  }
+  .budget-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    color: var(--ink-2);
+  }
+  .budget-table tr:last-child td { border-bottom: none; }
+  .budget-table .amount {
+    font-family: var(--mono);
+    font-weight: 500;
+    text-align: right;
+    white-space: nowrap;
+    color: var(--ink);
+  }
+  .budget-table .note {
+    font-size: 11px;
+    color: var(--ink-3);
+    margin-top: 2px;
+  }
+  .budget-table .subtotal td {
+    background: var(--surface-2);
+    font-weight: 600;
+    font-size: 12.5px;
+    color: var(--ink);
+  }
+  .budget-table .subtotal .amount {
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+
+  .total-bar {
+    background: var(--navy);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+  }
+  .total-bar .label {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,.7);
+  }
+  .total-bar .label span {
+    display: block;
+    font-size: 11px;
+    color: rgba(255,255,255,.45);
+    margin-top: 2px;
+  }
+  .total-bar .amount {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--gold);
+  }
+  .total-bar .amount .unit {
+    font-size: 13px;
+    color: rgba(255,255,255,.5);
+    margin-right: 4px;
+  }
+
+  .notes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 28px;
+  }
+  @media (max-width: 640px) { .notes-grid { grid-template-columns: 1fr; } }
+  .note-box {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+  }
+  .note-box h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .note-box ul {
+    list-style: none;
+    font-size: 12.5px;
+    color: var(--ink-3);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .note-box ul li::before {
+    content: '→ ';
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* ── CURRICULUM SECTION ── */
+  .phase-block {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+  .phase-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .phase-badge {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 12px;
+    color: #fff;
+  }
+  .ph1 .phase-badge { background: var(--navy); }
+  .ph2 .phase-badge { background: var(--teal); }
+  .ph3 .phase-badge { background: var(--gold); }
+  .ph4 .phase-badge { background: var(--violet); }
+
+  .phase-meta h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+  .phase-meta .phase-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-3);
+    letter-spacing: .05em;
+  }
+  .phase-meta .phase-tag .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--rule);
+  }
+
+  .unit-list {
+    padding: 0;
+  }
+  .unit-item {
+    border-bottom: 1px solid var(--rule);
+    padding: 0;
+  }
+  .unit-item:last-child { border-bottom: none; }
+
+  .unit-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 24px;
+    text-align: left;
+    transition: background .15s;
+  }
+  .unit-toggle:hover { background: var(--surface-2); }
+
+  .unit-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    background: var(--surface-2);
+    border: 1px solid var(--rule);
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .unit-title-wrap .unit-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .unit-title-wrap .unit-btec {
+    font-size: 11px;
+    color: var(--teal);
+    font-family: var(--mono);
+    margin-top: 2px;
+  }
+  .unit-toggle .chevron {
+    font-size: 10px;
+    color: var(--ink-3);
+    transition: transform .2s;
+  }
+  .unit-item.open .chevron { transform: rotate(90deg); }
+
+  .unit-body {
+    display: none;
+    padding: 0 24px 20px 62px;
+    background: var(--surface-2);
+    border-top: 1px dashed var(--rule);
+  }
+  .unit-item.open .unit-body { display: block; }
+
+  .unit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  @media (max-width: 640px) { .unit-grid { grid-template-columns: 1fr; } }
+
+  .unit-col h5 {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .unit-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .unit-col ul li {
+    padding-left: 14px;
+    position: relative;
+  }
+  .unit-col ul li::before {
+    content: '·';
+    position: absolute;
+    left: 3px;
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 15px;
+    top: -1px;
+  }
+
+  .btec-mapping {
+    margin-top: 14px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .btec-mapping table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .btec-mapping th {
+    background: var(--navy);
+    color: rgba(255,255,255,.8);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 400;
+  }
+  .btec-mapping td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink-2);
+    vertical-align: top;
+  }
+  .btec-mapping tr:last-child td { border-bottom: none; }
+  .btec-mapping .code {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--teal);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .btec-mapping .level-badge {
+    display: inline-block;
+    background: var(--violet-lt);
+    color: var(--violet);
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .btec-mapping .gap-tag {
+    display: inline-block;
+    background: var(--red-lt);
+    color: var(--red);
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+  .btec-mapping .ok-tag {
+    display: inline-block;
+    background: var(--teal-lt);
+    color: var(--teal);
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+
+  /* ── FOOTER ── */
+  .page-footer {
+    background: var(--navy);
+    color: rgba(255,255,255,.45);
+    text-align: center;
+    padding: 28px 24px;
+    font-size: 12px;
+    font-family: var(--mono);
+  }
+  .page-footer span { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="page-header">
+  <div class="eyebrow">IEG Co., Ltd. × ALAT Saudi Arabia — Partnership Documents</div>
+  <h1>Phase 1 <em>Budget</em> &amp; Full Curriculum Framework</h1>
+  <p class="sub">Internal cost baseline + external proposal pricing for Phase 1, paired with a unit-level curriculum and BTEC mapping across all four phases of the 12-month roadmap.</p>
+  <div class="meta-row">
+    <div class="meta-item">
+      <span class="label">Document Type</span>
+      <span class="value">Budget Estimate + Curriculum Framework</span>
+    </div>
+    <div class="meta-item">
+      <span class="label">Scope</span>
+      <span class="value">Phase 1 (M1–2) / All Phases Overview</span>
+    </div>
+    <div class="meta-item">
+      <span class="label">Partner</span>
+      <span class="value">TAFE SA / ALAT, Saudi Arabia</span>
+    </div>
+    <div class="meta-item">
+      <span class="label">Prepared by</span>
+      <span class="value">IEG Global Business Division</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── TAB NAV ── -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('budget', this)">💰 Phase 1 Budget</button>
+  <button class="tab-btn" onclick="switchTab('curriculum', this)">📋 Curriculum Framework</button>
+</nav>
+
+<!-- ════════════════════════════════════════════
+     TAB 1 — BUDGET
+════════════════════════════════════════════ -->
+<div id="tab-budget" class="tab-panel active">
+<div class="container">
+
+  <p class="section-title">Phase 1 Budget Estimate</p>
+  <p class="section-sub">Month 1–2 · Foundation &amp; Content Production (Tracks ③ + ⑤)</p>
+
+  <div class="budget-intro">
+    Phase 1 is a <strong>relationship and credibility asset</strong>, not a hardware sale. All expenditure in this phase is directed at two deliverables: <strong>(A) the BTEC Curriculum Mapping Table</strong> (Track ⑤, Month 1) and <strong>(B) the Semiconductor 8-Process Digital Walkthrough Concept Deck</strong> (Track ③, Month 2). These are billable deliverables in their own right and the mandatory substrate for the Model C Cleanroom hardware proposal in Phase 4.
+    <br><br>
+    Two views are provided: <strong>Internal Cost</strong> (IEG labour &amp; overhead basis — for go/no-go decisions) and <strong>External Proposal Price</strong> (invoiceable to TAFE SA / ALAT — for contract negotiation).
+  </div>
+
+  <!-- SPLIT: Internal + External -->
+  <div class="budget-split">
+
+    <!-- INTERNAL -->
+    <div class="budget-card internal">
+      <div class="budget-card-header">
+        <div>
+          <div class="badge">Internal Cost</div>
+          <div class="card-title">IEG All-In Cost (In-house + Outsourcing)</div>
+          <div class="card-desc">Based on ₩4M/month staff rate (₩182,000/day) + market outsourcing rates</div>
+        </div>
+      </div>
+      <table class="budget-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Type · Volume</th>
+            <th style="text-align:right">KRW (₩)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Month 1 -->
+          <tr><td colspan="3" style="background:#f8f9fc; font-size:11px; font-family:'IBM Plex Mono',monospace; letter-spacing:.06em; color:#5a6070; padding:8px 16px; text-transform:uppercase;">Month 1 — Curriculum Localization</td></tr>
+          <tr>
+            <td>
+              Curriculum analyst · NCS→BTEC mapping
+              <div class="note">In-house · ₩182,000/day · PLC, Smart Factory, Pneumatics</div>
+            </td>
+            <td>In-house · 10 days</td>
+            <td class="amount">₩1,820,000</td>
+          </tr>
+          <tr>
+            <td>
+              Technical translator (KO→EN) — outsourced
+              <div class="note">Freelance · ~5,000 words · ₩60/word · market rate</div>
+            </td>
+            <td>Outsource · 5,000 wds</td>
+            <td class="amount">₩300,000</td>
+          </tr>
+          <tr>
+            <td>
+              BTEC mapping table production (PDF layout)
+              <div class="note">In-house · ₩182,000/day</div>
+            </td>
+            <td>In-house · 3 days</td>
+            <td class="amount">₩546,000</td>
+          </tr>
+          <tr>
+            <td>
+              TAFE SA gap analysis review
+              <div class="note">In-house · ₩182,000/day</div>
+            </td>
+            <td>In-house · 2 days</td>
+            <td class="amount">₩364,000</td>
+          </tr>
+          <tr class="subtotal">
+            <td colspan="2">Month 1 Subtotal</td>
+            <td class="amount">₩3,030,000</td>
+          </tr>
+          <!-- Month 2 -->
+          <tr><td colspan="3" style="background:#f8f9fc; font-size:11px; font-family:'IBM Plex Mono',monospace; letter-spacing:.06em; color:#5a6070; padding:8px 16px; text-transform:uppercase;">Month 2 — Digital Walkthrough Prototype</td></tr>
+          <tr>
+            <td>
+              Instructional designer · 8-process scripting
+              <div class="note">In-house · ₩182,000/day · interactive narration per station</div>
+            </td>
+            <td>In-house · 8 days</td>
+            <td class="amount">₩1,456,000</td>
+          </tr>
+          <tr>
+            <td>
+              XR storyboard · UI/UX designer — outsourced
+              <div class="note">Freelance · ₩250,000/day (senior avg.) · Unity-ready brief, 8 stations</div>
+            </td>
+            <td>Outsource · 10 days</td>
+            <td class="amount">₩2,500,000</td>
+          </tr>
+          <tr>
+            <td>
+              Arabic bilingual placeholder — outsourced
+              <div class="note">Freelance translator · ~2,000 words · ₩250/word</div>
+            </td>
+            <td>Outsource · 2,000 wds</td>
+            <td class="amount">₩500,000</td>
+          </tr>
+          <tr>
+            <td>
+              Concept Deck production (PDF/HTML)
+              <div class="note">In-house · ₩182,000/day</div>
+            </td>
+            <td>In-house · 3 days</td>
+            <td class="amount">₩546,000</td>
+          </tr>
+          <tr>
+            <td>
+              Project management &amp; QC
+              <div class="note">In-house · ₩182,000/day</div>
+            </td>
+            <td>In-house · 4 days</td>
+            <td class="amount">₩728,000</td>
+          </tr>
+          <tr class="subtotal">
+            <td colspan="2">Month 2 Subtotal</td>
+            <td class="amount">₩5,730,000</td>
+          </tr>
+          <!-- Overhead -->
+          <tr><td colspan="3" style="background:#f8f9fc; font-size:11px; font-family:'IBM Plex Mono',monospace; letter-spacing:.06em; color:#5a6070; padding:8px 16px; text-transform:uppercase;">Overhead &amp; Misc.</td></tr>
+          <tr>
+            <td>
+              Software / tool licenses
+              <div class="note">Figma, Adobe (pro-rated 2 months)</div>
+            </td>
+            <td>2 months</td>
+            <td class="amount">₩300,000</td>
+          </tr>
+          <tr>
+            <td>
+              Outsourcing platform fee
+              <div class="note">~10% on outsourced items (Wishket or equivalent)</div>
+            </td>
+            <td>~10% of outsource</td>
+            <td class="amount">₩300,000</td>
+          </tr>
+          <tr>
+            <td>
+              Communication &amp; admin
+              <div class="note">Video calls, document hosting</div>
+            </td>
+            <td>Lump sum</td>
+            <td class="amount">₩200,000</td>
+          </tr>
+          <tr class="subtotal">
+            <td colspan="2"><strong>Total All-In Cost (Phase 1)</strong></td>
+            <td class="amount"><strong>₩9,560,000</strong></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="font-size:12px; color:#5a6070;">≈ USD equivalent</td>
+            <td class="amount" style="font-size:12px; color:#5a6070;">≈ USD 7,081</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- EXTERNAL -->
+    <div class="budget-card external">
+      <div class="budget-card-header">
+        <div>
+          <div class="badge">External Proposal</div>
+          <div class="card-title">Invoiceable to TAFE SA / ALAT</div>
+          <div class="card-desc">Commercial price for contract — includes margin &amp; IP value</div>
+        </div>
+      </div>
+      <table class="budget-table">
+        <thead>
+          <tr>
+            <th>Deliverable</th>
+            <th>Format</th>
+            <th style="text-align:right">USD</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Track 5 -->
+          <tr><td colspan="3" style="background:#f8f9fc; font-size:11px; font-family:'IBM Plex Mono',monospace; letter-spacing:.06em; color:#5a6070; padding:8px 16px; text-transform:uppercase;">Track ⑤ — Curriculum Localization Package</td></tr>
+          <tr>
+            <td>
+              Meister High → BTEC Mapping Table
+              <div class="note">3 flagship units fully mapped: PLC · Smart Factory · Pneumatics</div>
+            </td>
+            <td>PDF Report</td>
+            <td class="amount">$4,500</td>
+          </tr>
+          <tr>
+            <td>
+              NCS ↔ BTEC ↔ NQF Crosswalk Matrix
+              <div class="note">Unit 4039/4040 alignment, Level 3–4 evidence descriptors</div>
+            </td>
+            <td>PDF + Excel</td>
+            <td class="amount">$2,000</td>
+          </tr>
+          <tr>
+            <td>
+              TAFE SA Gap Analysis Report
+              <div class="note">Missing assessment evidence, recommended additions</div>
+            </td>
+            <td>PDF Report</td>
+            <td class="amount">$1,500</td>
+          </tr>
+          <tr class="subtotal">
+            <td colspan="2">Track ⑤ Subtotal</td>
+            <td class="amount">$8,000</td>
+          </tr>
+          <!-- Track 3 -->
+          <tr><td colspan="3" style="background:#f8f9fc; font-size:11px; font-family:'IBM Plex Mono',monospace; letter-spacing:.06em; color:#5a6070; padding:8px 16px; text-transform:uppercase;">Track ③ — Digital Walkthrough Concept Package</td></tr>
+          <tr>
+            <td>
+              8-Process XR Storyboard (8 stations)
+              <div class="note">High-fidelity Unity-ready brief per station</div>
+            </td>
+            <td>PDF Deck</td>
+            <td class="amount">$6,000</td>
+          </tr>
+          <tr>
+            <td>
+              Interactive Narration Scripts (EN/AR)
+              <div class="note">Full bilingual placeholder scripts, station-by-station</div>
+            </td>
+            <td>Document set</td>
+            <td class="amount">$2,500</td>
+          </tr>
+          <tr>
+            <td>
+              Digital Walkthrough Concept Deck
+              <div class="note">Final HTML/PDF package for TAFE SA internal review</div>
+            </td>
+            <td>HTML + PDF</td>
+            <td class="amount">$1,500</td>
+          </tr>
+          <tr class="subtotal">
+            <td colspan="2">Track ③ Subtotal</td>
+            <td class="amount">$10,000</td>
+          </tr>
+          <!-- Project Mgmt -->
+          <tr><td colspan="3" style="background:#f8f9fc; font-size:11px; font-family:'IBM Plex Mono',monospace; letter-spacing:.06em; color:#5a6070; padding:8px 16px; text-transform:uppercase;">Project Management &amp; Coordination</td></tr>
+          <tr>
+            <td>
+              Dedicated project coordinator (2 months)
+              <div class="note">Review cycles, stakeholder communication, delivery QC</div>
+            </td>
+            <td>Fixed fee</td>
+            <td class="amount">$2,000</td>
+          </tr>
+          <tr class="subtotal">
+            <td colspan="2"><strong>Total External Proposal (Phase 1)</strong></td>
+            <td class="amount"><strong>$20,000</strong></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="font-size:12px; color:#5a6070;">IEG margin on Phase 1 (incl. outsourcing)</td>
+            <td class="amount" style="font-size:12px; color:#1a7f74;">≈ 64.6%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div><!-- /budget-split -->
+
+  <!-- TOTAL BAR -->
+  <div class="total-bar">
+    <div class="label">
+      Phase 1 External Proposal — Total
+      <span>All-in cost ≈ $7,081 · Margin ≈ 64.6% · Invoiceable upon signed agreement</span>
+    </div>
+    <div class="amount"><span class="unit">USD</span>$20,000</div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="notes-grid">
+    <div class="note-box">
+      <h4>📌 Payment Terms (Recommended)</h4>
+      <ul>
+        <li>50% upon contract signature (Month 1 kick-off)</li>
+        <li>25% upon BTEC Mapping Table delivery (Month 1 end)</li>
+        <li>25% upon Digital Walkthrough Concept Deck delivery (Month 2 end)</li>
+      </ul>
+    </div>
+    <div class="note-box">
+      <h4>📌 Cost Basis</h4>
+      <ul>
+        <li>In-house rate: ₩182,000/day (₩4M/month ÷ 22 working days)</li>
+        <li>EN translation outsourced: ₩60/word (market avg., technical)</li>
+        <li>XR storyboard outsourced: ₩250,000/day (senior UX/XR freelancer avg.)</li>
+        <li>Arabic placeholder outsourced: ₩250/word (rare language, high difficulty)</li>
+      </ul>
+    </div>
+    <div class="note-box">
+      <h4>📌 Financing Context</h4>
+      <ul>
+        <li>Phase 1 is commercially self-funded — no EDCF/ODA required</li>
+        <li>Phase 4 hardware financing options: EDCF, Saudi-Korea bilateral fund, direct commercial</li>
+        <li>Phase 1 deliverables serve as proof-of-work for EDCF application if needed</li>
+      </ul>
+    </div>
+    <div class="note-box">
+      <h4>📌 Revenue Ramp (Full 12 Months)</h4>
+      <ul>
+        <li>Phase 1 (M1–2): <strong>$20,000</strong> — curriculum &amp; content (margin 64.6%)</li>
+        <li>Phase 3 (M7): <strong>TTT training fees</strong> — per-instructor rate TBD</li>
+        <li>Phase 4 (M12): <strong>Model C hardware contract</strong> — main revenue event</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</div><!-- /tab-budget -->
+
+
+<!-- ════════════════════════════════════════════
+     TAB 2 — CURRICULUM
+════════════════════════════════════════════ -->
+<div id="tab-curriculum" class="tab-panel">
+<div class="container">
+
+  <p class="section-title">Full Curriculum Framework — All 4 Phases</p>
+  <p class="section-sub">Unit-level learning objectives, NCS competency codes, BTEC Unit mapping (NQF Level 3–4), and TAFE SA alignment status across the 12-month roadmap.</p>
+
+  <!-- ── PHASE 1 ── -->
+  <div class="phase-block ph1">
+    <div class="phase-header">
+      <div class="phase-badge">P1</div>
+      <div class="phase-meta">
+        <h3>Phase 1 · Foundation &amp; Curriculum Localization</h3>
+        <div class="phase-tag">
+          <span>Month 1–2</span><span class="dot"></span>
+          <span>Track ⑤ Curriculum + Track ③ Digital Content</span><span class="dot"></span>
+          <span>3 Core Units</span>
+        </div>
+      </div>
+    </div>
+    <div class="unit-list">
+
+      <!-- UNIT 1 -->
+      <div class="unit-item" id="u1">
+        <button class="unit-toggle" onclick="toggleUnit('u1')">
+          <span class="unit-num">UNIT 1</span>
+          <div class="unit-title-wrap">
+            <div class="unit-name">PLC Fundamentals &amp; Industrial Automation</div>
+            <div class="unit-btec">BTEC Unit 4039 · NQF Level 3</div>
+          </div>
+          <span class="chevron">▶</span>
+        </button>
+        <div class="unit-body">
+          <div class="unit-grid">
+            <div class="unit-col">
+              <h5>Learning Objectives</h5>
+              <ul>
+                <li>Explain the architecture and operating principles of a Programmable Logic Controller (PLC)</li>
+                <li>Write and interpret ladder diagram logic for basic input/output control sequences</li>
+                <li>Configure and troubleshoot a PLC-based conveyor or sorting system</li>
+                <li>Apply IEC 61131-3 programming standards in a structured text environment</li>
+                <li>Demonstrate safe commissioning and de-commissioning procedures per relevant safety standards</li>
+              </ul>
+            </div>
+            <div class="unit-col">
+              <h5>NCS Competency Codes</h5>
+              <ul>
+                <li>NCS 15010201 · 전기제어시스템 설계 (Electrical Control System Design)</li>
+                <li>NCS 15010202 · PLC 프로그래밍 운영 (PLC Programming &amp; Operation)</li>
+                <li>NCS 15010204 · 자동화 시스템 유지보수 (Automation System Maintenance)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="btec-mapping">
+            <table>
+              <thead>
+                <tr>
+                  <th>BTEC Unit</th>
+                  <th>Title</th>
+                  <th>NQF Level</th>
+                  <th>NCS Alignment</th>
+                  <th>TAFE SA Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="code">Unit 4039</td>
+                  <td>Programmable Logic Controllers</td>
+                  <td><span class="level-badge">NQF L3</span></td>
+                  <td>15010201 · 15010202</td>
+                  <td><span class="ok-tag">Alignable</span></td>
+                </tr>
+                <tr>
+                  <td class="code">Unit 4039A</td>
+                  <td>PLC Systems Integration (extension)</td>
+                  <td><span class="level-badge">NQF L4</span></td>
+                  <td>15010204</td>
+                  <td><span class="gap-tag">Evidence gap</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 2 -->
+      <div class="unit-item" id="u2">
+        <button class="unit-toggle" onclick="toggleUnit('u2')">
+          <span class="unit-num">UNIT 2</span>
+          <div class="unit-title-wrap">
+            <div class="unit-name">Smart Factory Operations &amp; Industry 4.0 Integration</div>
+            <div class="unit-btec">BTEC Unit 4040 · NQF Level 4</div>
+          </div>
+          <span class="chevron">▶</span>
+        </button>
+        <div class="unit-body">
+          <div class="unit-grid">
+            <div class="unit-col">
+              <h5>Learning Objectives</h5>
+              <ul>
+                <li>Describe the key components of a smart factory ecosystem: sensors, actuators, SCADA, MES, and ERP integration</li>
+                <li>Monitor and interpret real-time production data from an IoT-enabled manufacturing line</li>
+                <li>Apply predictive maintenance principles using basic data analytics tools</li>
+                <li>Evaluate OEE (Overall Equipment Effectiveness) metrics and propose efficiency improvements</li>
+                <li>Demonstrate cyber-physical system safety and cybersecurity awareness in an industrial network</li>
+              </ul>
+            </div>
+            <div class="unit-col">
+              <h5>NCS Competency Codes</h5>
+              <ul>
+                <li>NCS 15020301 · 스마트팩토리 구축운영 (Smart Factory Build &amp; Operation)</li>
+                <li>NCS 15020302 · 생산자동화시스템 운영 (Production Automation System Operation)</li>
+                <li>NCS 15020305 · IoT 기반 설비관리 (IoT-based Facility Management)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="btec-mapping">
+            <table>
+              <thead>
+                <tr>
+                  <th>BTEC Unit</th>
+                  <th>Title</th>
+                  <th>NQF Level</th>
+                  <th>NCS Alignment</th>
+                  <th>TAFE SA Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="code">Unit 4040</td>
+                  <td>Manufacturing Systems Technology</td>
+                  <td><span class="level-badge">NQF L4</span></td>
+                  <td>15020301 · 15020302</td>
+                  <td><span class="ok-tag">Alignable</span></td>
+                </tr>
+                <tr>
+                  <td class="code">Unit 4040B</td>
+                  <td>Industry 4.0 Technologies (extension)</td>
+                  <td><span class="level-badge">NQF L4</span></td>
+                  <td>15020305</td>
+                  <td><span class="gap-tag">Evidence gap</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 3 -->
+      <div class="unit-item" id="u3">
+        <button class="unit-toggle" onclick="toggleUnit('u3')">
+          <span class="unit-num">UNIT 3</span>
+          <div class="unit-title-wrap">
+            <div class="unit-name">Pneumatics Systems &amp; Fluid Power Control</div>
+            <div class="unit-btec">BTEC Unit 4039 (Supplementary) · NQF Level 3</div>
+          </div>
+          <span class="chevron">▶</span>
+        </button>
+        <div class="unit-body">
+          <div class="unit-grid">
+            <div class="unit-col">
+              <h5>Learning Objectives</h5>
+              <ul>
+                <li>Identify and explain the function of core pneumatic components: compressors, valves, actuators, and FRLs</li>
+                <li>Read and interpret ISO 1219-compliant pneumatic circuit diagrams</li>
+                <li>Assemble and test a basic double-acting cylinder circuit using directional control valves</li>
+                <li>Diagnose and resolve common pneumatic faults (leakage, insufficient pressure, valve sticking)</li>
+                <li>Integrate a pneumatic actuator into a PLC-controlled automated sequence</li>
+              </ul>
+            </div>
+            <div class="unit-col">
+              <h5>NCS Competency Codes</h5>
+              <ul>
+                <li>NCS 15010101 · 공압시스템 설계 (Pneumatic System Design)</li>
+                <li>NCS 15010102 · 공압회로 구성 및 운영 (Pneumatic Circuit Construction &amp; Operation)</li>
+                <li>NCS 15010105 · 유공압 장치 유지보수 (Hydraulic &amp; Pneumatic Device Maintenance)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="btec-mapping">
+            <table>
+              <thead>
+                <tr>
+                  <th>BTEC Unit</th>
+                  <th>Title</th>
+                  <th>NQF Level</th>
+                  <th>NCS Alignment</th>
+                  <th>TAFE SA Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="code">Unit 4039 (supp.)</td>
+                  <td>Fluid Power Systems</td>
+                  <td><span class="level-badge">NQF L3</span></td>
+                  <td>15010101 · 15010102</td>
+                  <td><span class="ok-tag">Alignable</span></td>
+                </tr>
+                <tr>
+                  <td class="code">Unit 4039C</td>
+                  <td>Electro-Pneumatic Integration</td>
+                  <td><span class="level-badge">NQF L3–4</span></td>
+                  <td>15010105</td>
+                  <td><span class="gap-tag">Evidence gap</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 4 — Digital Walkthrough -->
+      <div class="unit-item" id="u4">
+        <button class="unit-toggle" onclick="toggleUnit('u4')">
+          <span class="unit-num">UNIT 4</span>
+          <div class="unit-title-wrap">
+            <div class="unit-name">Semiconductor 8-Process Digital Walkthrough (XR Concept)</div>
+            <div class="unit-btec">Track ③ Digital Content · M2 Deliverable</div>
+          </div>
+          <span class="chevron">▶</span>
+        </button>
+        <div class="unit-body">
+          <div class="unit-grid">
+            <div class="unit-col">
+              <h5>Process Stations (8 Modules)</h5>
+              <ul>
+                <li>Station 1 — Wafer Preparation (substrate cleaning, inspection)</li>
+                <li>Station 2 — Thermal Oxidation (SiO₂ growth, furnace operation)</li>
+                <li>Station 3 — Photolithography (coating, exposure, development)</li>
+                <li>Station 4 — Etching (wet &amp; dry etch, selectivity)</li>
+                <li>Station 5 — Ion Implantation / Doping (dopant profiles)</li>
+                <li>Station 6 — CVD (chemical vapour deposition, film quality)</li>
+                <li>Station 7 — Metallisation (sputtering, interconnect layers)</li>
+                <li>Station 8 — Testing &amp; Packaging (electrical probing, dicing)</li>
+              </ul>
+            </div>
+            <div class="unit-col">
+              <h5>Learning Objectives per Station</h5>
+              <ul>
+                <li>Describe the purpose and parameters of each process step within the IC fabrication sequence</li>
+                <li>Identify equipment used at each station and explain its operating principles</li>
+                <li>Recognise common defect modes and their process origin</li>
+                <li>Navigate the XR environment and complete station-level assessment prompts</li>
+              </ul>
+            </div>
+          </div>
+          <div class="btec-mapping">
+            <table>
+              <thead>
+                <tr>
+                  <th>BTEC Unit</th>
+                  <th>Title</th>
+                  <th>NQF Level</th>
+                  <th>Delivery Mode</th>
+                  <th>TAFE SA Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="code">IEG-SEM-01</td>
+                  <td>Semiconductor Process Fundamentals (IEG proprietary)</td>
+                  <td><span class="level-badge">NQF L3–4</span></td>
+                  <td>XR Digital Walkthrough</td>
+                  <td><span class="gap-tag">New unit — recognition TBD</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /unit-list -->
+  </div><!-- /phase 1 -->
+
+  <hr class="divider">
+
+  <!-- ── PHASE 2 ── -->
+  <div class="phase-block ph2">
+    <div class="phase-header">
+      <div class="phase-badge">P2</div>
+      <div class="phase-meta">
+        <h3>Phase 2 · Model C Concept &amp; TTT Proposal</h3>
+        <div class="phase-tag">
+          <span>Month 3–5</span><span class="dot"></span>
+          <span>Track ① Concept + Track ⑤ TTT Design</span><span class="dot"></span>
+          <span>2 Programme Modules</span>
+        </div>
+      </div>
+    </div>
+    <div class="unit-list">
+
+      <div class="unit-item" id="u5">
+        <button class="unit-toggle" onclick="toggleUnit('u5')">
+          <span class="unit-num">MODULE 1</span>
+          <div class="unit-title-wrap">
+            <div class="unit-name">Model C Cleanroom — Conceptual Learning Pathway</div>
+            <div class="unit-btec">Track ① · Vision Document (no pricing) — submitted M3</div>
+          </div>
+          <span class="chevron">▶</span>
+        </button>
+        <div class="unit-body">
+          <div class="unit-grid">
+            <div class="unit-col">
+              <h5>Programme Scope</h5>
+              <ul>
+                <li>Cleanroom operations fundamentals (ISO 14644 classification)</li>
+                <li>Semiconductor equipment operation: CVD, PVD, etch, lithography trainers</li>
+                <li>Process flow integration: connecting unit operations into a full fab sequence</li>
+                <li>Quality systems in semiconductor manufacturing (SPC, defect classification)</li>
+                <li>EHS in cleanroom environments: gowning, chemical handling, emergency procedures</li>
+              </ul>
+            </div>
+            <div class="unit-col">
+              <h5>BTEC Target Units</h5>
+              <ul>
+                <li>Unit 4040 — Manufacturing Systems Technology (NQF L4)</li>
+                <li>Unit 4039 — PLC / Equipment Control in Cleanroom context (NQF L3)</li>
+                <li>IEG-SEM-01 — Semiconductor Process Fundamentals (proprietary, NQF L3–4)</li>
+                <li>Assessment: portfolio of process logs + practical observation checklist</li>
+              </ul>
+            </div>
+          </div>
+          <div class="btec-mapping">
+            <table>
+              <thead>
+                <tr><th>Delivery Mode</th><th>Duration</th><th>Credential</th><th>TAFE SA Recognition Pathway</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Lab-based (Model C Cleanroom hardware)</td>
+                  <td>6–8 weeks full-time</td>
+                  <td><span class="level-badge">BTEC NQF L3–4</span></td>
+                  <td><span class="ok-tag">Pending TAFE SA review (Phase 2)</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="unit-item" id="u6">
+        <button class="unit-toggle" onclick="toggleUnit('u6')">
+          <span class="unit-num">MODULE 2</span>
+          <div class="unit-title-wrap">
+            <div class="unit-name">Train-the-Trainer (TTT) — Korea Technology Tour Design</div>
+            <div class="unit-btec">Track ⑤ TTT · 5–7 Day Programme · proposed M4</div>
+          </div>
+          <span class="chevron">▶</span>
+        </button>
+        <div class="unit-body">
+          <div class="unit-grid">
+            <div class="unit-col">
+              <h5>Instructor Competencies Targeted</h5>
+              <ul>
+                <li>Operate and demonstrate IEG PLC/MPS/Pneumatics equipment safely and confidently</li>
+                <li>Deliver the XR Digital Walkthrough session to a trainee cohort independently</li>
+                <li>Contextualise Korean TVET pedagogy within the Saudi NQF framework</li>
+                <li>Adapt IEG curriculum materials to ALAT institutional context and learner profile</li>
+                <li>Design and administer competency-based assessments for BTEC evidence collection</li>
+              </ul>
+            </div>
+            <div class="unit-col">
+              <h5>Programme Itinerary Outline</h5>
+              <ul>
+                <li>Day 1–2 · IEG HQ Seongnam: equipment briefing, PLC/MPS hands-on, XR demo</li>
+                <li>Day 3 · Korea Polytechnic (Siheung / Incheon): TVET system structure, KRIVET briefing</li>
+                <li>Day 4 · Smart factory site visit (Samsung/LG partner facility, subject to arrangement)</li>
+                <li>Day 5 · Co-design workshop + competency assessment + certificate presentation</li>
+              </ul>
+            </div>
+          </div>
+          <div class="btec-mapping">
+            <table>
+              <thead>
+                <tr><th>Cohort Size</th><th>Duration</th><th>Credential</th><th>Language</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>5–10 TAFE SA / ALAT instructors</td>
+                  <td>5–7 days (Q3 target)</td>
+                  <td><span class="level-badge">IEG Certificate of Completion</span></td>
+                  <td>English (AR support materials provided)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /phase 2 -->
+
+  <hr class="divider">
+
+  <!-- ── PHASE 3 ── -->
+  <div class="phase-block ph3">
+    <div class="phase-header">
+      <div class="phase-badge">P3</div>
+      <div class="phase-meta">
+        <h3>Phase 3 · TTT Pilot Execution — First Revenue Event</h3>
+        <div class="phase-tag">
+          <span>Month 6–9</span><span class="dot"></span>
+          <span>Track ⑤ TTT Delivery + Track ③ Showcase</span><span class="dot"></span>
+          <span>★ First Revenue</span>
+        </div>
+      </div>
+    </div>
+    <div class="unit-list">
+
+      <div class="unit-item" id="u7">
+        <button class="unit-toggle" onclick="toggleUnit('u7')">
+          <span class="unit-num">MODULE 3</span>
+          <div class="unit-title-wrap">
+            <div class="unit-name">Korea Technology Tour — Live TTT Execution</div>
+            <div class="unit-btec">Track ⑤ · Month 7 · Training Fees Received</div>
+          </div>
+          <span class="chevron">▶</span>
+        </button>
+        <div class="unit-body">
+          <div class="unit-grid">
+            <div class="unit-col">
+              <h5>Session-level Curriculum (5 Days)</h5>
+              <ul>
+                <li>Session 1A — IEG Equipment Orientation: safety, specifications, startup/shutdown</li>
+                <li>Session 1B — PLC Lab: ladder logic programming, I/O wiring, fault diagnosis</li>
+                <li>Session 2A — MPS (Modular Production System): station integration, HMI operation</li>
+                <li>Session 2B — XR Walkthrough demo: facilitation script, Q&A management</li>
+                <li>Session 3 — Korean TVET: NCS structure, Meister High model, national policies</li>
+                <li>Session 4 — Site visit debrief: linking observed practices to BTEC evidence requirements</li>
+                <li>Session 5 — Co-design workshop: adapting 3 IEG units to ALAT learner context</li>
+              </ul>
+            </div>
+            <div class="unit-col">
+              <h5>Assessment &amp; Output</h5>
+              <ul>
+                <li>Pre/post competency confidence survey (Likert 1–5 per learning objective)</li>
+                <li>Practical observation checklist completed by IEG lead instructor</li>
+                <li>Each participant produces a 2-page "Curriculum Adaptation Note" for one IEG unit</li>
+                <li>TTT Pilot Report compiled by IEG: outcomes, equipment performance log, adaptation notes</li>
+                <li>Digital Showcase produced: video testimonials, demo clips, infographic outcomes</li>
+              </ul>
+            </div>
+          </div>
+          <div class="btec-mapping">
+            <table>
+              <thead>
+                <tr><th>Output Document</th><th>Purpose</th><th>Used In</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="code">TTT Pilot Report</td>
+                  <td>Evidence of IEG delivery capability + curriculum validity</td>
+                  <td>Phase 4 hardware proposal backbone</td>
+                </tr>
+                <tr>
+                  <td class="code">Digital Showcase Package</td>
+                  <td>Marketing asset for ALAT internal stakeholder buy-in</td>
+                  <td>Phase 4 bid submission annex</td>
+                </tr>
+                <tr>
+                  <td class="code">Hardware Needs Assessment</td>
+                  <td>Informal scoping: "What would a permanent TVET Centre require?"</td>
+                  <td>Model C Cleanroom spec basis</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /phase 3 -->
+
+  <hr class="divider">
+
+  <!-- ── PHASE 4 ── -->
+  <div class="phase-block ph4">
+    <div class="phase-header">
+      <div class="phase-badge">P4</div>
+      <div class="phase-meta">
+        <h3>Phase 4 · Model C Cleanroom — Hardware Proposal &amp; Contract</h3>
+        <div class="phase-tag">
+          <span>Month 10–12</span><span class="dot"></span>
+          <span>Track ① Model C Full Bid</span><span class="dot"></span>
+          <span>★★ Main Revenue Event</span>
+        </div>
+      </div>
+    </div>
+    <div class="unit-list">
+
+      <div class="unit-item" id="u8">
+        <button class="unit-toggle" onclick="toggleUnit('u8')">
+          <span class="unit-num">MODULE 4</span>
+          <div class="unit-title-wrap">
+            <div class="unit-name">Model C Turnkey TVET Centre — Full Programme &amp; Hardware Package</div>
+            <div class="unit-btec">Track ① · M11 Formal Bid · BTEC-aligned Curriculum Bundle</div>
+          </div>
+          <span class="chevron">▶</span>
+        </button>
+        <div class="unit-body">
+          <div class="unit-grid">
+            <div class="unit-col">
+              <h5>Full Programme Structure</h5>
+              <ul>
+                <li>Level 3 Certificate: PLC Fundamentals + Pneumatics Systems (Units 1 + 3, 12 weeks)</li>
+                <li>Level 4 Diploma: Smart Factory Operations + Semiconductor Process (Units 2 + IEG-SEM-01, 16 weeks)</li>
+                <li>TTT Ongoing: annual instructor refresher programme, delivered in-country by trained TAFE SA faculty</li>
+                <li>XR Content Licensing: annual update subscription for 8-process Digital Walkthrough</li>
+                <li>Curriculum Review Cycle: annual NCS/BTEC alignment update as standards evolve</li>
+              </ul>
+            </div>
+            <div class="unit-col">
+              <h5>Turnkey Package Components</h5>
+              <ul>
+                <li>Model C Cleanroom hardware (full equipment list, layout, specs — scoped in M10)</li>
+                <li>BTEC-aligned curriculum bundle (all 4 units, EN/AR bilingual)</li>
+                <li>TTT support (initial cohort + annual refresher)</li>
+                <li>XR Digital Twin integration (hardware-linked virtual learning overlay)</li>
+                <li>Financing pathway documentation (EDCF / Saudi-Korea bilateral / commercial)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="btec-mapping">
+            <table>
+              <thead>
+                <tr><th>Qualification</th><th>Units Included</th><th>NQF Level</th><th>Duration</th><th>Certification Body</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>BTEC Level 3 Certificate</td>
+                  <td>Unit 4039 (PLC) + Unit 4039 Supp. (Pneumatics)</td>
+                  <td><span class="level-badge">NQF L3</span></td>
+                  <td>12 weeks</td>
+                  <td>TAFE SA / Pearson BTEC</td>
+                </tr>
+                <tr>
+                  <td>BTEC Level 4 Diploma</td>
+                  <td>Unit 4040 (Smart Factory) + IEG-SEM-01 (Semiconductor)</td>
+                  <td><span class="level-badge">NQF L4</span></td>
+                  <td>16 weeks</td>
+                  <td>TAFE SA / Pearson BTEC</td>
+                </tr>
+                <tr>
+                  <td>Saudi TVTC Pathway</td>
+                  <td>All units cross-referenced with TVTC occupational standards</td>
+                  <td><span class="level-badge">NQF L3–4</span></td>
+                  <td>TBD with TVTC</td>
+                  <td><span class="gap-tag">To be confirmed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /phase 4 -->
+
+</div>
+</div><!-- /tab-curriculum -->
+
+<!-- ── FOOTER ── -->
+<footer class="page-footer">
+  IEG Co., Ltd. · Global Business Division · Seongnam, Gyeonggi-do, Republic of Korea<br>
+  <span>IEG × ALAT</span> · 12-Month Market Entry Roadmap · Phase 1 Budget &amp; Curriculum Framework
+</footer>
+
+<script>
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function toggleUnit(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
