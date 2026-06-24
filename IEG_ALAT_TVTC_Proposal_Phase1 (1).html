@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IEG × ALAT/TVTC — Semiconductor TVET Partnership Proposal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
+
+:root {
+  --ink: #0d1520;
+  --ink2: #243550;
+  --ink3: #4a6280;
+  --rule: #dde3ed;
+  --bg: #f0f4f9;
+  --surf: #ffffff;
+  --surf2: #f5f8fc;
+  --surf3: #e8edf5;
+  --gold: #b08a28;
+  --gold-lt: #fdf6e3;
+  --gold-bd: #e8c84a;
+  --teal: #0f6e56;
+  --teal-lt: #e1f5ee;
+  --navy: #1a2a4a;
+  --violet: #5340a0;
+  --violet-lt: #ede8f8;
+  --green: #16a34a;
+  --green-lt: #dcfce7;
+  --amber: #b45309;
+  --amber-lt: #fef3c7;
+  --red: #b91c1c;
+  --red-lt: #fee2e2;
+  --mono: 'IBM Plex Mono', monospace;
+  --body: 'Inter', sans-serif;
+  --disp: 'Fraunces', serif;
+  --r: 8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.65}
+
+/* ── HERO HEADER ── */
+.hero{background:var(--navy);color:#fff;padding:56px 48px 48px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-80px;top:-80px;width:380px;height:380px;border-radius:50%;background:rgba(176,138,40,.08);pointer-events:none}
+.hero-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-bd);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold-bd)}
+.hero h1{font-family:var(--disp);font-size:clamp(24px,4vw,38px);font-weight:600;line-height:1.15;color:#fff;margin-bottom:10px}
+.hero h1 em{font-style:italic;font-weight:300;color:var(--gold-bd)}
+.hero-sub{font-size:14px;color:rgba(255,255,255,.6);max-width:680px;line-height:1.7;margin-top:10px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1)}
+.meta-item .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.meta-item .val{font-size:13px;color:rgba(255,255,255,.85);font-weight:500;margin-top:2px}
+
+/* ── NAV ── */
+.tab-nav{background:var(--surf);border-bottom:1px solid var(--rule);padding:0 48px;display:flex;gap:0;position:sticky;top:0;z-index:100;overflow-x:auto}
+.tab-btn{background:none;border:none;cursor:pointer;font-family:var(--body);font-size:12.5px;font-weight:500;color:var(--ink3);padding:15px 18px 13px;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.tab-btn:hover{color:var(--ink)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+
+/* ── PANELS ── */
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.container{max-width:1040px;margin:0 auto;padding:44px 48px 80px}
+
+/* ── SECTION ── */
+.sec-title{font-family:var(--disp);font-weight:600;font-size:20px;color:var(--ink);margin-bottom:4px}
+.sec-sub{font-size:13px;color:var(--ink3);margin-bottom:28px;line-height:1.6}
+.divider{border:none;border-top:1px solid var(--rule);margin:36px 0}
+
+/* ── STRATEGY BANNER ── */
+.strategy-banner{background:var(--navy);color:#fff;border-radius:var(--r);padding:24px 28px;margin-bottom:32px;position:relative;overflow:hidden}
+.strategy-banner::before{content:'';position:absolute;right:-40px;bottom:-40px;width:180px;height:180px;border-radius:50%;background:rgba(176,138,40,.1)}
+.strategy-banner h3{font-family:var(--disp);font-size:17px;font-weight:600;color:var(--gold-bd);margin-bottom:8px}
+.strategy-banner p{font-size:13px;color:rgba(255,255,255,.7);line-height:1.75;max-width:780px}
+
+/* ── PHASE TIMELINE ── */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border-radius:var(--r);overflow:hidden;margin-bottom:32px}
+.phase-col{background:var(--surf);padding:20px 18px}
+.phase-col.highlight{background:var(--gold-lt);border-top:3px solid var(--gold)}
+.phase-num{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.phase-name{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.phase-period{font-family:var(--mono);font-size:11px;color:var(--gold);margin-bottom:10px}
+.phase-items{list-style:none;display:flex;flex-direction:column;gap:5px}
+.phase-items li{font-size:12px;color:var(--ink2);padding-left:14px;position:relative;line-height:1.5}
+.phase-items li::before{content:'·';position:absolute;left:2px;color:var(--gold);font-size:16px;top:-2px}
+.phase-budget{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--teal);margin-top:12px;padding-top:10px;border-top:1px solid var(--rule)}
+
+/* ── Q&A CARDS ── */
+.qa-grid{display:flex;flex-direction:column;gap:16px;margin-bottom:32px}
+.qa-card{background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden}
+.qa-hdr{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;cursor:pointer;transition:background .15s}
+.qa-hdr:hover{background:var(--surf2)}
+.qa-hdr.open{background:var(--surf2);border-bottom:1px solid var(--rule)}
+.qa-num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--navy);color:var(--gold-bd);font-family:var(--mono);font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center}
+.qa-q{font-size:13.5px;font-weight:600;color:var(--ink);flex:1;line-height:1.4}
+.qa-arrow{font-size:11px;color:var(--ink3);transition:transform .2s;flex-shrink:0;margin-top:2px}
+.qa-hdr.open .qa-arrow{transform:rotate(90deg)}
+.qa-body{display:none;padding:20px 20px 20px 62px}
+.qa-hdr.open+.qa-body{display:block}
+
+/* ── CONTENT BLOCKS ── */
+.answer-text{font-size:13.5px;color:var(--ink2);line-height:1.75;margin-bottom:14px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0}
+.info-box{background:var(--surf2);border:1px solid var(--rule);border-radius:6px;padding:14px 16px}
+.info-box h5{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--rule)}
+.info-box ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+.info-box ul li{font-size:12.5px;color:var(--ink2);padding-left:14px;position:relative;line-height:1.5}
+.info-box ul li::before{content:'→';position:absolute;left:0;color:var(--gold);font-size:10px;top:2px}
+.tag{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;margin:2px}
+.tag-teal{background:var(--teal-lt);color:var(--teal)}
+.tag-violet{background:var(--violet-lt);color:var(--violet)}
+.tag-gold{background:var(--gold-lt);color:var(--amber)}
+.tag-green{background:var(--green-lt);color:var(--green)}
+.tag-red{background:var(--red-lt);color:var(--red)}
+
+/* ── PROGRAM CARDS ── */
+.prog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0}
+.prog-card{background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden}
+.prog-card-hdr{padding:14px 16px;border-bottom:1px solid var(--rule)}
+.prog-card-hdr .badge{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;margin-bottom:8px;display:inline-block}
+.prog-card-hdr h4{font-size:13px;font-weight:600;color:var(--ink)}
+.prog-card-body{padding:14px 16px}
+.prog-card-body ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+.prog-card-body ul li{font-size:12px;color:var(--ink2);padding-left:12px;position:relative;line-height:1.5}
+.prog-card-body ul li::before{content:'·';position:absolute;left:1px;color:var(--gold);font-size:15px;top:-2px}
+.prog-card-footer{padding:10px 16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:11px;color:var(--ink3)}
+
+/* ── BUDGET TABLES ── */
+.budget-wrap{background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;margin:14px 0}
+.budget-wrap table{width:100%;border-collapse:collapse;font-size:13px}
+.budget-wrap th{background:var(--surf2);font-size:10px;font-family:var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);padding:9px 16px;text-align:left;font-weight:500}
+.budget-wrap td{padding:10px 16px;border-bottom:1px solid var(--rule);color:var(--ink2);vertical-align:top}
+.budget-wrap tr:last-child td{border-bottom:none}
+.budget-wrap .amount{font-family:var(--mono);font-weight:500;text-align:right;white-space:nowrap;color:var(--ink)}
+.budget-wrap .note{font-size:11px;color:var(--ink3);margin-top:2px}
+.budget-wrap .sub-hdr td{background:var(--surf2);font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);padding:7px 16px}
+.budget-wrap .subtotal td{background:var(--surf3);font-weight:600;font-size:13px}
+.budget-wrap .grand td{background:var(--navy);color:#fff;font-weight:600}
+.budget-wrap .grand .amount{color:var(--gold-bd);font-size:15px}
+.type-in{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;background:var(--navy-lt,#e8ecf4);color:var(--navy)}
+.type-out{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;background:var(--teal-lt);color:var(--teal)}
+.type-ext{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;background:var(--amber-lt);color:var(--amber)}
+
+/* ── TOTAL BARS ── */
+.total-bar{background:var(--navy);border-radius:var(--r);padding:18px 24px;display:flex;justify-content:space-between;align-items:center;margin:16px 0}
+.total-bar .lbl{font-size:13px;font-weight:500;color:rgba(255,255,255,.7)}
+.total-bar .lbl span{display:block;font-size:11px;color:rgba(255,255,255,.4);margin-top:2px}
+.total-bar .amt{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--gold-bd)}
+.total-bar .unit{font-size:13px;color:rgba(255,255,255,.4);margin-right:4px}
+
+/* ── MILESTONE ── */
+.milestone-list{display:flex;flex-direction:column;gap:0;position:relative;margin:14px 0}
+.milestone-list::before{content:'';position:absolute;left:19px;top:24px;bottom:24px;width:1px;background:var(--rule)}
+.ms-item{display:flex;gap:16px;align-items:flex-start;padding:14px 0}
+.ms-dot{flex-shrink:0;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:500;position:relative;z-index:1}
+.ms-dot.online{background:var(--teal-lt);color:var(--teal);border:2px solid var(--teal)}
+.ms-dot.korea{background:var(--gold-lt);color:var(--amber);border:2px solid var(--gold-bd)}
+.ms-dot.hardware{background:var(--violet-lt);color:var(--violet);border:2px solid var(--violet)}
+.ms-dot.scale{background:var(--green-lt);color:var(--green);border:2px solid var(--green)}
+.ms-content{flex:1;padding-top:8px}
+.ms-content h4{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.ms-content p{font-size:12.5px;color:var(--ink2);line-height:1.65}
+.ms-content .ms-budget{font-family:var(--mono);font-size:12px;color:var(--teal);font-weight:500;margin-top:6px}
+
+/* ── NOTE BOXES ── */
+.note-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.note-box{border-radius:6px;padding:14px 16px;font-size:12.5px;line-height:1.7}
+.note-box h5{font-size:11px;font-weight:600;margin-bottom:6px}
+.note-box.gold{background:var(--gold-lt);border:1px solid var(--gold-bd);color:var(--amber)}
+.note-box.gold h5{color:var(--amber)}
+.note-box.teal{background:var(--teal-lt);border:1px solid rgba(15,110,86,.25);color:var(--teal)}
+.note-box.teal h5{color:var(--teal)}
+.note-box.red{background:var(--red-lt);border:1px solid rgba(185,28,28,.2);color:var(--red)}
+.note-box.red h5{color:var(--red)}
+.note-box.green{background:var(--green-lt);border:1px solid rgba(22,163,74,.2);color:var(--green)}
+.note-box.green h5{color:var(--green)}
+
+/* ── RECOMMENDATION CARDS ── */
+.rec-card{background:var(--surf);border:1px solid var(--rule);border-left:4px solid var(--gold);border-radius:0 var(--r) var(--r) 0;padding:16px 20px;margin:12px 0}
+.rec-card h4{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.rec-card p{font-size:13px;color:var(--ink2);line-height:1.7}
+.rec-card.teal{border-left-color:var(--teal)}
+.rec-card.violet{border-left-color:var(--violet)}
+
+/* ── CERT TABLE ── */
+.cert-table{width:100%;border-collapse:collapse;font-size:13px;margin:14px 0}
+.cert-table th{background:var(--navy);color:rgba(255,255,255,.8);font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:9px 14px;text-align:left;font-weight:400}
+.cert-table td{padding:10px 14px;border-bottom:1px solid var(--rule);color:var(--ink2);vertical-align:top}
+.cert-table tr:last-child td{border-bottom:none}
+.cert-table .code{font-family:var(--mono);font-size:11px;color:var(--teal);font-weight:500}
+.level-badge{display:inline-block;background:var(--violet-lt);color:var(--violet);font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px}
+.gap-tag{display:inline-block;background:var(--red-lt);color:var(--red);font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px}
+.ok-tag{display:inline-block;background:var(--green-lt);color:var(--green);font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px}
+
+/* ── FOOTER ── */
+.page-footer{background:var(--navy);color:rgba(255,255,255,.4);text-align:center;padding:24px;font-size:12px;font-family:var(--mono)}
+.page-footer span{color:var(--gold-bd)}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow">IEG Co., Ltd. × ALAT / TVTC — Semiconductor TVET Partnership</div>
+  <h1>Semiconductor Workforce Development<br><em>A Full-Spectrum Partnership Proposal</em></h1>
+  <p class="hero-sub">From online curriculum delivery and Train-the-Trainer pilot to Korea Technology Tour and Model C Cleanroom infrastructure — a phased, low-risk, high-impact pathway to building Saudi Arabia's semiconductor technical talent base.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><div class="lbl">Prepared by</div><div class="val">IEG Global Business Division</div></div>
+    <div class="meta-item"><div class="lbl">Target Partner</div><div class="val">ALAT / TVTC, Saudi Arabia</div></div>
+    <div class="meta-item"><div class="lbl">Certification Pathway</div><div class="val">BTEC Unit 4039/4040 · NQF L3–4 · Saudi TVTC</div></div>
+    <div class="meta-item"><div class="lbl">Phase 1 Investment</div><div class="val">USD 47,500 (all-in)</div></div>
+    <div class="meta-item"><div class="lbl">Document Version</div><div class="val">v3.0 · June 2026</div></div>
+  </div>
+</header>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('strategy',this)">🗺 Partnership Strategy</button>
+  <button class="tab-btn" onclick="switchTab('qa',this)">📋 10 Questions Answered</button>
+  <button class="tab-btn" onclick="switchTab('budget',this)">💰 Phase 1 Budget</button>
+  <button class="tab-btn" onclick="switchTab('curriculum',this)">📚 Curriculum Framework</button>
+  <button class="tab-btn" onclick="switchTab('recommend',this)">⭐ Recommendations</button>
+  <button class="tab-btn" onclick="switchTab('notes',this)">📝 Partner Notes</button>
+</nav>
+
+<!-- ══════════════════════════════════════
+     TAB 1: STRATEGY
+══════════════════════════════════════ -->
+<div id="tab-strategy" class="tab-panel active">
+<div class="container">
+  <p class="sec-title">The IEG Three-Stage Partnership Model</p>
+  <p class="sec-sub">We recommend inverting the traditional TVET hardware-first approach. Online curriculum and digital tools establish credibility, trust, and institutional alignment <em>before</em> any capital equipment is committed — reducing procurement risk for ALAT/TVTC and shortening the path to first enrolment.</p>
+
+  <div class="strategy-banner">
+    <h3>Core Principle: Curriculum Before Concrete</h3>
+    <p>The fastest way to fail a TVET centre build is to purchase equipment before instructors know how to use it. IEG's model reverses this: online learning and TTT come first, hardware second. By the time the Model C Cleanroom ships, Saudi instructors are already certified, curriculum is locally adapted, and student intake is scheduled.</p>
+  </div>
+
+  <div class="timeline">
+    <div class="phase-col highlight">
+      <div class="phase-num">Phase 1A · M1–2</div>
+      <div class="phase-name">Online Curriculum</div>
+      <div class="phase-period">Month 1–2</div>
+      <ul class="phase-items">
+        <li>BTEC curriculum mapping (EN/AR)</li>
+        <li>8-Process Digital Simulator</li>
+        <li>Async video modules (8 units)</li>
+        <li>Assessment & competency tracking</li>
+        <li>TVTC alignment review</li>
+      </ul>
+      <div class="phase-budget">USD 20,000</div>
+    </div>
+    <div class="phase-col highlight">
+      <div class="phase-num">Phase 1B · M4–7</div>
+      <div class="phase-name">Korea TTT Tour</div>
+      <div class="phase-period">Month 4–7</div>
+      <ul class="phase-items">
+        <li>5–10 Saudi instructors to IEG HQ</li>
+        <li>PLC/MPS hands-on lab</li>
+        <li>Korea Polytechnic site visit</li>
+        <li>Smart factory tour</li>
+        <li>Co-design workshop + cert.</li>
+      </ul>
+      <div class="phase-budget">USD 27,500</div>
+    </div>
+    <div class="phase-col">
+      <div class="phase-num">Phase 2 · M8–11</div>
+      <div class="phase-name">Model C Concept</div>
+      <div class="phase-period">Month 8–11</div>
+      <ul class="phase-items">
+        <li>Cleanroom spec & layout</li>
+        <li>Equipment list finalised</li>
+        <li>Financing pathway (EDCF/bilateral)</li>
+        <li>Formal bid submission</li>
+      </ul>
+      <div class="phase-budget">TBD at Phase 2</div>
+    </div>
+    <div class="phase-col">
+      <div class="phase-num">Phase 3–4 · M12+</div>
+      <div class="phase-name">Hardware & Scale</div>
+      <div class="phase-period">Month 12+</div>
+      <ul class="phase-items">
+        <li>Model C Cleanroom delivery</li>
+        <li>On-site commissioning</li>
+        <li>Annual instructor refresher</li>
+        <li>XR digital twin integration</li>
+        <li>ALAT site expansion</li>
+      </ul>
+      <div class="phase-budget">Main revenue event</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <p class="sec-title">Why Online-First Answers ALAT/TVTC's Real Concern</p>
+  <p class="sec-sub">Behind the 10 technical questions is one strategic fear: "What if we build the lab and no one can teach in it?" The online-first model eliminates that risk entirely.</p>
+
+  <div class="milestone-list">
+    <div class="ms-item">
+      <div class="ms-dot online">1A</div>
+      <div class="ms-content">
+        <h4>Online Curriculum Package — Delivered Remotely, Month 1–2</h4>
+        <p>IEG delivers the complete BTEC-mapped semiconductor curriculum as bilingual (EN/AR) digital content: 8-process interactive simulator, async video modules for each unit, competency self-assessments, and TVTC occupational standard crosswalk. Saudi instructors can begin learning from Day 1 with zero travel and zero hardware.</p>
+        <div class="ms-budget">USD 20,000 · 100% remote delivery · No equipment required</div>
+      </div>
+    </div>
+    <div class="ms-item">
+      <div class="ms-dot korea">1B</div>
+      <div class="ms-content">
+        <h4>Korea Technology Tour (TTT Pilot) — 5–7 Days, IEG HQ Seongnam</h4>
+        <p>5–10 ALAT/TVTC instructors visit IEG headquarters. They operate the actual PLC, MPS, and pneumatics equipment that will eventually be installed in Saudi Arabia. They tour Korea Polytechnic University and a smart factory site. On Day 5, they co-design a locally adapted curriculum unit and receive their IEG Certificate of Completion. This is the single highest-leverage activity in the entire roadmap.</p>
+        <div class="ms-budget">USD 27,500 · Includes training fees + accommodation + airport transfer (5–10 pax)</div>
+      </div>
+    </div>
+    <div class="ms-item">
+      <div class="ms-dot hardware">2</div>
+      <div class="ms-content">
+        <h4>Model C Cleanroom Proposal — Submitted at Month 11</h4>
+        <p>Armed with the TTT Pilot Report, IEG submits a full Model C Cleanroom proposal to ALAT procurement. The proposal includes equipment list, layout drawings, commissioning plan, and financing options (EDCF, Saudi-Korea bilateral fund, or direct commercial). The TTT pilot deliverables serve as proof of IEG's delivery capability — making this the lowest-risk major hardware bid ALAT will ever evaluate.</p>
+        <div class="ms-budget">Pricing TBD · EDCF / bilateral financing recommended</div>
+      </div>
+    </div>
+    <div class="ms-item">
+      <div class="ms-dot scale">3–4</div>
+      <div class="ms-content">
+        <h4>Operational Scale-Up — Year 2 Onwards</h4>
+        <p>Once the Model C centre is commissioned, IEG provides annual instructor refresher training, XR digital twin content updates, and curriculum review cycles. The ALAT centre becomes a regional reference site, enabling expansion to additional ALAT locations across Saudi Arabia.</p>
+        <div class="ms-budget">Annual maintenance contract · Optional: replication to other ALAT sites</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 2: Q&A
+══════════════════════════════════════ -->
+<div id="tab-qa" class="tab-panel">
+<div class="container">
+  <p class="sec-title">10 Questions — Answered</p>
+  <p class="sec-sub">ALAT/TVTC's official enquiry, addressed in full, mapped to IEG's online-first, TTT-second, hardware-third delivery model.</p>
+
+  <div class="qa-grid">
+
+    <!-- Q1 -->
+    <div class="qa-card">
+      <div class="qa-hdr" onclick="toggleQA(this)">
+        <div class="qa-num">1</div>
+        <div class="qa-q">Training programmes proposed in each phase</div>
+        <span class="qa-arrow">▶</span>
+      </div>
+      <div class="qa-body">
+        <p class="answer-text">IEG proposes a four-programme ladder aligned to BTEC NQF Levels 3–4 and Saudi TVTC occupational standards. Programmes are sequenced so each phase of the partnership enables the next level of qualification.</p>
+        <div class="prog-grid">
+          <div class="prog-card">
+            <div class="prog-card-hdr">
+              <span class="badge tag-teal">Phase 1A · Online</span>
+              <h4>Foundation Digital Programme</h4>
+            </div>
+            <div class="prog-card-body"><ul>
+              <li>8-Process Semiconductor Walkthrough (self-paced, EN/AR)</li>
+              <li>PLC Fundamentals e-module</li>
+              <li>Smart Factory Orientation</li>
+              <li>Pneumatics Systems primer</li>
+              <li>Assessment quizzes per unit</li>
+            </ul></div>
+            <div class="prog-card-footer">Duration: 40 hrs self-paced · Delivery: LMS/Browser</div>
+          </div>
+          <div class="prog-card">
+            <div class="prog-card-hdr">
+              <span class="badge tag-gold">Phase 1B · Korea TTT</span>
+              <h4>Instructor Certification Programme</h4>
+            </div>
+            <div class="prog-card-body"><ul>
+              <li>PLC/MPS hands-on lab (IEG HQ)</li>
+              <li>XR Digital Walkthrough facilitation</li>
+              <li>Korean TVET system immersion</li>
+              <li>Smart factory site visit</li>
+              <li>Curriculum co-design workshop</li>
+            </ul></div>
+            <div class="prog-card-footer">Duration: 5–7 days · Cohort: 5–10 instructors</div>
+          </div>
+          <div class="prog-card">
+            <div class="prog-card-hdr">
+              <span class="badge" style="background:var(--violet-lt);color:var(--violet)">Phase 2–4 · Hardware</span>
+              <h4>BTEC Level 3–4 Technical Programme</h4>
+            </div>
+            <div class="prog-card-body"><ul>
+              <li>BTEC L3: PLC + Pneumatics (12 wks)</li>
+              <li>BTEC L4: Smart Factory + Semiconductor (16 wks)</li>
+              <li>Model C Cleanroom practicals</li>
+              <li>Industry project assessment</li>
+              <li>TVTC dual recognition pathway</li>
+            </ul></div>
+            <div class="prog-card-footer">Duration: 12–16 weeks · Annual intake: 20–40 trainees</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="qa-card">
+      <div class="qa-hdr" onclick="toggleQA(this)">
+        <div class="qa-num">2</div>
+        <div class="qa-q">Duration and structure of each training programme</div>
+        <span class="qa-arrow">▶</span>
+      </div>
+      <div class="qa-body">
+        <p class="answer-text">Each programme is structured around competency-based assessment (CBA) rather than contact hours alone — ensuring trainees demonstrate skill, not just attendance.</p>
+        <div class="two-col">
+          <div class="info-box">
+            <h5>Phase 1A — Online Foundation (M1–2)</h5>
+            <ul>
+              <li>8 units × ~5 hrs = 40 hrs total</li>
+              <li>Async video + interactive simulator per unit</li>
+              <li>Station-level quiz (pass mark 70%)</li>
+              <li>Bilingual EN/AR throughout</li>
+              <li>Accessible on any browser, no install</li>
+              <li>Completion certificate auto-issued</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>Phase 1B — Korea TTT (M6–7)</h5>
+            <ul>
+              <li>Day 1–2: IEG HQ — equipment lab + XR demo</li>
+              <li>Day 3: Korea Polytechnic — TVET system tour</li>
+              <li>Day 4: Smart factory site visit</li>
+              <li>Day 5: Co-design workshop + assessment</li>
+              <li>Day 5 PM: IEG Certificate presentation</li>
+              <li>Optional Day 6–7: Extended curriculum lab</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>Phase 2 — BTEC L3 Certificate (Year 2)</h5>
+            <ul>
+              <li>12 weeks full-time (360 contact hours)</li>
+              <li>Units: PLC Fundamentals + Pneumatics</li>
+              <li>50% theory / 50% lab-based practical</li>
+              <li>Portfolio of evidence assessment</li>
+              <li>External moderation by Saudi TAFE / Pearson</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>Phase 2 — BTEC L4 Diploma (Year 2)</h5>
+            <ul>
+              <li>16 weeks full-time (480 contact hours)</li>
+              <li>Units: Smart Factory + Semiconductor Process</li>
+              <li>Industry project: 80-hr supervised practicum</li>
+              <li>Assessment: observation + portfolio + exam</li>
+              <li>Dual recognition: BTEC + TVTC pathway</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="qa-card">
+      <div class="qa-hdr" onclick="toggleQA(this)">
+        <div class="qa-num">3</div>
+        <div class="qa-q">Skills and competencies to be developed</div>
+        <span class="qa-arrow">▶</span>
+      </div>
+      <div class="qa-body">
+        <p class="answer-text">Competencies are tiered across three levels: Digital Literacy (Phase 1A), Hands-on Technical Proficiency (Phase 1B+), and Industry-Ready Qualification (Phase 2–4). Each maps directly to BTEC learning outcomes and TVTC occupational standards.</p>
+        <div class="two-col">
+          <div class="info-box">
+            <h5>Technical Competencies</h5>
+            <ul>
+              <li>PLC programming (IEC 61131-3, ladder logic)</li>
+              <li>Modular Production System (MPS) integration</li>
+              <li>Pneumatic circuit design & fault diagnosis</li>
+              <li>Semiconductor 8-process sequence knowledge</li>
+              <li>Smart factory IoT monitoring & OEE analysis</li>
+              <li>CVD / PVD / etch process parameter control</li>
+              <li>Wafer yield calculation (Murphy's model)</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>Professional Competencies</h5>
+            <ul>
+              <li>Competency-based assessment design</li>
+              <li>Industrial safety (ISO 14644 cleanroom EHS)</li>
+              <li>Technical documentation in EN/AR</li>
+              <li>Equipment commissioning & maintenance logs</li>
+              <li>Root cause analysis (8D / Ishikawa)</li>
+              <li>Statistical Process Control (SPC) basics</li>
+              <li>Cross-cultural technical instruction delivery</li>
+            </ul>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <span class="tag tag-teal">NCS 15010201 · PLC</span>
+          <span class="tag tag-teal">NCS 15020301 · Smart Factory</span>
+          <span class="tag tag-teal">NCS 15010101 · Pneumatics</span>
+          <span class="tag tag-violet">BTEC 4039 · NQF L3</span>
+          <span class="tag tag-violet">BTEC 4040 · NQF L4</span>
+          <span class="tag tag-gold">IEG-SEM-01 · Semiconductor</span>
+          <span class="tag tag-gold">Saudi TVTC alignment TBD</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="qa-card">
+      <div class="qa-hdr" onclick="toggleQA(this)">
+        <div class="qa-num">4</div>
+        <div class="qa-q">Requirements for establishing training laboratories and facilities</div>
+        <span class="qa-arrow">▶</span>
+      </div>
+      <div class="qa-body">
+        <p class="answer-text">IEG distinguishes between Phase 1 (zero-hardware digital delivery) and Phase 2+ (Model C Cleanroom hardware). This staged approach means ALAT/TVTC can begin training immediately with no facility investment, and only commit to capital infrastructure once curriculum fit is confirmed.</p>
+        <div class="two-col">
+          <div class="info-box">
+            <h5>Phase 1A Requirements (Minimal)</h5>
+            <ul>
+              <li>Internet-connected classroom or LMS</li>
+              <li>Projector or display screen per group</li>
+              <li>Instructor laptop per 15 trainees</li>
+              <li>No specialist equipment needed</li>
+              <li>No cleanroom or facility modification</li>
+              <li>Can run in any TVTC campus room</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>Phase 2 Model C Cleanroom (future)</h5>
+            <ul>
+              <li>Minimum 200m² dedicated lab space</li>
+              <li>ISO Class 7 cleanroom environment</li>
+              <li>3-phase power supply (380V/50Hz)</li>
+              <li>Compressed air + exhaust ventilation</li>
+              <li>DI water supply line (optional at Phase 2)</li>
+              <li>Storage for training wafers & chemicals</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note-grid" style="margin-top:12px">
+          <div class="note-box gold">
+            <h5>Phase 1 Facility Cost</h5>
+            USD 0 additional facility spend. Phase 1A delivers fully remotely. Phase 1B takes place at IEG HQ in Korea — ALAT covers travel and accommodation only.
+          </div>
+          <div class="note-box teal">
+            <h5>Phase 2 Facility Planning</h5>
+            IEG will provide a full Model C facility brief (layout, MEP requirements, ISO classification) at Month 8 as part of the Phase 2 concept package — ALAT/TVTC can share with their facility team for early planning.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="qa-card">
+      <div class="qa-hdr" onclick="toggleQA(this)">
+        <div class="qa-num">5</div>
+        <div class="qa-q">Equipment and tools required for each laboratory</div>
+        <span class="qa-arrow">▶</span>
+      </div>
+      <div class="qa-body">
+        <p class="answer-text">Phase 1 requires no hardware from ALAT/TVTC. The IEG Interactive Simulator serves as the digital stand-in for all 8 semiconductor process stations. Physical equipment is introduced progressively from Phase 1B (IEG showroom in Korea) through Phase 2+ (Saudi-based lab).</p>
+        <div class="two-col">
+          <div class="info-box">
+            <h5>Phase 1A — Digital Equipment (IEG provided)</h5>
+            <ul>
+              <li>IEG 8-Process Interactive Simulator (browser)</li>
+              <li>Deal-Grove / Rayleigh / Murphy simulation engines</li>
+              <li>EN/AR bilingual LMS module set</li>
+              <li>Assessment rubric templates</li>
+              <li>Instructor facilitation guide (PDF)</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>Phase 1B — IEG Showroom Equipment (Korea)</h5>
+            <ul>
+              <li>IEG PLC Trainer (Siemens S7 + Mitsubishi FX)</li>
+              <li>MPS (Modular Production System) — 4 stations</li>
+              <li>Electro-Pneumatics Trainer (IEG 4000 Series)</li>
+              <li>XR Semiconductor Walkthrough station</li>
+              <li>Smart Factory IoT demo line</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>Phase 2 Model C — Core Hardware (Saudi)</h5>
+            <ul>
+              <li>Semiconductor Wafer Handling Trainer</li>
+              <li>Photolithography Training System</li>
+              <li>Plasma Etch / CVD Process Trainer</li>
+              <li>Semiconductor Packaging Trainer</li>
+              <li>PLC / Smart Factory automation line</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>Phase 2 Model C — Support Systems (Saudi)</h5>
+            <ul>
+              <li>Process Control Software (IEG proprietary)</li>
+              <li>XR Digital Twin overlay (hardware-linked)</li>
+              <li>Cleanroom gowning station + particle counter</li>
+              <li>Safety interlock and EHS monitoring system</li>
+              <li>Instructor workstation × 2</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="qa-card">
+      <div class="qa-hdr" onclick="toggleQA(this)">
+        <div class="qa-num">6</div>
+        <div class="qa-q">Train-the-Trainer programmes and capability development</div>
+        <span class="qa-arrow">▶</span>
+      </div>
+      <div class="qa-body">
+        <p class="answer-text">The Korea Technology Tour (Phase 1B) is IEG's flagship TTT programme. It is the single most important investment in the partnership — because trained Saudi instructors are the permanent, self-sustaining asset that multiplies every subsequent investment in equipment and facilities.</p>
+        <div class="two-col">
+          <div class="info-box">
+            <h5>TTT Programme Structure (5–7 Days)</h5>
+            <ul>
+              <li>Day 1–2: IEG HQ — equipment orientation + PLC/MPS lab</li>
+              <li>Day 2 PM: XR Walkthrough facilitation training</li>
+              <li>Day 3: Korea Polytechnic Univ. (Siheung/Incheon)</li>
+              <li>Day 4: Smart factory site visit (Samsung/LG partner)</li>
+              <li>Day 5: Curriculum co-design + assessment + ceremony</li>
+              <li>Optional D6–7: Extended lab + KRIVET briefing</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>Instructor Output per TTT Cohort</h5>
+            <ul>
+              <li>IEG Certificate of Completion (each participant)</li>
+              <li>1 localised curriculum unit per participant</li>
+              <li>Competency confidence survey (pre/post)</li>
+              <li>Equipment operation checklist (signed off)</li>
+              <li>TTT Pilot Report compiled by IEG team</li>
+              <li>Digital Showcase package for ALAT internal use</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note-grid" style="margin-top:12px">
+          <div class="note-box gold">
+            <h5>Annual Refresher (Year 2+)</h5>
+            Once the Model C centre is operational, IEG delivers an annual 2-day in-country instructor refresher covering new curriculum content, equipment updates, and assessment moderation.
+          </div>
+          <div class="note-box teal">
+            <h5>Train-the-Master-Trainer</h5>
+            One senior Saudi instructor can be nominated for an extended 10-day IEG HQ programme at Year 2, qualifying them to independently deliver TTT to new cohorts — making the programme self-sustaining.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="qa-card">
+      <div class="qa-hdr" onclick="toggleQA(this)">
+        <div class="qa-num">7</div>
+        <div class="qa-q">Possibility of delivering the programmes in Saudi Arabia</div>
+        <span class="qa-arrow">▶</span>
+      </div>
+      <div class="qa-body">
+        <p class="answer-text">All Phase 1A content is delivered 100% in Saudi Arabia (or anywhere with internet access) from Day 1. Phase 1B is delivered in Korea — which is by design, not a limitation. Phase 2+ is fully Saudi-based.</p>
+        <div class="two-col">
+          <div class="info-box">
+            <h5>What Delivers in KSA from Day 1</h5>
+            <ul>
+              <li>Full online curriculum suite (EN/AR, browser-based)</li>
+              <li>Interactive 8-process simulator</li>
+              <li>Async video modules for each unit</li>
+              <li>Assessment and certification platform</li>
+              <li>Instructor facilitation guide + lesson plans</li>
+              <li>IEG remote curriculum support (weekly check-in)</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>Why Korea TTT is Intentionally in Korea</h5>
+            <ul>
+              <li>Instructors must touch the actual equipment before teaching with it</li>
+              <li>Korea Polytechnic campus provides TVET benchmarking context</li>
+              <li>Smart factory site visits impossible to replicate elsewhere</li>
+              <li>5-day immersion builds institutional confidence rapidly</li>
+              <li>All logistics managed by IEG — visa, accommodation, transport</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note-box green" style="margin-top:12px">
+          <h5>Saudi-based delivery from Year 2</h5>
+          Once the Model C Cleanroom is operational (Phase 2+), all programme delivery shifts to Saudi Arabia. IEG sends a technical specialist for initial commissioning + instructor support (2 weeks on-site). Annual refreshers can be delivered either in KSA or Korea depending on cohort preference.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="qa-card">
+      <div class="qa-hdr" onclick="toggleQA(this)">
+        <div class="qa-num">8</div>
+        <div class="qa-q">Certifications and qualifications that can be awarded to trainees</div>
+        <span class="qa-arrow">▶</span>
+      </div>
+      <div class="qa-body">
+        <p class="answer-text">IEG's programme is designed for dual recognition: international BTEC credentials through Saudi TAFE / Pearson, plus Saudi TVTC national qualification alignment. This positions ALAT graduates for both domestic employment and international mobility.</p>
+        <table class="cert-table">
+          <thead>
+            <tr><th>Programme</th><th>Credential</th><th>Level</th><th>Issuing Body</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Foundation Digital (Phase 1A)</td><td class="code">IEG-DW-01 Certificate of Completion</td><td><span class="level-badge">Foundational</span></td><td>IEG Co., Ltd.</td><td><span class="ok-tag">Immediate</span></td></tr>
+            <tr><td>Korea TTT (Phase 1B)</td><td class="code">IEG TTT Certificate</td><td><span class="level-badge">Instructor</span></td><td>IEG Co., Ltd.</td><td><span class="ok-tag">Phase 1B</span></td></tr>
+            <tr><td>BTEC L3 Certificate</td><td class="code">BTEC Unit 4039 (PLC + Pneumatics)</td><td><span class="level-badge">NQF L3</span></td><td>Saudi TAFE / Pearson BTEC</td><td><span class="gap-tag">Phase 2 (pending Saudi TAFE)</span></td></tr>
+            <tr><td>BTEC L4 Diploma</td><td class="code">BTEC Unit 4040 (Smart Factory + Semi.)</td><td><span class="level-badge">NQF L4</span></td><td>Saudi TAFE / Pearson BTEC</td><td><span class="gap-tag">Phase 2 (pending Saudi TAFE)</span></td></tr>
+            <tr><td>Saudi National Qualification</td><td class="code">TVTC Occupational Certificate</td><td><span class="level-badge">SNQF L3–4</span></td><td>TVTC / NCAAA</td><td><span class="gap-tag">Alignment TBD with TVTC</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="qa-card">
+      <div class="qa-hdr" onclick="toggleQA(this)">
+        <div class="qa-num">9</div>
+        <div class="qa-q">Expected training capacity and number of trainees per year</div>
+        <span class="qa-arrow">▶</span>
+      </div>
+      <div class="qa-body">
+        <p class="answer-text">Capacity scales with each phase of the partnership. Phase 1A is unlimited (online). Phase 1B is instructor-focused (5–10 per cohort). Phase 2+ depends on Model C lab configuration.</p>
+        <div class="two-col">
+          <div class="info-box">
+            <h5>Phase 1A — Online Capacity</h5>
+            <ul>
+              <li>Unlimited concurrent learners (browser-based)</li>
+              <li>Recommended group: 20–30 per facilitator</li>
+              <li>Self-paced: 40 hrs over 2–4 weeks</li>
+              <li>Assessment auto-graded; cert auto-issued</li>
+              <li>Annual throughput: unlimited (no cohort cap)</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>Phase 1B — TTT Cohort Capacity</h5>
+            <ul>
+              <li>Cohort size: 5–10 instructors per tour</li>
+              <li>IEG can accommodate 2 cohorts/year</li>
+              <li>Total TTT-certified instructors Year 1: 10–20</li>
+              <li>Each certified instructor can teach 20 trainees/yr</li>
+              <li>Multiplier effect: 200–400 trainees by Year 2</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>Phase 2 Model C — Lab Capacity</h5>
+            <ul>
+              <li>Lab size: 200–400m² (1–2 stations per process)</li>
+              <li>BTEC cohort: 20 trainees per 12–16 wk intake</li>
+              <li>2 intakes/year = 40 graduates/year</li>
+              <li>TVTC modular: 60–80 certificate holders/year</li>
+              <li>Expansion: additional stations → 120+/year</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>ALAT Workforce Target Alignment</h5>
+            <ul>
+              <li>Year 1: 5–10 TTT instructors certified</li>
+              <li>Year 2: 40 BTEC L3/L4 graduates</li>
+              <li>Year 3: 80+ graduates with dual TVTC recognition</li>
+              <li>Year 5: 200+ cumulative certified technicians</li>
+              <li>ROI model aligned to ALAT headcount targets</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="qa-card">
+      <div class="qa-hdr" onclick="toggleQA(this)">
+        <div class="qa-num">10</div>
+        <div class="qa-q">Estimated costs and implementation requirements</div>
+        <span class="qa-arrow">▶</span>
+      </div>
+      <div class="qa-body">
+        <p class="answer-text">Phase 1 (1A + 1B combined) is an all-in USD 47,500 investment — covering online curriculum development, digital simulator, and the Korea Technology Tour for up to 10 instructors. This is the complete Phase 1 cost with no hidden items. Phase 2+ hardware is scoped separately at Month 8.</p>
+        <div class="total-bar">
+          <div class="lbl">Phase 1 Total (1A Online + 1B Korea TTT)<span>All-inclusive · No hidden fees · Phase 2 hardware priced separately at M8</span></div>
+          <div class="amt"><span class="unit">USD</span>47,500</div>
+        </div>
+        <div class="two-col">
+          <div class="info-box">
+            <h5>Phase 1A — Online Curriculum (USD 20,000)</h5>
+            <ul>
+              <li>BTEC curriculum mapping (3 flagship units): $8,000</li>
+              <li>XR/digital walkthrough concept package: $10,000</li>
+              <li>Project management & delivery: $2,000</li>
+              <li>EN/AR bilingual content review: included</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h5>Phase 1B — Korea TTT (USD 27,500)</h5>
+            <ul>
+              <li>Training programme fee (5–10 pax): $12,000</li>
+              <li>Accommodation Pangyo/Seongnam (5 nights): $8,000</li>
+              <li>Airport transfer + local transport: $2,500</li>
+              <li>Korea Polytechnic + factory visit: $2,000</li>
+              <li>Co-design materials + certificates: $1,000</li>
+              <li>IEG coordinator (2 months): $2,000</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note-grid" style="margin-top:12px">
+          <div class="note-box gold">
+            <h5>Payment Terms (Recommended)</h5>
+            50% on contract (Phase 1A kick-off) · 25% on BTEC mapping delivery (M2) · 25% on TTT completion (M7)
+          </div>
+          <div class="note-box teal">
+            <h5>Financing</h5>
+            Phase 1 is commercially self-funded — no ODA required. Phase 2 hardware: EDCF, Saudi-Korea bilateral fund, or direct commercial pricing available.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /qa-grid -->
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 3: BUDGET
+══════════════════════════════════════ -->
+<div id="tab-budget" class="tab-panel">
+<div class="container">
+  <p class="sec-title">Phase 1 Detailed Budget</p>
+  <p class="sec-sub">Two views: Phase 1A (Online Curriculum, M1–2) and Phase 1B (Korea Technology Tour, M4–7). Internal cost vs. external proposal shown side-by-side. All figures in USD.</p>
+
+  <!-- 1A EXTERNAL -->
+  <p style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:12px;margin-top:4px">Phase 1A — Online Curriculum Package · External Proposal to ALAT/TVTC</p>
+  <div class="budget-wrap">
+    <table>
+      <thead><tr><th style="width:40%">Deliverable</th><th style="width:12%">Type</th><th style="width:30%">Scope</th><th style="width:18%" style="text-align:right">USD</th></tr></thead>
+      <tbody>
+        <tr><td colspan="4" class="sub-hdr">Track ⑤ · Curriculum Localization</td></tr>
+        <tr>
+          <td>NCS→BTEC Curriculum Mapping Table<div class="note">PLC · Smart Factory · Pneumatics — 3 flagship units</div></td>
+          <td><span class="type-out">Deliverable</span></td>
+          <td>PDF report + Excel crosswalk · NQF L3–4 evidence descriptors</td>
+          <td class="amount">$6,500</td>
+        </tr>
+        <tr>
+          <td>Saudi TAFE Gap Analysis Report<div class="note">Missing assessment evidence for BTEC recognition</div></td>
+          <td><span class="type-out">Deliverable</span></td>
+          <td>PDF report · TVTC alignment notes included</td>
+          <td class="amount">$1,500</td>
+        </tr>
+        <tr class="subtotal"><td colspan="3">Track ⑤ Subtotal</td><td class="amount">$8,000</td></tr>
+
+        <tr><td colspan="4" class="sub-hdr">Track ③ · Digital Walkthrough & Online Modules</td></tr>
+        <tr>
+          <td>8-Process XR Storyboard (8 stations)<div class="note">High-fidelity Unity-ready brief per process station</div></td>
+          <td><span class="type-out">Deliverable</span></td>
+          <td>PDF storyboard deck · EN/AR bilingual scripts</td>
+          <td class="amount">$5,000</td>
+        </tr>
+        <tr>
+          <td>Interactive Browser Simulator<div class="note">Deal-Grove · Rayleigh · Murphy · RIE · CVD engines</div></td>
+          <td><span class="type-out">Deliverable</span></td>
+          <td>HTML/JS · No install · EN/AR toggle · Inquiry form</td>
+          <td class="amount">$3,000</td>
+        </tr>
+        <tr>
+          <td>Async Video Module Scripts (8 units)<div class="note">Narration + slide brief per station, EN/AR</div></td>
+          <td><span class="type-out">Deliverable</span></td>
+          <td>Script documents · Ready for voiceover production</td>
+          <td class="amount">$2,000</td>
+        </tr>
+        <tr class="subtotal"><td colspan="3">Track ③ Subtotal</td><td class="amount">$10,000</td></tr>
+
+        <tr><td colspan="4" class="sub-hdr">Project Management</td></tr>
+        <tr>
+          <td>Dedicated PM · 2 months<div class="note">Review cycles, stakeholder comms, QC</div></td>
+          <td><span class="type-in">Internal</span></td>
+          <td>Fixed fee · Includes 4 video review sessions</td>
+          <td class="amount">$2,000</td>
+        </tr>
+        <tr class="grand"><td colspan="3"><strong>Phase 1A Total — External Proposal</strong></td><td class="amount">$20,000</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 1A INTERNAL COST -->
+  <p style="font-size:12px;color:var(--ink3);margin-bottom:10px;margin-top:20px">Phase 1A · Internal Cost Basis (IEG Reference Only · ₩182,000/day in-house · Market rates for outsourced)</p>
+  <div class="budget-wrap">
+    <table>
+      <thead><tr><th style="width:40%">Item</th><th style="width:12%">Type</th><th style="width:18%">Rate / Volume</th><th style="width:30%" style="text-align:right">KRW</th></tr></thead>
+      <tbody>
+        <tr><td>Curriculum analyst (NCS→BTEC mapping)</td><td><span class="type-in">In-house</span></td><td>10 days × ₩182K</td><td class="amount">₩1,820,000</td></tr>
+        <tr><td>Technical translator (KO→EN)</td><td><span class="type-ext">Outsource</span></td><td>5,000 words × ₩60</td><td class="amount">₩300,000</td></tr>
+        <tr><td>BTEC mapping table layout</td><td><span class="type-in">In-house</span></td><td>3 days × ₩182K</td><td class="amount">₩546,000</td></tr>
+        <tr><td>Saudi TAFE gap analysis</td><td><span class="type-in">In-house</span></td><td>2 days × ₩182K</td><td class="amount">₩364,000</td></tr>
+        <tr><td>Instructional designer (8-process scripts)</td><td><span class="type-in">In-house</span></td><td>8 days × ₩182K</td><td class="amount">₩1,456,000</td></tr>
+        <tr><td>XR storyboard / UI designer</td><td><span class="type-ext">Outsource</span></td><td>10 days × ₩250K</td><td class="amount">₩2,500,000</td></tr>
+        <tr><td>Arabic bilingual placeholder</td><td><span class="type-ext">Outsource</span></td><td>2,000 words × ₩250</td><td class="amount">₩500,000</td></tr>
+        <tr><td>Concept deck production (PDF/HTML)</td><td><span class="type-in">In-house</span></td><td>3 days × ₩182K</td><td class="amount">₩546,000</td></tr>
+        <tr><td>PM & QC</td><td><span class="type-in">In-house</span></td><td>4 days × ₩182K</td><td class="amount">₩728,000</td></tr>
+        <tr><td>Software licenses (Figma/Adobe 2mo)</td><td><span class="type-in">In-house</span></td><td>Pro-rated</td><td class="amount">₩300,000</td></tr>
+        <tr><td>Outsourcing platform fee (~10%)</td><td><span class="type-ext">Outsource</span></td><td>On outsourced items</td><td class="amount">₩300,000</td></tr>
+        <tr><td>Communication & admin</td><td><span class="type-in">In-house</span></td><td>Lump sum</td><td class="amount">₩200,000</td></tr>
+        <tr class="subtotal"><td colspan="3"><strong>Phase 1A Internal Cost Total</strong></td><td class="amount">₩9,560,000 ≈ $7,081</td></tr>
+        <tr><td colspan="3" style="font-size:12px;color:var(--ink3)">IEG Margin on Phase 1A</td><td class="amount" style="color:var(--teal)">~64.6%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 1B -->
+  <p style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:12px">Phase 1B — Korea Technology Tour (TTT) · External Proposal to ALAT/TVTC</p>
+  <div class="budget-wrap">
+    <table>
+      <thead><tr><th style="width:40%">Item</th><th style="width:12%">Type</th><th style="width:30%">Notes</th><th style="width:18%" style="text-align:right">USD</th></tr></thead>
+      <tbody>
+        <tr><td colspan="4" class="sub-hdr">Training Programme Fee</td></tr>
+        <tr>
+          <td>TTT Programme Fee (5–10 participants)<div class="note">5-day structured programme · IEG instructor × 2</div></td>
+          <td><span class="type-out">Service</span></td>
+          <td>Includes: curriculum, labs, facilitation, materials</td>
+          <td class="amount">$12,000</td>
+        </tr>
+        <tr><td colspan="4" class="sub-hdr">Accommodation & Logistics (based on 8 pax avg.)</td></tr>
+        <tr>
+          <td>Hotel accommodation · Pangyo/Seongnam area<div class="note">5 nights × 8 rooms · Business class hotel</div></td>
+          <td><span class="type-out">Direct cost</span></td>
+          <td>₩150,000/night/room · IEG arranges, ALAT invoiced</td>
+          <td class="amount">$4,500</td>
+        </tr>
+        <tr>
+          <td>Meals & daily allowance<div class="note">3 meals/day × 5 days × 8 participants</div></td>
+          <td><span class="type-out">Direct cost</span></td>
+          <td>₩60,000/person/day all-in</td>
+          <td class="amount">$1,800</td>
+        </tr>
+        <tr>
+          <td>Airport transfer (ICN ↔ Seongnam × 2 way)<div class="note">Group van service · 2 transfers</div></td>
+          <td><span class="type-out">Direct cost</span></td>
+          <td>KAL Limousine or chartered van</td>
+          <td class="amount">$800</td>
+        </tr>
+        <tr>
+          <td>Local transport (5 days)<div class="note">IEG HQ ↔ Korea Polytechnic ↔ factory site</div></td>
+          <td><span class="type-out">Direct cost</span></td>
+          <td>Chartered bus × 3 days site visits</td>
+          <td class="amount">$900</td>
+        </tr>
+        <tr><td colspan="4" class="sub-hdr">Programme Content & Site Visits</td></tr>
+        <tr>
+          <td>Korea Polytechnic University visit<div class="note">Campus tour + faculty briefing on TVET system</div></td>
+          <td><span class="type-out">Coordination</span></td>
+          <td>MOU coordination with KRIVET/Polytechnic</td>
+          <td class="amount">$1,000</td>
+        </tr>
+        <tr>
+          <td>Smart factory site visit<div class="note">Samsung/LG partner facility (subject to arrangement)</div></td>
+          <td><span class="type-out">Coordination</span></td>
+          <td>Entry coordination + NDA management</td>
+          <td class="amount">$1,000</td>
+        </tr>
+        <tr>
+          <td>Co-design workshop materials<div class="note">Printed curriculum workbooks + Arabic support docs</div></td>
+          <td><span class="type-in">Internal</span></td>
+          <td>8 participant sets + facilitator guide</td>
+          <td class="amount">$500</td>
+        </tr>
+        <tr>
+          <td>Certificates + ceremony<div class="note">IEG-stamped bilingual certificates + framing</div></td>
+          <td><span class="type-in">Internal</span></td>
+          <td>10 units + ceremony coordination</td>
+          <td class="amount">$500</td>
+        </tr>
+        <tr><td colspan="4" class="sub-hdr">IEG Coordination (Pre + Post Tour)</td></tr>
+        <tr>
+          <td>IEG programme coordinator · 2 months<div class="note">Visa support, scheduling, logistics, follow-up report</div></td>
+          <td><span class="type-in">Internal</span></td>
+          <td>₩182,000/day × 10 days + overhead</td>
+          <td class="amount">$2,000</td>
+        </tr>
+        <tr>
+          <td>TTT Pilot Report + Digital Showcase<div class="note">Post-tour deliverable for ALAT internal use</div></td>
+          <td><span class="type-in">Internal</span></td>
+          <td>PDF report + video testimonials + infographic</td>
+          <td class="amount">$1,500</td>
+        </tr>
+        <tr>
+          <td>Visa invitation letters + admin<div class="note">Official IEG letters for Saudi participants</div></td>
+          <td><span class="type-in">Internal</span></td>
+          <td>Korean visa support documentation</td>
+          <td class="amount">$500</td>
+        </tr>
+        <tr><td colspan="4" class="sub-hdr">Note: International airfare NOT included</td></tr>
+        <tr>
+          <td>International airfare (Riyadh ↔ Seoul × 8 pax)<div class="note">ALAT/TVTC to arrange and fund directly — not IEG scope</div></td>
+          <td><span class="tag-red" style="font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;background:var(--red-lt);color:var(--red)">ALAT scope</span></td>
+          <td>Est. $1,200–1,800/person round-trip business</td>
+          <td class="amount" style="color:var(--ink3)">~$12,000*</td>
+        </tr>
+        <tr class="grand"><td colspan="3"><strong>Phase 1B Total — IEG Invoice to ALAT</strong></td><td class="amount">$27,500</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="total-bar">
+    <div class="lbl">Phase 1 Combined Total (1A + 1B) — IEG Invoice<span>Excludes international airfare (ALAT/TVTC scope, est. $12,000 for 8 pax)</span></div>
+    <div class="amt"><span class="unit">USD</span>47,500</div>
+  </div>
+
+  <div class="note-grid">
+    <div class="note-box gold">
+      <h5>📌 Payment Schedule</h5>
+      50% on contract signing (M1) · 25% on Phase 1A delivery (M2) · 25% on TTT completion (M7)
+    </div>
+    <div class="note-box teal">
+      <h5>📌 Phase 1 Margin</h5>
+      Phase 1A all-in cost ≈ $7,081 (margin 64.6%). Phase 1B direct costs ≈ $21,000 (margin ~24%). Combined Phase 1 margin ≈ 44%.
+    </div>
+    <div class="note-box green">
+      <h5>📌 What This Unlocks</h5>
+      Phase 1 completion = TTT Pilot Report = Phase 2 hardware proposal credential. ALAT cannot get a credible Model C proposal from any provider without Phase 1 data.
+    </div>
+    <div class="note-box gold">
+      <h5>📌 Revenue Ladder</h5>
+      Phase 1: $47,500 · Phase 2 hardware: TBD (est. $800K–2M) · Annual support: $30–60K/yr
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 4: CURRICULUM
+══════════════════════════════════════ -->
+<div id="tab-curriculum" class="tab-panel">
+<div class="container">
+  <p class="sec-title">Curriculum Framework — All Phases</p>
+  <p class="sec-sub">Unit-level learning objectives, NCS codes, BTEC mapping, and TVTC alignment status across the full partnership lifecycle.</p>
+
+  <!-- Phase 1A -->
+  <div style="background:var(--teal-lt);border:1px solid rgba(15,110,86,.2);border-radius:var(--r);padding:18px 20px;margin-bottom:20px">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px">Phase 1A · Online Foundation — Delivered Remotely · Month 1–2</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+      <div class="info-box" style="background:white">
+        <h5>Unit 1 — PLC Fundamentals</h5>
+        <ul>
+          <li>PLC architecture & IEC 61131-3 standards</li>
+          <li>Ladder diagram programming (basic I/O)</li>
+          <li>Fault diagnosis simulation exercise</li>
+          <li>Safe commissioning procedures</li>
+        </ul>
+        <div style="margin-top:8px"><span class="tag tag-violet">BTEC 4039 · L3</span><span class="tag tag-teal">NCS 15010201</span></div>
+      </div>
+      <div class="info-box" style="background:white">
+        <h5>Unit 2 — Smart Factory & Industry 4.0</h5>
+        <ul>
+          <li>IoT sensor networks & SCADA basics</li>
+          <li>OEE monitoring and interpretation</li>
+          <li>Predictive maintenance data concepts</li>
+          <li>Cyber-physical systems safety</li>
+        </ul>
+        <div style="margin-top:8px"><span class="tag tag-violet">BTEC 4040 · L4</span><span class="tag tag-teal">NCS 15020301</span></div>
+      </div>
+      <div class="info-box" style="background:white">
+        <h5>Unit 3 — Pneumatics Systems</h5>
+        <ul>
+          <li>ISO 1219 circuit diagram reading</li>
+          <li>Double-acting cylinder assembly</li>
+          <li>Fault diagnosis: leakage, pressure, valves</li>
+          <li>PLC-pneumatics integration</li>
+        </ul>
+        <div style="margin-top:8px"><span class="tag tag-violet">BTEC 4039 Supp. · L3</span><span class="tag tag-teal">NCS 15010101</span></div>
+      </div>
+      <div class="info-box" style="background:white" style="grid-column:span 3">
+        <h5>Unit 4–11 — Semiconductor 8-Process Digital Walkthrough (IEG-SEM-01)</h5>
+        <ul>
+          <li>Station 1: Wafer Preparation — RCA clean, crystal growth, specification</li>
+          <li>Station 2: Thermal Oxidation — Deal-Grove model, dry vs. wet, gate oxide</li>
+          <li>Station 3: Photolithography — Rayleigh resolution, COBD sequence, defect modes</li>
+          <li>Station 4: Etching — RIE plasma, selectivity, anisotropy, endpoint detection</li>
+          <li>Station 5: Ion Implantation — Gaussian profile, RTA, SIMS analysis</li>
+          <li>Station 6: CVD/Thin Film — LPCVD/PECVD/ALD, step coverage, film stress</li>
+          <li>Station 7: Metallisation — Cu damascene, CMP Preston equation, TaN barrier</li>
+          <li>Station 8: Testing & Packaging — Murphy yield, cost-per-die, BGA/QFN/3D-IC</li>
+        </ul>
+        <div style="margin-top:8px"><span class="tag tag-gold">IEG-SEM-01 · Proprietary</span><span class="tag tag-violet">NQF L3–4 Reference</span><span class="tag tag-green">Interactive Simulator Included</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 1B -->
+  <div style="background:var(--gold-lt);border:1px solid var(--gold-bd);border-radius:var(--r);padding:18px 20px;margin-bottom:20px">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:8px">Phase 1B · Korea TTT — Instructor Certification · Month 6–7</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="info-box" style="background:white">
+        <h5>Day 1–2 · IEG HQ Lab Sessions</h5>
+        <ul>
+          <li>Session 1A: Equipment safety & startup/shutdown</li>
+          <li>Session 1B: PLC lab — ladder logic, I/O wiring, fault</li>
+          <li>Session 2A: MPS integration & HMI operation</li>
+          <li>Session 2B: XR Walkthrough facilitation script</li>
+          <li>Assessment: practical observation checklist</li>
+        </ul>
+      </div>
+      <div class="info-box" style="background:white">
+        <h5>Day 3–5 · Site Visits & Co-design</h5>
+        <ul>
+          <li>Day 3: Korea Polytechnic — TVET structure, KRIVET</li>
+          <li>Day 4: Smart factory — link to BTEC evidence</li>
+          <li>Day 5: Curriculum adaptation workshop (2-page output each)</li>
+          <li>Day 5 PM: Competency assessment + certificate</li>
+          <li>Output: TTT Pilot Report compiled by IEG</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2+ -->
+  <div style="background:var(--violet-lt);border:1px solid rgba(83,64,160,.2);border-radius:var(--r);padding:18px 20px">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--violet);margin-bottom:8px">Phase 2+ · BTEC Formal Qualification — Hardware-based · Year 2</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="info-box" style="background:white">
+        <h5>BTEC L3 Certificate (12 weeks)</h5>
+        <ul>
+          <li>BTEC Unit 4039: PLC Systems (NQF L3)</li>
+          <li>BTEC Unit 4039 Supp.: Pneumatics (NQF L3)</li>
+          <li>Portfolio assessment: process logs + obs. checklist</li>
+          <li>External moderation: Saudi TAFE / Pearson</li>
+          <li>TVTC occupational crosswalk included</li>
+        </ul>
+      </div>
+      <div class="info-box" style="background:white">
+        <h5>BTEC L4 Diploma (16 weeks)</h5>
+        <ul>
+          <li>BTEC Unit 4040: Smart Factory (NQF L4)</li>
+          <li>IEG-SEM-01: Semiconductor Process (NQF L3–4)</li>
+          <li>80-hr industry project (ALAT facility)</li>
+          <li>Assessment: portfolio + practical + written</li>
+          <li>Dual recognition: BTEC + SNQF pathway</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 5: RECOMMENDATIONS
+══════════════════════════════════════ -->
+<div id="tab-recommend" class="tab-panel">
+<div class="container">
+  <p class="sec-title">IEG Recommendations</p>
+  <p class="sec-sub">Direct answers to ALAT/TVTC's three supplementary questions — stated plainly, based on 15 years of Korean TVET delivery experience.</p>
+
+  <div class="rec-card">
+    <h4>⭐ Priority 1: Which laboratories should be prioritised for Phase 1?</h4>
+    <p>Do not build any laboratory in Phase 1. The single highest-ROI action in Phase 1 is getting 5–10 Saudi instructors to IEG HQ in Korea. A laboratory without trained instructors is an expensive storage room. The online curriculum (Phase 1A) plus the Korea Technology Tour (Phase 1B) must come first — they produce the certified instructors and the adapted curriculum that will determine exactly which laboratory configuration makes sense for Saudi Arabia. IEG will use the TTT Pilot Report to specify the optimal Model C layout for your specific workforce profile.</p>
+  </div>
+
+  <div class="rec-card teal">
+    <h4>⭐ Priority 2: Which digital content should ALAT/TVTC deploy immediately?</h4>
+    <p>The IEG Semiconductor 8-Process Interactive Simulator is available now, at no cost, for ALAT/TVTC internal evaluation. We recommend distributing it to your existing instructors and engineering trainers as a baseline assessment tool. Their performance and engagement with the simulator will help IEG calibrate the Phase 1A curriculum to exactly the right entry level — avoiding both over-pitching and under-pitching the content for your audience.</p>
+  </div>
+
+  <div class="rec-card violet">
+    <h4>⭐ Priority 3: Minimum investment to launch Phase 1</h4>
+    <p>USD 20,000 for Phase 1A (online curriculum + simulator). This is the minimum viable investment and delivers tangible, usable deliverables: a complete BTEC mapping table, an interactive digital simulator in EN/AR, and 8 video module scripts. It also gives ALAT/TVTC 60 days of curriculum content to evaluate before committing to the Korea Technology Tour. The full Phase 1 investment (1A + 1B) is USD 47,500 — less than the annual salary of one semiconductor engineer, and it certifies 5–10 instructors who will each train 20+ technicians per year.</p>
+  </div>
+
+  <hr class="divider">
+  <p class="sec-title">Expected Annual Output — Trained Engineers & Technicians</p>
+
+  <div style="background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;margin-bottom:20px">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead><tr style="background:var(--navy)">
+        <th style="color:rgba(255,255,255,.8);font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:10px 16px;text-align:left;font-weight:400;width:15%">Year</th>
+        <th style="color:rgba(255,255,255,.8);font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:10px 16px;text-align:left;font-weight:400">Milestone</th>
+        <th style="color:rgba(255,255,255,.8);font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:10px 16px;text-align:right;font-weight:400;width:20%">Annual Output</th>
+        <th style="color:rgba(255,255,255,.8);font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:10px 16px;text-align:right;font-weight:400;width:20%">Cumulative</th>
+      </tr></thead>
+      <tbody>
+        <tr><td style="padding:11px 16px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--teal)">Year 1</td><td style="padding:11px 16px;border-bottom:1px solid var(--rule);color:var(--ink2)">Online foundation certificates (Phase 1A) + 5–10 TTT instructors (Phase 1B)</td><td style="padding:11px 16px;border-bottom:1px solid var(--rule);text-align:right;font-family:var(--mono);font-weight:500;color:var(--ink)">10–30 certified</td><td style="padding:11px 16px;border-bottom:1px solid var(--rule);text-align:right;font-family:var(--mono);color:var(--ink3)">10–30</td></tr>
+        <tr><td style="padding:11px 16px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--teal)">Year 2</td><td style="padding:11px 16px;border-bottom:1px solid var(--rule);color:var(--ink2)">Model C operational · First BTEC L3/L4 cohort graduates</td><td style="padding:11px 16px;border-bottom:1px solid var(--rule);text-align:right;font-family:var(--mono);font-weight:500;color:var(--ink)">40–60 graduates</td><td style="padding:11px 16px;border-bottom:1px solid var(--rule);text-align:right;font-family:var(--mono);color:var(--ink3)">50–90</td></tr>
+        <tr><td style="padding:11px 16px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--teal)">Year 3</td><td style="padding:11px 16px;border-bottom:1px solid var(--rule);color:var(--ink2)">Dual BTEC + TVTC recognition · 2 intakes/year · Master Trainer operational</td><td style="padding:11px 16px;border-bottom:1px solid var(--rule);text-align:right;font-family:var(--mono);font-weight:500;color:var(--ink)">80–100 graduates</td><td style="padding:11px 16px;border-bottom:1px solid var(--rule);text-align:right;font-family:var(--mono);color:var(--ink3)">130–190</td></tr>
+        <tr><td style="padding:11px 16px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--teal)">Year 4–5</td><td style="padding:11px 16px;border-bottom:1px solid var(--rule);color:var(--ink2)">ALAT expansion to additional sites · Regional reference centre status</td><td style="padding:11px 16px;border-bottom:1px solid var(--rule);text-align:right;font-family:var(--mono);font-weight:500;color:var(--ink)">120–200/year</td><td style="padding:11px 16px;border-bottom:1px solid var(--rule);text-align:right;font-family:var(--mono);color:var(--ink3)">400–600</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="strategy-banner">
+    <h3>The Core Argument for Phase 1 Approval</h3>
+    <p>ALAT/TVTC is being asked to invest USD 47,500 in Phase 1. In return, by Month 7: (1) a complete BTEC-mapped, TVTC-aligned curriculum in EN/AR exists, (2) 5–10 Saudi instructors are certified and have operated real IEG equipment, (3) a TTT Pilot Report is ready to anchor the Phase 2 hardware bid, and (4) IEG has proven delivery capability. No other TVET equipment provider offers this sequence. The hardware comes after the instructors are ready — not before.</p>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 6: PARTNER NOTES
+══════════════════════════════════════ -->
+<div id="tab-notes" class="tab-panel">
+<div class="container">
+  <p class="sec-title">Partner Notes & Questions</p>
+  <p class="sec-sub">ALAT / TVTC / Saudi TAFE representatives can log questions, comments, and action items directly on this document. Notes are saved in your browser and persist across sessions.</p>
+
+  <!-- Add note form -->
+  <div class="note-form-card">
+    <div class="note-form-hdr">
+      <span class="note-form-icon">✏️</span>
+      <span class="note-form-title">Add a New Note</span>
+    </div>
+    <div class="note-form-body">
+      <div class="note-form-row">
+        <div class="note-form-field">
+          <label class="nf-label">Your Name <span style="color:var(--red)">*</span></label>
+          <input class="nf-input" type="text" id="nf-name" placeholder="e.g. Mohammed Al-Rashidi">
+        </div>
+        <div class="note-form-field">
+          <label class="nf-label">Organisation</label>
+          <input class="nf-input" type="text" id="nf-org" placeholder="e.g. ALAT / TVTC / Saudi TAFE">
+        </div>
+        <div class="note-form-field">
+          <label class="nf-label">Type</label>
+          <select class="nf-input nf-select" id="nf-type">
+            <option value="question">❓ Question</option>
+            <option value="comment">💬 Comment</option>
+            <option value="action">✅ Action Item</option>
+            <option value="concern">⚠️ Concern</option>
+            <option value="approval">👍 Approval / Agreement</option>
+          </select>
+        </div>
+      </div>
+      <div class="note-form-field" style="margin-bottom:12px">
+        <label class="nf-label">Topic / Section Reference</label>
+        <select class="nf-input nf-select" id="nf-section">
+          <option value="General">General</option>
+          <option value="Q1 — Training Programmes">Q1 — Training Programmes</option>
+          <option value="Q2 — Duration & Structure">Q2 — Duration & Structure</option>
+          <option value="Q3 — Skills & Competencies">Q3 — Skills & Competencies</option>
+          <option value="Q4 — Facility Requirements">Q4 — Facility Requirements</option>
+          <option value="Q5 — Equipment & Tools">Q5 — Equipment & Tools</option>
+          <option value="Q6 — Train-the-Trainer">Q6 — Train-the-Trainer</option>
+          <option value="Q7 — Delivery in Saudi Arabia">Q7 — Delivery in Saudi Arabia</option>
+          <option value="Q8 — Certifications">Q8 — Certifications</option>
+          <option value="Q9 — Training Capacity">Q9 — Training Capacity</option>
+          <option value="Q10 — Costs & Budget">Q10 — Costs & Budget</option>
+          <option value="Phase 1A — Online Curriculum">Phase 1A — Online Curriculum</option>
+          <option value="Phase 1B — Korea TTT">Phase 1B — Korea TTT</option>
+          <option value="Phase 2+ — Model C Cleanroom">Phase 2+ — Model C Cleanroom</option>
+          <option value="Recommendations">Recommendations</option>
+        </select>
+      </div>
+      <div class="note-form-field" style="margin-bottom:16px">
+        <label class="nf-label">Note / Question / Comment <span style="color:var(--red)">*</span></label>
+        <textarea class="nf-input nf-textarea" id="nf-body" placeholder="Write your question, comment, or action item here. Be as specific as possible — include page references or section numbers if helpful."></textarea>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div style="font-size:12px;color:var(--ink3)">Notes are saved locally in your browser. Use the export button to share with IEG.</div>
+        <div style="display:flex;gap:10px">
+          <button class="nf-btn-secondary" onclick="clearForm()">Clear</button>
+          <button class="nf-btn-primary" onclick="addNote()">Add Note →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes list -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin:28px 0 14px;flex-wrap:wrap;gap:10px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-size:14px;font-weight:600;color:var(--ink)">Logged Notes</span>
+      <span class="note-count-badge" id="note-count">0 notes</span>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <select class="nf-input nf-select" id="filter-type" onchange="renderNotes()" style="height:32px;font-size:12px;padding:4px 28px 4px 10px;width:auto">
+        <option value="all">All types</option>
+        <option value="question">Questions only</option>
+        <option value="action">Action items</option>
+        <option value="concern">Concerns</option>
+        <option value="approval">Approvals</option>
+      </select>
+      <button class="nf-btn-secondary" onclick="exportNotes()" style="white-space:nowrap">Export Draft →</button>
+      <button class="nf-btn-send" onclick="sendNotesToIEG()" id="send-btn" style="white-space:nowrap">📨 Send to IEG</button>
+      <button class="nf-btn-danger" onclick="clearAllNotes()">Clear All</button>
+    </div>
+  </div>
+
+  <div id="notes-list"></div>
+
+  <div id="notes-empty" style="text-align:center;padding:48px 24px;background:var(--surf);border:1px dashed var(--rule);border-radius:var(--r);display:block">
+    <div style="font-size:32px;margin-bottom:12px">📋</div>
+    <div style="font-size:14px;font-weight:500;color:var(--ink2);margin-bottom:6px">No notes yet</div>
+    <div style="font-size:13px;color:var(--ink3)">Add your first question or comment using the form above. Notes are saved in your browser.</div>
+  </div>
+
+  <!-- Export preview -->
+  <div id="export-preview" style="display:none;margin-top:24px">
+    <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px">📧 Email Draft — Copy and send to kellycho824@ieg.kr</div>
+    <div style="background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);padding:20px;font-size:12.5px;line-height:1.8;color:var(--ink2);white-space:pre-wrap;font-family:var(--mono)" id="export-text"></div>
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button class="nf-btn-primary" onclick="copyExport()">Copy to Clipboard</button>
+      <button class="nf-btn-secondary" onclick="document.getElementById('export-preview').style.display='none'">Close</button>
+    </div>
+  </div>
+
+  <!-- Send modal -->
+  <div id="send-modal-bg" style="display:none;position:fixed;inset:0;background:rgba(13,21,32,.55);z-index:500;align-items:center;justify-content:center">
+    <div class="send-modal">
+      <div class="send-modal-hdr">
+        <span style="font-size:15px;font-weight:600;color:#fff">Send Notes to IEG</span>
+        <button onclick="closeSendModal()" style="background:none;border:none;color:rgba(255,255,255,.5);font-size:18px;cursor:pointer;line-height:1">✕</button>
+      </div>
+      <div class="send-modal-body">
+        <p style="font-size:13px;color:var(--ink2);margin-bottom:16px;line-height:1.7">All logged notes will be sent to <strong>kellycho824@ieg.kr</strong>. Please confirm your contact details so IEG can respond directly.</p>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
+          <div class="note-form-field">
+            <label class="nf-label">Your Name <span style="color:var(--red)">*</span></label>
+            <input class="nf-input" type="text" id="send-name" placeholder="Full name">
+          </div>
+          <div class="note-form-field">
+            <label class="nf-label">Organisation <span style="color:var(--red)">*</span></label>
+            <input class="nf-input" type="text" id="send-org" placeholder="ALAT / TVTC / Saudi TAFE">
+          </div>
+          <div class="note-form-field">
+            <label class="nf-label">Reply-to Email <span style="color:var(--red)">*</span></label>
+            <input class="nf-input" type="email" id="send-email" placeholder="your@email.com">
+          </div>
+          <div class="note-form-field">
+            <label class="nf-label">Additional Message <span style="font-weight:400;color:var(--ink3)">(optional)</span></label>
+            <textarea class="nf-input nf-textarea" id="send-msg" placeholder="Any context you'd like to add for the IEG team..." style="min-height:70px"></textarea>
+          </div>
+        </div>
+        <div id="send-status" style="display:none"></div>
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <button class="nf-btn-secondary" onclick="closeSendModal()">Cancel</button>
+          <button class="nf-btn-send" id="send-confirm-btn" onclick="confirmSend()">Send Notes →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<style>
+.nf-btn-send{background:var(--teal);color:#fff;border:none;border-radius:6px;padding:9px 18px;font-size:13px;font-weight:600;font-family:var(--body);cursor:pointer;transition:opacity .15s}
+.nf-btn-send:hover{opacity:.88}
+.nf-btn-send:disabled{opacity:.45;cursor:not-allowed}
+.send-modal{background:var(--surf);border-radius:12px;width:100%;max-width:480px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.25)}
+.send-modal-hdr{background:var(--navy);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.send-modal-body{padding:22px 20px}
+.send-success{background:var(--green-lt);border:1px solid rgba(22,163,74,.25);border-radius:6px;padding:12px 14px;font-size:13px;color:var(--green);line-height:1.6;margin-bottom:14px}
+.send-error{background:var(--red-lt);border:1px solid rgba(185,28,28,.2);border-radius:6px;padding:12px 14px;font-size:13px;color:var(--red);line-height:1.6;margin-bottom:14px}
+</style>
+    <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px">📧 Email Draft — Copy and send to kellycho824@ieg.kr</div>
+    <div style="background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);padding:20px;font-size:12.5px;line-height:1.8;color:var(--ink2);white-space:pre-wrap;font-family:var(--mono)" id="export-text"></div>
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button class="nf-btn-primary" onclick="copyExport()">Copy to Clipboard</button>
+      <button class="nf-btn-secondary" onclick="document.getElementById('export-preview').style.display='none'">Close</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<style>
+/* ── PARTNER NOTES STYLES ── */
+.note-form-card{background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;margin-bottom:8px}
+.note-form-hdr{background:var(--navy);padding:14px 20px;display:flex;align-items:center;gap:10px}
+.note-form-icon{font-size:16px}
+.note-form-title{font-size:13px;font-weight:600;color:#fff;letter-spacing:.01em}
+.note-form-body{padding:20px}
+.note-form-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:700px){.note-form-row{grid-template-columns:1fr}}
+.note-form-field{display:flex;flex-direction:column;gap:5px}
+.nf-label{font-size:12px;font-weight:600;color:var(--ink2)}
+.nf-input{background:var(--surf2);border:1px solid var(--rule);border-radius:6px;padding:9px 12px;font-size:13px;color:var(--ink);font-family:var(--body);outline:none;transition:border-color .15s;width:100%}
+.nf-input:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,.08)}
+.nf-input::placeholder{color:#9db0c8}
+.nf-select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238aabcc' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+.nf-textarea{min-height:90px;resize:vertical;line-height:1.6}
+.nf-btn-primary{background:var(--navy);color:#fff;border:none;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:600;font-family:var(--body);cursor:pointer;transition:opacity .15s}
+.nf-btn-primary:hover{opacity:.85}
+.nf-btn-secondary{background:var(--surf2);color:var(--ink2);border:1px solid var(--rule);border-radius:6px;padding:9px 16px;font-size:13px;font-weight:500;font-family:var(--body);cursor:pointer;transition:all .15s}
+.nf-btn-secondary:hover{background:var(--surf3);color:var(--ink)}
+.nf-btn-danger{background:var(--red-lt);color:var(--red);border:1px solid rgba(185,28,28,.2);border-radius:6px;padding:7px 14px;font-size:12px;font-weight:500;font-family:var(--body);cursor:pointer;transition:all .15s}
+.nf-btn-danger:hover{background:rgba(185,28,28,.12)}
+.note-count-badge{background:var(--navy);color:var(--gold-bd);font-family:var(--mono);font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+
+/* Note cards */
+.note-card{background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);margin-bottom:12px;overflow:hidden;transition:box-shadow .15s}
+.note-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.note-card-hdr{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-bottom:1px solid var(--rule)}
+.note-type-badge{flex-shrink:0;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;white-space:nowrap;margin-top:1px}
+.note-type-question{background:#dbeafe;color:#1e40af}
+.note-type-comment{background:#f0fdf4;color:#15803d}
+.note-type-action{background:#dcfce7;color:#15803d;border:1px solid rgba(22,163,74,.2)}
+.note-type-concern{background:#fef3c7;color:#92400e}
+.note-type-approval{background:#d1fae5;color:#065f46}
+.note-meta{flex:1;min-width:0}
+.note-author{font-size:13px;font-weight:600;color:var(--ink)}
+.note-detail{font-size:11.5px;color:var(--ink3);margin-top:2px}
+.note-section-tag{display:inline-block;background:var(--surf2);border:1px solid var(--rule);font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;color:var(--ink3);margin-top:4px}
+.note-actions{display:flex;gap:8px;flex-shrink:0}
+.note-action-btn{background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink3);padding:4px 8px;border-radius:4px;transition:all .15s;font-family:var(--body)}
+.note-action-btn:hover{background:var(--surf2);color:var(--ink)}
+.note-action-btn.delete{color:var(--red)}
+.note-action-btn.delete:hover{background:var(--red-lt)}
+.note-body{padding:14px 18px;font-size:13.5px;color:var(--ink2);line-height:1.75}
+.note-card.resolved{opacity:.6}
+.note-card.resolved .note-body{text-decoration:line-through}
+.resolved-badge{display:inline-block;background:var(--green-lt);color:var(--green);font-size:10px;padding:1px 7px;border-radius:3px;font-family:var(--mono);margin-left:8px}
+</style>
+<footer class="page-footer">
+  IEG Co., Ltd. · Global Business Division · Seongnam, Gyeonggi-do, Republic of Korea<br>
+  <span>IEG × ALAT/TVTC</span> · Semiconductor TVET Partnership Proposal · v3.0 · June 2026
+</footer>
+
+<script>
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name === 'notes') renderNotes();
+}
+function toggleQA(el) {
+  el.classList.toggle('open');
+}
+
+/* ── PARTNER NOTES ── */
+const STORAGE_KEY = 'ieg_alat_notes_v1';
+
+function getNotes() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch { return []; }
+}
+function saveNotes(notes) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+}
+
+function addNote() {
+  const name = document.getElementById('nf-name').value.trim();
+  const org  = document.getElementById('nf-org').value.trim();
+  const type = document.getElementById('nf-type').value;
+  const section = document.getElementById('nf-section').value;
+  const body = document.getElementById('nf-body').value.trim();
+
+  if (!name) { alert('Please enter your name.'); return; }
+  if (!body) { alert('Please enter a note or question.'); return; }
+
+  const notes = getNotes();
+  notes.unshift({
+    id: Date.now(),
+    name, org, type, section, body,
+    resolved: false,
+    ts: new Date().toLocaleString('en-GB', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})
+  });
+  saveNotes(notes);
+  clearForm();
+  renderNotes();
+}
+
+function clearForm() {
+  document.getElementById('nf-name').value = '';
+  document.getElementById('nf-org').value = '';
+  document.getElementById('nf-type').value = 'question';
+  document.getElementById('nf-section').value = 'General';
+  document.getElementById('nf-body').value = '';
+}
+
+const typeConfig = {
+  question: { label: '❓ Question', cls: 'note-type-question' },
+  comment:  { label: '💬 Comment',  cls: 'note-type-comment' },
+  action:   { label: '✅ Action',   cls: 'note-type-action' },
+  concern:  { label: '⚠️ Concern',  cls: 'note-type-concern' },
+  approval: { label: '👍 Approval', cls: 'note-type-approval' }
+};
+
+function renderNotes() {
+  const all = getNotes();
+  const filter = document.getElementById('filter-type')?.value || 'all';
+  const notes = filter === 'all' ? all : all.filter(n => n.type === filter);
+
+  const list = document.getElementById('notes-list');
+  const empty = document.getElementById('notes-empty');
+  const countEl = document.getElementById('note-count');
+
+  countEl.textContent = all.length + (all.length === 1 ? ' note' : ' notes');
+  empty.style.display = notes.length === 0 ? 'block' : 'none';
+  list.innerHTML = '';
+
+  notes.forEach(n => {
+    const tc = typeConfig[n.type] || typeConfig.comment;
+    const card = document.createElement('div');
+    card.className = 'note-card' + (n.resolved ? ' resolved' : '');
+    card.innerHTML = `
+      <div class="note-card-hdr">
+        <span class="note-type-badge ${tc.cls}">${tc.label}</span>
+        <div class="note-meta">
+          <div class="note-author">${escHtml(n.name)}${n.org ? ' <span style="font-weight:400;color:var(--ink3)">· '+escHtml(n.org)+'</span>' : ''}${n.resolved ? '<span class="resolved-badge">Resolved</span>' : ''}</div>
+          <div class="note-detail">${n.ts}</div>
+          <div class="note-section-tag">${escHtml(n.section)}</div>
+        </div>
+        <div class="note-actions">
+          <button class="note-action-btn" onclick="toggleResolve(${n.id})" title="${n.resolved ? 'Mark open' : 'Mark resolved'}">${n.resolved ? '↩ Reopen' : '✓ Resolve'}</button>
+          <button class="note-action-btn delete" onclick="deleteNote(${n.id})" title="Delete">✕</button>
+        </div>
+      </div>
+      <div class="note-body">${escHtml(n.body).replace(/\n/g,'<br>')}</div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toggleResolve(id) {
+  const notes = getNotes();
+  const n = notes.find(x => x.id === id);
+  if (n) n.resolved = !n.resolved;
+  saveNotes(notes);
+  renderNotes();
+}
+
+function deleteNote(id) {
+  if (!confirm('Delete this note?')) return;
+  saveNotes(getNotes().filter(n => n.id !== id));
+  renderNotes();
+}
+
+function clearAllNotes() {
+  if (!confirm('Clear all notes? This cannot be undone.')) return;
+  saveNotes([]);
+  renderNotes();
+}
+
+function exportNotes() {
+  const notes = getNotes();
+  if (notes.length === 0) { alert('No notes to export.'); return; }
+
+  const lines = [
+    'IEG × ALAT/TVTC — Partner Notes Export',
+    'Document: Semiconductor TVET Partnership Proposal v3.0',
+    'Exported: ' + new Date().toLocaleString('en-GB'),
+    'Send to: kellycho824@ieg.kr',
+    '─'.repeat(60),
+    ''
+  ];
+
+  notes.forEach((n, i) => {
+    const tc = typeConfig[n.type];
+    lines.push(`[${i+1}] ${tc.label} — ${n.section}`);
+    lines.push(`From: ${n.name}${n.org ? ' ('+n.org+')' : ''} · ${n.ts}${n.resolved ? ' · RESOLVED' : ''}`);
+    lines.push('');
+    lines.push(n.body);
+    lines.push('');
+    lines.push('─'.repeat(40));
+    lines.push('');
+  });
+
+  document.getElementById('export-text').textContent = lines.join('\n');
+  document.getElementById('export-preview').style.display = 'block';
+  document.getElementById('export-preview').scrollIntoView({behavior:'smooth'});
+}
+
+function copyExport() {
+  const text = document.getElementById('export-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
+  });
+}
+
+function sendNotesToIEG() {
+  const notes = getNotes();
+  if (notes.length === 0) { alert('No notes to send. Please add at least one note first.'); return; }
+  // pre-fill name/org from last note
+  const last = notes[0];
+  if (last) {
+    if (!document.getElementById('send-name').value) document.getElementById('send-name').value = last.name || '';
+    if (!document.getElementById('send-org').value)  document.getElementById('send-org').value  = last.org  || '';
+  }
+  const bg = document.getElementById('send-modal-bg');
+  bg.style.display = 'flex';
+  document.getElementById('send-status').style.display = 'none';
+  document.getElementById('send-confirm-btn').disabled = false;
+  document.getElementById('send-confirm-btn').textContent = 'Send Notes →';
+}
+
+function closeSendModal() {
+  document.getElementById('send-modal-bg').style.display = 'none';
+}
+
+async function confirmSend() {
+  const name  = document.getElementById('send-name').value.trim();
+  const org   = document.getElementById('send-org').value.trim();
+  const email = document.getElementById('send-email').value.trim();
+  const msg   = document.getElementById('send-msg').value.trim();
+
+  if (!name)  { alert('Please enter your name.');         return; }
+  if (!org)   { alert('Please enter your organisation.'); return; }
+  if (!email) { alert('Please enter your email address.'); return; }
+
+  const notes = getNotes();
+  const btn   = document.getElementById('send-confirm-btn');
+  const status = document.getElementById('send-status');
+
+  // Build notes body text
+  const noteLines = notes.map((n, i) => {
+    const tc = typeConfig[n.type];
+    return [
+      `[${i+1}] ${tc.label} — ${n.section}`,
+      `${n.ts}${n.resolved ? ' · RESOLVED' : ''}`,
+      '',
+      n.body,
+      '─'.repeat(40)
+    ].join('\n');
+  }).join('\n\n');
+
+  const fullMessage = [
+    msg ? `Message from sender:\n${msg}\n\n${'─'.repeat(40)}\n` : '',
+    `Total notes: ${notes.length}`,
+    '',
+    noteLines
+  ].join('\n');
+
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  status.style.display = 'none';
+
+  try {
+    const fd = new FormData();
+    fd.append('name',         name);
+    fd.append('organisation', org);
+    fd.append('email',        email);
+    fd.append('_replyto',     email);
+    fd.append('_subject',     `[IEG Partner Notes] ${org} — ${notes.length} note(s) from Proposal Review`);
+    fd.append('notes_count',  notes.length);
+    fd.append('message',      fullMessage);
+
+    const res = await fetch('https://formspree.io/f/xnjkjnyy', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: fd
+    });
+
+    if (res.ok) {
+      status.style.display = 'block';
+      status.className = 'send-success';
+      status.innerHTML = `✓ <strong>${notes.length} note(s) sent successfully</strong> to kellycho824@ieg.kr.<br>IEG will respond to <strong>${escHtml(email)}</strong> within 2 business days.`;
+      btn.textContent = 'Sent ✓';
+      setTimeout(() => closeSendModal(), 3000);
+    } else {
+      throw new Error('Server error');
+    }
+  } catch (err) {
+    status.style.display = 'block';
+    status.className = 'send-error';
+    status.innerHTML = '✕ Failed to send. Please check your connection and try again, or use the Export Draft option.';
+    btn.disabled = false;
+    btn.textContent = 'Retry →';
+  }
+}
+
+// Close modal on background click
+document.getElementById('send-modal-bg').addEventListener('click', function(e) {
+  if (e.target === this) closeSendModal();
+});
+</script>
+</body>
+</html>
