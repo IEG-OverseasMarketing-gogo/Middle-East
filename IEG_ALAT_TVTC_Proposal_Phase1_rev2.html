@@ -125,7 +125,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 .prog-card-footer{padding:10px 16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:11px;color:var(--ink3)}
 
 /* ── BUDGET TABLES ── */
-.budget-wrap{background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;margin:14px 0}
+.budget-wrap{background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);overflow-x:auto;overflow-y:hidden;margin:14px 0}
 .budget-wrap table{width:100%;border-collapse:collapse;font-size:13px}
 .budget-wrap th{background:var(--surf2);font-size:10px;font-family:var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);padding:9px 16px;text-align:left;font-weight:500}
 .budget-wrap td{padding:10px 16px;border-bottom:1px solid var(--rule);color:var(--ink2);vertical-align:top}
@@ -254,6 +254,41 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
     <p>IEG's model places online learning, assessment design, and Train-the-Trainer delivery before major equipment procurement. By the time ALAT/TVTC evaluates the Model C Cleanroom, Saudi instructors will have completed structured preparation, the curriculum will be locally adapted, and the laboratory specification will be supported by Phase 1 evidence rather than assumptions.</p>
   </div>
 
+  <p class="sec-title">Technical Proposal Architecture</p>
+  <p class="sec-sub">Phase 1 is structured as a technical validation package, not only a training activity. Each deliverable connects curriculum, process science, instructor capability, assessment evidence, and future lab specification.</p>
+
+  <div class="budget-wrap" style="margin-bottom:28px">
+    <table>
+      <thead><tr><th style="width:22%">Layer</th><th style="width:34%">Technical Content</th><th style="width:24%">Validation Method</th><th style="width:20%">Decision Use</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Curriculum Layer</td>
+          <td>BTEC/NQF learning outcomes, TVTC occupational alignment, semiconductor process sequence, automation fundamentals</td>
+          <td>Curriculum crosswalk, evidence mapping, bilingual module review</td>
+          <td>Confirms whether the programme is teachable in Saudi context</td>
+        </tr>
+        <tr>
+          <td>Technology Layer</td>
+          <td>PLC/MPS, pneumatics, smart factory data, process physics, cleanroom operating discipline, yield and quality concepts</td>
+          <td>Simulator exercises, Korea TTT lab observation, process-parameter worksheets</td>
+          <td>Defines which lab capabilities must be included in Model C</td>
+        </tr>
+        <tr>
+          <td>Assessment Layer</td>
+          <td>Knowledge, performance, product, and instructor facilitation evidence</td>
+          <td>Rubrics, observation checklists, portfolio templates, moderation notes</td>
+          <td>Supports BTEC/TVTC recognition and certificate credibility</td>
+        </tr>
+        <tr>
+          <td>Infrastructure Layer</td>
+          <td>Cleanroom class assumption, MEP requirements, equipment envelope, safety interlock, consumables and maintenance logic</td>
+          <td>Lab readiness checklist and TTT Pilot Report findings</td>
+          <td>Converts Phase 1 evidence into Phase 2 facility scope</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
   <p class="sec-title">The IEG Three-Stage Partnership Model</p>
   <p class="sec-sub">The proposed roadmap answers ALAT/TVTC's technical questions while keeping Phase 1 commercially modest and operationally practical.</p>
 
@@ -308,6 +343,17 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
         <li>ALAT site expansion</li>
       </ul>
       <div class="phase-budget">Full proposal after Phase 1</div>
+    </div>
+  </div>
+
+  <div class="note-grid" style="margin-top:18px">
+    <div class="note-box teal">
+      <h5>Phase 2 Gate Criteria</h5>
+      IEG recommends proceeding to a Model C cleanroom proposal only after ALAT/TVTC has reviewed: curriculum fit, instructor readiness, assessment evidence, facility assumptions, and annual training capacity.
+    </div>
+    <div class="note-box gold">
+      <h5>Procurement Risk Control</h5>
+      The Phase 2 equipment list should be derived from validated learning outcomes and instructor capability, then checked against space, power, exhaust, compressed air, DI water, safety, and maintenance requirements.
     </div>
   </div>
 
@@ -368,7 +414,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
         <tr><td>Delivery Mode</td><td>Remote first, then Korea-based instructor training</td><td>Zero facility requirement in Phase 1A; structured TTT in Phase 1B</td></tr>
         <tr><td>Equipment</td><td>No ALAT/TVTC hardware purchase required in Phase 1</td><td>Digital simulator first; IEG showroom equipment used during TTT</td></tr>
         <tr><td>Certification</td><td>IEG completion certificates first; BTEC/TVTC pathway in Phase 2</td><td>Portfolio, practical assessment, written assessment, alignment report</td></tr>
-        <tr><td>Technical Assurance</td><td>Process physics, automation, cleanroom, and assessment evidence are mapped together</td><td>Technical competency matrix, lab readiness checklist, QA/moderation workflow</td></tr>
+        <tr><td>Technical Assurance</td><td>Process physics, automation, cleanroom, and assessment evidence are mapped together</td><td>Technical competency matrix, traceability matrix, lab readiness checklist, QA/moderation workflow</td></tr>
         <tr><td>Commercial</td><td>USD 47,500 Phase 1 total</td><td>USD 20,000 Phase 1A + USD 27,500 Phase 1B, excluding international airfare</td></tr>
       </tbody>
     </table>
@@ -912,6 +958,12 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <td>Worksheets linked to simulator stations and instructor facilitation notes</td>
           <td class="amount">Included</td>
         </tr>
+        <tr>
+          <td>Simulator-to-Lab Traceability Matrix<div class="note">Simulator station · learning outcome · lab task · assessment evidence · equipment implication</div></td>
+          <td><span class="type-out">Deliverable</span></td>
+          <td>Excel/PDF matrix used as the technical basis for Phase 2 Model C scoping</td>
+          <td class="amount">Included</td>
+        </tr>
         <tr class="subtotal"><td colspan="3">Track ③ Subtotal</td><td class="amount">$10,000</td></tr>
 
         <tr><td colspan="4" class="sub-hdr">Project Management</td></tr>
@@ -929,7 +981,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
   <div class="note-grid" style="margin-top:16px">
     <div class="note-box teal">
       <h5>Phase 1A Acceptance Package</h5>
-      ALAT/TVTC receives the curriculum mapping matrix, simulator access files, module scripts, technical exercise pack, assessment evidence guide, QA matrix, and a review log documenting stakeholder comments and IEG responses.
+      ALAT/TVTC receives the curriculum mapping matrix, simulator access files, module scripts, technical exercise pack, assessment evidence guide, QA matrix, traceability matrix, and a review log documenting stakeholder comments and IEG responses.
     </div>
     <div class="note-box gold">
       <h5>Quality Assurance</h5>
@@ -1016,6 +1068,12 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <td class="amount">$1,500</td>
         </tr>
         <tr>
+          <td>Model C Readiness Brief<div class="note">Training capacity · instructor readiness · facility assumptions · equipment implications</div></td>
+          <td><span class="type-out">Deliverable</span></td>
+          <td>Decision brief for proceed / revise / defer Phase 2 cleanroom scope</td>
+          <td class="amount">Included</td>
+        </tr>
+        <tr>
           <td>Visa invitation letters + admin<div class="note">Official IEG letters for Saudi participants</div></td>
           <td><span class="type-out">Service</span></td>
           <td>Korean visa support documentation</td>
@@ -1045,7 +1103,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
     </div>
     <div class="note-box teal">
       <h5>📌 Acceptance Gate</h5>
-      Phase 1A is accepted when the curriculum mapping package and digital simulator are delivered. Phase 1B is accepted when the TTT Pilot Report, certificates, and Phase 2 concept brief are delivered.
+      Phase 1A is accepted when the curriculum mapping package, digital simulator, assessment matrix, and traceability matrix are delivered. Phase 1B is accepted when the TTT Pilot Report, certificates, and Model C Readiness Brief are delivered.
     </div>
     <div class="note-box green">
       <h5>📌 What This Unlocks</h5>
@@ -1106,6 +1164,44 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
     </table>
   </div>
 
+  <div class="budget-wrap" style="margin-bottom:24px">
+    <table>
+      <thead><tr><th style="width:20%">Reference Area</th><th style="width:28%">Technical Standard / Practice</th><th style="width:28%">IEG Application</th><th style="width:24%">Review Output</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Automation</td>
+          <td>IEC 61131-3 programming logic, industrial I/O wiring discipline, interlock and fault-state handling</td>
+          <td>PLC and MPS lab tasks, ladder logic exercises, fault diagnosis scenarios</td>
+          <td>Instructor operation checklist and troubleshooting record</td>
+        </tr>
+        <tr>
+          <td>Pneumatics</td>
+          <td>ISO 1219 circuit symbols, actuator sequencing, pressure regulation, valve fault analysis</td>
+          <td>Electro-pneumatic trainer tasks linked to PLC control and safety logic</td>
+          <td>Circuit reading worksheet and practical observation evidence</td>
+        </tr>
+        <tr>
+          <td>Cleanroom</td>
+          <td>ISO 14644 cleanroom classification concept, particle control, gowning, contamination prevention</td>
+          <td>Model C readiness checklist and cleanroom operations module</td>
+          <td>Facility readiness assumptions for Phase 2</td>
+        </tr>
+        <tr>
+          <td>Semiconductor Process</td>
+          <td>Oxidation kinetics, lithography resolution, plasma etch selectivity, deposition uniformity, CMP removal rate, yield loss</td>
+          <td>8-process simulator, parameter trade-off exercises, defect mode analysis</td>
+          <td>Process competency matrix and worksheet portfolio</td>
+        </tr>
+        <tr>
+          <td>Assessment & QA</td>
+          <td>Competency-based assessment, portfolio evidence, assessor moderation, learning outcome traceability</td>
+          <td>BTEC/TVTC evidence mapping, rubrics, sample portfolio review</td>
+          <td>Assessment Evidence & QA Matrix</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
   <div class="two-col" style="margin-bottom:24px">
     <div class="info-box">
       <h5>Assessment Architecture</h5>
@@ -1123,6 +1219,27 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
         <li>Assessor checklist and minimum evidence standard</li>
         <li>Sample portfolio review before certificate issue</li>
         <li>Phase 2 moderation pathway prepared for Saudi TAFE / Pearson / TVTC alignment</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-bottom:24px">
+    <div class="info-box">
+      <h5>Model C Readiness Logic</h5>
+      <ul>
+        <li>Training requirement: number of trainees, instructor ratio, module hours</li>
+        <li>Process requirement: which process stations must be simulated or physically installed</li>
+        <li>Facility requirement: cleanroom class, MEP, exhaust, compressed air, safety zoning</li>
+        <li>Operational requirement: consumables, maintenance plan, spare parts, calibration schedule</li>
+      </ul>
+    </div>
+    <div class="info-box">
+      <h5>Technical Review Board</h5>
+      <ul>
+        <li>IEG curriculum lead reviews learning outcome coverage</li>
+        <li>IEG technical trainer reviews lab task feasibility</li>
+        <li>ALAT/TVTC reviewer confirms local delivery assumptions</li>
+        <li>Joint review decides whether to proceed, revise, or defer Phase 2 scope</li>
       </ul>
     </div>
   </div>
@@ -1185,6 +1302,17 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <li>Instructor notes linking theory, simulator, and future Model C lab practice</li>
         </ul>
         <div style="margin-top:8px"><span class="tag tag-green">Assessment Evidence</span><span class="tag tag-teal">QA Ready</span></div>
+      </div>
+      <div class="info-box" style="background:white">
+        <h5>Simulator-to-Lab Traceability</h5>
+        <ul>
+          <li>Each simulator station maps to a future Model C lab task</li>
+          <li>Each lab task maps to a learning outcome and evidence type</li>
+          <li>Each evidence type maps to assessor checklist criteria</li>
+          <li>Each equipment requirement is justified by a training outcome</li>
+          <li>Traceability prevents over-specification of Phase 2 hardware</li>
+        </ul>
+        <div style="margin-top:8px"><span class="tag tag-violet">Traceability Matrix</span><span class="tag tag-gold">Phase 2 Input</span></div>
       </div>
     </div>
   </div>
@@ -1472,7 +1600,17 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 .note-form-title{font-size:13px;font-weight:600;color:#fff;letter-spacing:.01em}
 .note-form-body{padding:20px}
 .note-form-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
-@media(max-width:700px){.note-form-row{grid-template-columns:1fr}}
+@media(max-width:900px){
+  .container{padding:32px 18px 64px}
+  .hero{padding:42px 24px 36px}
+  .tab-nav{padding:0 18px}
+  .timeline,.prog-grid,.two-col,.note-grid{grid-template-columns:1fr}
+  div[style*="grid-template-columns:1fr 1fr 1fr"],div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}
+  .qa-body{padding:18px 16px}
+  .total-bar{align-items:flex-start;gap:12px;flex-direction:column}
+  .budget-wrap table{min-width:720px}
+  .note-form-row{grid-template-columns:1fr}
+}
 .note-form-field{display:flex;flex-direction:column;gap:5px}
 .nf-label{font-size:12px;font-weight:600;color:var(--ink2)}
 .nf-input{background:var(--surf2);border:1px solid var(--rule);border-radius:6px;padding:9px 12px;font-size:13px;color:var(--ink);font-family:var(--body);outline:none;transition:border-color .15s;width:100%}
