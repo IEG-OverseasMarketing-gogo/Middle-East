@@ -125,7 +125,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 .prog-card-footer{padding:10px 16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:11px;color:var(--ink3)}
 
 /* ── BUDGET TABLES ── */
-.budget-wrap{background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;margin:14px 0}
+.budget-wrap{background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);overflow-x:auto;overflow-y:hidden;margin:14px 0}
 .budget-wrap table{width:100%;border-collapse:collapse;font-size:13px}
 .budget-wrap th{background:var(--surf2);font-size:10px;font-family:var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);padding:9px 16px;text-align:left;font-weight:500}
 .budget-wrap td{padding:10px 16px;border-bottom:1px solid var(--rule);color:var(--ink2);vertical-align:top}
@@ -194,6 +194,46 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 /* ── FOOTER ── */
 .page-footer{background:var(--navy);color:rgba(255,255,255,.4);text-align:center;padding:24px;font-size:12px;font-family:var(--mono)}
 .page-footer span{color:var(--gold-bd)}
+
+/* ════════ v3.2 ADDITIONS ════════ */
+/* Vision 2030 stat cards */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:16px 0 28px}
+.stat-card{background:var(--surf);border:1px solid var(--rule);border-top:3px solid var(--gold);border-radius:var(--r);padding:16px}
+.stat-card .num{font-family:var(--disp);font-size:27px;font-weight:600;color:var(--navy);line-height:1}
+.stat-card .num small{font-size:14px;color:var(--gold);font-weight:600}
+.stat-card .cap{font-size:11.5px;color:var(--ink3);margin-top:7px;line-height:1.45}
+.stat-card .src{font-family:var(--mono);font-size:9px;color:var(--ink3);opacity:.65;margin-top:8px;letter-spacing:.03em}
+/* Alignment flow */
+.align-flow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;margin:14px 0 8px}
+.align-col{background:var(--surf);padding:18px}
+.align-col h5{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:11px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+.align-col.n1 h5{color:var(--violet)}.align-col.n2 h5{color:var(--amber)}.align-col.n3 h5{color:var(--teal)}
+.align-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.align-col li{font-size:12.5px;color:var(--ink2);padding-left:15px;position:relative;line-height:1.5}
+.align-col li::before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%}
+.align-col.n1 li::before{background:var(--violet)}.align-col.n2 li::before{background:var(--amber)}.align-col.n3 li::before{background:var(--teal)}
+/* Why IEG */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.why-card{background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);padding:16px 18px;display:flex;gap:14px;align-items:flex-start}
+.why-ic{flex-shrink:0;width:38px;height:38px;border-radius:9px;background:var(--gold-lt);color:var(--amber);display:flex;align-items:center;justify-content:center;font-size:18px}
+.why-card h4{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.why-card p{font-size:12.5px;color:var(--ink2);line-height:1.6}
+.placeholder{background:var(--amber-lt);color:var(--amber);font-family:var(--mono);font-size:10px;padding:1px 7px;border-radius:3px;border:1px dashed var(--gold-bd);white-space:nowrap}
+/* Risk register */
+.risk-table .sev{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;white-space:nowrap}
+.sev-h{background:var(--red-lt);color:var(--red)}.sev-m{background:var(--amber-lt);color:var(--amber)}.sev-l{background:var(--green-lt);color:var(--green)}
+/* Capacity chart */
+.cap-chart{display:flex;flex-direction:column;gap:11px;margin:16px 0 6px}
+.cap-bar-row{display:grid;grid-template-columns:88px 1fr;gap:14px;align-items:center}
+.cap-bar-row .yr{font-family:var(--mono);font-size:12px;color:var(--teal);font-weight:500}
+.cap-track{background:var(--surf3);border-radius:6px;height:30px;overflow:hidden}
+.cap-fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--gold));border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:11px;color:#fff;font-family:var(--mono);font-size:11px;font-weight:500;min-width:60px}
+/* Glossary */
+.gloss-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin:14px 0}
+.gloss-item{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--rule);font-size:12.5px}
+.gloss-item dt{font-family:var(--mono);font-size:11px;color:var(--teal);font-weight:500}
+.gloss-item dd{color:var(--ink2);line-height:1.5}
+@media(max-width:900px){.stat-row,.align-flow,.why-grid,.gloss-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -201,14 +241,14 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 <!-- HERO -->
 <header class="hero">
   <div class="hero-eyebrow">IEG Co., Ltd. × ALAT / TVTC — Semiconductor TVET Partnership</div>
-  <h1>Semiconductor Workforce Development<br><em>A Full-Spectrum Partnership Proposal</em></h1>
-  <p class="hero-sub">From online curriculum delivery and Train-the-Trainer pilot to Korea Technology Tour and Model C Cleanroom infrastructure — a phased, low-risk, high-impact pathway to building Saudi Arabia's semiconductor technical talent base.</p>
+  <h1>Semiconductor Workforce Development<br><em>Phase 1 Partnership Proposal</em></h1>
+  <p class="hero-sub">A curriculum-first, instructor-led pathway for ALAT/TVTC: validate the training model online, certify Saudi instructors through Korea-based TTT, and use the evidence from Phase 1 to de-risk the later Model C cleanroom investment.</p>
   <div class="hero-meta">
     <div class="meta-item"><div class="lbl">Prepared by</div><div class="val">IEG Global Business Division</div></div>
     <div class="meta-item"><div class="lbl">Target Partner</div><div class="val">ALAT / TVTC, Saudi Arabia</div></div>
     <div class="meta-item"><div class="lbl">Certification Pathway</div><div class="val">BTEC Unit 4039/4040 · NQF L3–4 · Saudi TVTC</div></div>
     <div class="meta-item"><div class="lbl">Phase 1 Investment</div><div class="val">USD 47,500 (all-in)</div></div>
-    <div class="meta-item"><div class="lbl">Document Version</div><div class="val">v3.0 · June 2026</div></div>
+    <div class="meta-item"><div class="lbl">Document Version</div><div class="val">v3.2 · June 2026</div></div>
   </div>
 </header>
 
@@ -227,13 +267,132 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 ══════════════════════════════════════ -->
 <div id="tab-strategy" class="tab-panel active">
 <div class="container">
-  <p class="sec-title">The IEG Three-Stage Partnership Model</p>
-  <p class="sec-sub">We recommend inverting the traditional TVET hardware-first approach. Online curriculum and digital tools establish credibility, trust, and institutional alignment <em>before</em> any capital equipment is committed — reducing procurement risk for ALAT/TVTC and shortening the path to first enrolment.</p>
+  <p class="sec-title">Executive Summary</p>
+  <p class="sec-sub">IEG proposes a <strong>USD 47,500, seven-month Phase 1</strong> that de-risks ALAT/TVTC's semiconductor training build-out <em>before</em> any cleanroom capital is committed. The programme validates a BTEC-mapped, bilingual (EN/AR) curriculum online, certifies 5–10 Saudi instructors through a Korea Train-the-Trainer pilot, and returns the evidence — a TTT Pilot Report and Model C readiness brief — needed to right-size later infrastructure. It is a direct, fundable contribution to Vision 2030's semiconductor technician-supply gap and to TVTC's Technical Trainer College mandate.</p>
+
+  <div class="two-col">
+    <div class="info-box">
+      <h5>ALAT/TVTC Decision Need</h5>
+      <ul>
+        <li>Confirm a semiconductor TVET curriculum suitable for Saudi delivery</li>
+        <li>Prepare instructors before capital equipment deployment</li>
+        <li>Define a credible Model C lab specification from actual training evidence</li>
+      </ul>
+    </div>
+    <div class="info-box">
+      <h5>IEG Phase 1 Response</h5>
+      <ul>
+        <li>Deliver BTEC-mapped, TVTC-aligned online curriculum assets</li>
+        <li>Run Korea-based TTT for 5-10 Saudi instructors</li>
+        <li>Produce a TTT Pilot Report, technical QA matrix, and Phase 2 cleanroom concept brief</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="sec-title">Strategic Context — Saudi Vision 2030 &amp; ALAT Alignment</p>
+  <p class="sec-sub">Phase 1 plugs directly into a national priority. ALAT — the PIF company launched in 2024 to make Saudi Arabia a global hub for electronics and advanced industries — lists <strong>semiconductors</strong> among its core business units, while Vision 2030's Human Capability Development Program and TVTC's expansion make <strong>technician supply the binding constraint</strong>. IEG supplies the instructor and curriculum layer this build-out cannot scale without.</p>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="num">$100<small>B</small></div><div class="cap">ALAT investment pledged by 2030 across electronics &amp; advanced industries</div><div class="src">Source: PIF / Arab News</div></div>
+    <div class="stat-card"><div class="num">39,000</div><div class="cap">Skilled jobs ALAT targets by 2030 (≈ $9.3B GDP contribution)</div><div class="src">Source: PIF</div></div>
+    <div class="stat-card"><div class="num">50–60<small>K</small></div><div class="cap">Direct roles a Saudi semiconductor sector is projected to require</div><div class="src">Source: Vision 2030 sector reports</div></div>
+    <div class="stat-card"><div class="num">40<small>%</small></div><div class="cap">Of high-school graduates TVTC aims to enrol in TVET by 2030 (33% in 2025)</div><div class="src">Source: TVTC</div></div>
+  </div>
+
+  <div class="align-flow">
+    <div class="align-col n1">
+      <h5>① National Priority</h5>
+      <ul>
+        <li>Semiconductors named among ALAT's core business units</li>
+        <li>Vision 2030 Human Capability Development Program</li>
+        <li>TVTC establishing the Kingdom's first Technical Trainer College</li>
+        <li>Workforce nationalisation (Saudization) targets</li>
+      </ul>
+    </div>
+    <div class="align-col n2">
+      <h5>② The Binding Constraint</h5>
+      <ul>
+        <li>Acute shortage of fabrication, test &amp; mid-level technicians</li>
+        <li>Few trainers qualified to teach semiconductor process skills</li>
+        <li>No locally-adapted, bilingual TVET semiconductor curriculum</li>
+        <li>Risk of under-utilised cleanrooms if instructors lag the hardware</li>
+      </ul>
+    </div>
+    <div class="align-col n3">
+      <h5>③ IEG Phase 1 Contribution</h5>
+      <ul>
+        <li>Certifies Saudi instructors via Korea TTT — feeds the Trainer College mission</li>
+        <li>Delivers BTEC-mapped, EN/AR semiconductor curriculum assets</li>
+        <li>Online-first model scales reach before capital is committed</li>
+        <li>Evidence base to right-size the Model C cleanroom investment</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="sec-title">Why IEG</p>
+  <p class="sec-sub">IEG pairs semiconductor process depth with vocational-training delivery — the combination ALAT/TVTC needs to convert national ambition into classroom-ready capability. Track-record figures below are marked for IEG to confirm before the proposal is issued.</p>
+
+  <div class="why-grid">
+    <div class="why-card"><div class="why-ic">🔬</div><div><h4>Semiconductor process expertise</h4><p>An 8-process curriculum built on real physics (Deal-Grove, Rayleigh, Murphy yield) rather than generic automation content — already delivered as an interactive simulator.</p></div></div>
+    <div class="why-card"><div class="why-ic">🎓</div><div><h4>TVET &amp; BTEC delivery capability</h4><p>Curriculum mapped to BTEC NQF L3–4 with assessment, QA and moderation evidence designed for Pearson recognition and TVTC alignment.</p></div></div>
+    <div class="why-card"><div class="why-ic">🇰🇷</div><div><h4>Korea training infrastructure</h4><p>HQ labs (PLC/MPS, pneumatics, smart factory, XR) plus Korea Polytechnic and industry access — the immersive environment behind the TTT pilot.</p></div></div>
+    <div class="why-card"><div class="why-ic">🌐</div><div><h4>Bilingual, localisation-ready</h4><p>EN/AR content and a co-design workshop that adapts delivery to Saudi context instead of importing a fixed foreign syllabus.</p></div></div>
+  </div>
+
+  <div class="budget-wrap" style="margin:14px 0 32px">
+    <table>
+      <thead><tr><th style="width:34%">Track Record (to confirm)</th><th style="width:38%">Reference / Evidence</th><th style="width:28%">Status</th></tr></thead>
+      <tbody>
+        <tr><td>Years in TVET / automation training</td><td><span class="placeholder">[ IEG to insert ]</span></td><td>Company profile</td></tr>
+        <tr><td>Technicians / instructors trained to date</td><td><span class="placeholder">[ IEG to insert ]</span></td><td>Internal records</td></tr>
+        <tr><td>Comparable overseas TVET / TTT projects</td><td><span class="placeholder">[ client · country · year ]</span></td><td>Case study on request</td></tr>
+        <tr><td>Accreditations / partner institutions</td><td><span class="placeholder">[ Korea Polytechnic · KRIVET · Pearson … ]</span></td><td>MOU / certificate</td></tr>
+      </tbody>
+    </table>
+  </div>
 
   <div class="strategy-banner">
-    <h3>Core Principle: Curriculum Before Concrete</h3>
-    <p>The fastest way to fail a TVET centre build is to purchase equipment before instructors know how to use it. IEG's model reverses this: online learning and TTT come first, hardware second. By the time the Model C Cleanroom ships, Saudi instructors are already certified, curriculum is locally adapted, and student intake is scheduled.</p>
+    <h3>Core Principle: Curriculum and Instructor Readiness Before Hardware</h3>
+    <p>IEG's model places online learning, assessment design, and Train-the-Trainer delivery before major equipment procurement. By the time ALAT/TVTC evaluates the Model C Cleanroom, Saudi instructors will have completed structured preparation, the curriculum will be locally adapted, and the laboratory specification will be supported by Phase 1 evidence rather than assumptions.</p>
   </div>
+
+  <p class="sec-title">Technical Proposal Architecture</p>
+  <p class="sec-sub">Phase 1 is structured as a technical validation package, not only a training activity. Each deliverable connects curriculum, process science, instructor capability, assessment evidence, and future lab specification.</p>
+
+  <div class="budget-wrap" style="margin-bottom:28px">
+    <table>
+      <thead><tr><th style="width:22%">Layer</th><th style="width:34%">Technical Content</th><th style="width:24%">Validation Method</th><th style="width:20%">Decision Use</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Curriculum Layer</td>
+          <td>BTEC/NQF learning outcomes, TVTC occupational alignment, semiconductor process sequence, automation fundamentals</td>
+          <td>Curriculum crosswalk, evidence mapping, bilingual module review</td>
+          <td>Confirms whether the programme is teachable in Saudi context</td>
+        </tr>
+        <tr>
+          <td>Technology Layer</td>
+          <td>PLC/MPS, pneumatics, smart factory data, process physics, cleanroom operating discipline, yield and quality concepts</td>
+          <td>Simulator exercises, Korea TTT lab observation, process-parameter worksheets</td>
+          <td>Defines which lab capabilities must be included in Model C</td>
+        </tr>
+        <tr>
+          <td>Assessment Layer</td>
+          <td>Knowledge, performance, product, and instructor facilitation evidence</td>
+          <td>Rubrics, observation checklists, portfolio templates, moderation notes</td>
+          <td>Supports BTEC/TVTC recognition and certificate credibility</td>
+        </tr>
+        <tr>
+          <td>Infrastructure Layer</td>
+          <td>Cleanroom class assumption, MEP requirements, equipment envelope, safety interlock, consumables and maintenance logic</td>
+          <td>Lab readiness checklist and TTT Pilot Report findings</td>
+          <td>Converts Phase 1 evidence into Phase 2 facility scope</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="sec-title">The IEG Three-Stage Partnership Model</p>
+  <p class="sec-sub">The proposed roadmap answers ALAT/TVTC's technical questions while keeping Phase 1 commercially modest and operationally practical.</p>
 
   <div class="timeline">
     <div class="phase-col highlight">
@@ -285,20 +444,31 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
         <li>XR digital twin integration</li>
         <li>ALAT site expansion</li>
       </ul>
-      <div class="phase-budget">Main revenue event</div>
+      <div class="phase-budget">Full proposal after Phase 1</div>
+    </div>
+  </div>
+
+  <div class="note-grid" style="margin-top:18px">
+    <div class="note-box teal">
+      <h5>Phase 2 Gate Criteria</h5>
+      IEG recommends proceeding to a Model C cleanroom proposal only after ALAT/TVTC has reviewed: curriculum fit, instructor readiness, assessment evidence, facility assumptions, and annual training capacity.
+    </div>
+    <div class="note-box gold">
+      <h5>Procurement Risk Control</h5>
+      The Phase 2 equipment list should be derived from validated learning outcomes and instructor capability, then checked against space, power, exhaust, compressed air, DI water, safety, and maintenance requirements.
     </div>
   </div>
 
   <hr class="divider">
-  <p class="sec-title">Why Online-First Answers ALAT/TVTC's Real Concern</p>
-  <p class="sec-sub">Behind the 10 technical questions is one strategic fear: "What if we build the lab and no one can teach in it?" The online-first model eliminates that risk entirely.</p>
+  <p class="sec-title">Why Online-First Reduces Implementation Risk</p>
+  <p class="sec-sub">The central delivery risk in a semiconductor TVET centre is not only equipment procurement; it is whether instructors, curriculum, assessment, and facility planning are ready at the same time. Phase 1 is designed to synchronise those components before Phase 2 investment.</p>
 
   <div class="milestone-list">
     <div class="ms-item">
       <div class="ms-dot online">1A</div>
       <div class="ms-content">
         <h4>Online Curriculum Package — Delivered Remotely, Month 1–2</h4>
-        <p>IEG delivers the complete BTEC-mapped semiconductor curriculum as bilingual (EN/AR) digital content: 8-process interactive simulator, async video modules for each unit, competency self-assessments, and TVTC occupational standard crosswalk. Saudi instructors can begin learning from Day 1 with zero travel and zero hardware.</p>
+        <p>IEG delivers BTEC-mapped semiconductor curriculum assets as bilingual-ready digital content: an 8-process interactive simulator, asynchronous module scripts, competency self-assessments, and a TVTC occupational standard crosswalk. Saudi instructors can begin structured preparation without immediate travel or hardware dependency.</p>
         <div class="ms-budget">USD 20,000 · 100% remote delivery · No equipment required</div>
       </div>
     </div>
@@ -306,7 +476,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
       <div class="ms-dot korea">1B</div>
       <div class="ms-content">
         <h4>Korea Technology Tour (TTT Pilot) — 5–7 Days, IEG HQ Seongnam</h4>
-        <p>5–10 ALAT/TVTC instructors visit IEG headquarters. They operate the actual PLC, MPS, and pneumatics equipment that will eventually be installed in Saudi Arabia. They tour Korea Polytechnic University and a smart factory site. On Day 5, they co-design a locally adapted curriculum unit and receive their IEG Certificate of Completion. This is the single highest-leverage activity in the entire roadmap.</p>
+        <p>5-10 ALAT/TVTC instructors visit IEG headquarters to operate PLC, MPS, pneumatics, and smart-factory training systems comparable to those proposed for Saudi deployment. The programme includes Korea Polytechnic University engagement, industry site exposure, assessment calibration, and a co-design workshop for Saudi-localised delivery.</p>
         <div class="ms-budget">USD 27,500 · Includes training fees + accommodation + airport transfer (5–10 pax)</div>
       </div>
     </div>
@@ -314,7 +484,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
       <div class="ms-dot hardware">2</div>
       <div class="ms-content">
         <h4>Model C Cleanroom Proposal — Submitted at Month 11</h4>
-        <p>Armed with the TTT Pilot Report, IEG submits a full Model C Cleanroom proposal to ALAT procurement. The proposal includes equipment list, layout drawings, commissioning plan, and financing options (EDCF, Saudi-Korea bilateral fund, or direct commercial). The TTT pilot deliverables serve as proof of IEG's delivery capability — making this the lowest-risk major hardware bid ALAT will ever evaluate.</p>
+        <p>Using the TTT Pilot Report, IEG submits a Model C Cleanroom concept package for ALAT/TVTC review. The package includes equipment list, layout assumptions, commissioning plan, instructor utilisation model, and financing pathways such as EDCF, Saudi-Korea bilateral funding, or direct commercial procurement.</p>
         <div class="ms-budget">Pricing TBD · EDCF / bilateral financing recommended</div>
       </div>
     </div>
@@ -337,6 +507,20 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 <div class="container">
   <p class="sec-title">10 Questions — Answered</p>
   <p class="sec-sub">ALAT/TVTC's official enquiry, addressed in full, mapped to IEG's online-first, TTT-second, hardware-third delivery model.</p>
+
+  <div class="budget-wrap" style="margin-bottom:24px">
+    <table>
+      <thead><tr><th style="width:24%">Evaluation Area</th><th style="width:34%">Phase 1 Answer</th><th style="width:42%">Evidence / Output</th></tr></thead>
+      <tbody>
+        <tr><td>Programme</td><td>Online foundation + Korea TTT</td><td>BTEC/TVTC mapping matrix, module scripts, simulator, TTT agenda</td></tr>
+        <tr><td>Delivery Mode</td><td>Remote first, then Korea-based instructor training</td><td>Zero facility requirement in Phase 1A; structured TTT in Phase 1B</td></tr>
+        <tr><td>Equipment</td><td>No ALAT/TVTC hardware purchase required in Phase 1</td><td>Digital simulator first; IEG showroom equipment used during TTT</td></tr>
+        <tr><td>Certification</td><td>IEG completion certificates first; BTEC/TVTC pathway in Phase 2</td><td>Portfolio, practical assessment, written assessment, alignment report</td></tr>
+        <tr><td>Technical Assurance</td><td>Process physics, automation, cleanroom, and assessment evidence are mapped together</td><td>Technical competency matrix, traceability matrix, lab readiness checklist, QA/moderation workflow</td></tr>
+        <tr><td>Commercial</td><td>USD 47,500 Phase 1 total</td><td>USD 20,000 Phase 1A + USD 27,500 Phase 1B, excluding international airfare</td></tr>
+      </tbody>
+    </table>
+  </div>
 
   <div class="qa-grid">
 
@@ -418,7 +602,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
             </ul>
           </div>
           <div class="info-box">
-            <h5>Phase 1B — Korea TTT (M6–7)</h5>
+            <h5>Phase 1B — Korea TTT (Month 4–7)</h5>
             <ul>
               <li>Day 1–2: IEG HQ — equipment lab + XR demo</li>
               <li>Day 3: Korea Polytechnic — TVET system tour</li>
@@ -435,7 +619,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
               <li>Units: PLC Fundamentals + Pneumatics</li>
               <li>50% theory / 50% lab-based practical</li>
               <li>Portfolio of evidence assessment</li>
-              <li>External moderation by Saudi TAFE / Pearson</li>
+              <li>External moderation by Pearson BTEC</li>
             </ul>
           </div>
           <div class="info-box">
@@ -469,6 +653,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
               <li>Modular Production System (MPS) integration</li>
               <li>Pneumatic circuit design & fault diagnosis</li>
               <li>Semiconductor 8-process sequence knowledge</li>
+              <li>Oxidation thickness, lithography resolution, etch profile, and yield trade-off interpretation</li>
               <li>Smart factory IoT monitoring & OEE analysis</li>
               <li>CVD / PVD / etch process parameter control</li>
               <li>Wafer yield calculation (Murphy's model)</li>
@@ -483,6 +668,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
               <li>Equipment commissioning & maintenance logs</li>
               <li>Root cause analysis (8D / Ishikawa)</li>
               <li>Statistical Process Control (SPC) basics</li>
+              <li>Evidence portfolio preparation for assessor review</li>
               <li>Cross-cultural technical instruction delivery</li>
             </ul>
           </div>
@@ -692,7 +878,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
         <span class="qa-arrow">▶</span>
       </div>
       <div class="qa-body">
-        <p class="answer-text">IEG's programme is designed for dual recognition: international BTEC credentials through Saudi TAFE / Pearson, plus Saudi TVTC national qualification alignment. This positions ALAT graduates for both domestic employment and international mobility.</p>
+        <p class="answer-text">IEG's programme is designed for dual recognition: international BTEC credentials through Pearson BTEC, plus Saudi TVTC national qualification alignment. This positions ALAT graduates for both domestic employment and international mobility.</p>
         <table class="cert-table">
           <thead>
             <tr><th>Programme</th><th>Credential</th><th>Level</th><th>Issuing Body</th><th>Status</th></tr>
@@ -700,8 +886,8 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <tbody>
             <tr><td>Foundation Digital (Phase 1A)</td><td class="code">IEG-DW-01 Certificate of Completion</td><td><span class="level-badge">Foundational</span></td><td>IEG Co., Ltd.</td><td><span class="ok-tag">Immediate</span></td></tr>
             <tr><td>Korea TTT (Phase 1B)</td><td class="code">IEG TTT Certificate</td><td><span class="level-badge">Instructor</span></td><td>IEG Co., Ltd.</td><td><span class="ok-tag">Phase 1B</span></td></tr>
-            <tr><td>BTEC L3 Certificate</td><td class="code">BTEC Unit 4039 (PLC + Pneumatics)</td><td><span class="level-badge">NQF L3</span></td><td>Saudi TAFE / Pearson BTEC</td><td><span class="gap-tag">Phase 2 (pending Saudi TAFE)</span></td></tr>
-            <tr><td>BTEC L4 Diploma</td><td class="code">BTEC Unit 4040 (Smart Factory + Semi.)</td><td><span class="level-badge">NQF L4</span></td><td>Saudi TAFE / Pearson BTEC</td><td><span class="gap-tag">Phase 2 (pending Saudi TAFE)</span></td></tr>
+            <tr><td>BTEC L3 Certificate</td><td class="code">BTEC Unit 4039 (PLC + Pneumatics)</td><td><span class="level-badge">NQF L3</span></td><td>Pearson BTEC (approved centre)</td><td><span class="gap-tag">Phase 2 (pending accreditation)</span></td></tr>
+            <tr><td>BTEC L4 Diploma</td><td class="code">BTEC Unit 4040 (Smart Factory + Semi.)</td><td><span class="level-badge">NQF L4</span></td><td>Pearson BTEC (approved centre)</td><td><span class="gap-tag">Phase 2 (pending accreditation)</span></td></tr>
             <tr><td>Saudi National Qualification</td><td class="code">TVTC Occupational Certificate</td><td><span class="level-badge">SNQF L3–4</span></td><td>TVTC / NCAAA</td><td><span class="gap-tag">Alignment TBD with TVTC</span></td></tr>
           </tbody>
         </table>
@@ -788,12 +974,12 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <div class="info-box">
             <h5>Phase 1B — Korea TTT (USD 27,500)</h5>
             <ul>
-              <li>Training programme fee (5–10 pax): $12,000</li>
-              <li>Accommodation Pangyo/Seongnam (5 nights): $8,000</li>
-              <li>Airport transfer + local transport: $2,500</li>
-              <li>Korea Polytechnic + factory visit: $2,000</li>
-              <li>Co-design materials + certificates: $1,000</li>
-              <li>IEG coordinator (2 months): $2,000</li>
+              <li>Training programme fee (IEG instructors ×2): $12,000</li>
+              <li>Accommodation &amp; meals (8 pax × 5 nights): $6,300</li>
+              <li>Ground transport (airport + 5-day local): $1,700</li>
+              <li>Site visits (Korea Polytechnic + smart factory): $2,000</li>
+              <li>Workshop materials, certificates, visa admin: $1,500</li>
+              <li>Coordination, TTT Pilot Report &amp; buffer: $4,000</li>
             </ul>
           </div>
         </div>
@@ -819,31 +1005,37 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 ══════════════════════════════════════ -->
 <div id="tab-budget" class="tab-panel">
 <div class="container">
-  <p class="sec-title">Phase 1 Detailed Budget</p>
-  <p class="sec-sub">Two views: Phase 1A (Online Curriculum, M1–2) and Phase 1B (Korea Technology Tour, M4–7). Internal cost vs. external proposal shown side-by-side. All figures in USD.</p>
+  <p class="sec-title">Phase 1 Scope, Deliverables & Commercial Terms</p>
+  <p class="sec-sub">External proposal view for ALAT/TVTC. The Phase 1 investment is structured around tangible deliverables, acceptance checkpoints, and a clear decision gate for any later cleanroom procurement. All figures in USD.</p>
 
   <!-- 1A EXTERNAL -->
   <p style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:12px;margin-top:4px">Phase 1A — Online Curriculum Package · External Proposal to ALAT/TVTC</p>
   <div class="budget-wrap">
     <table>
-      <thead><tr><th style="width:40%">Deliverable</th><th style="width:12%">Type</th><th style="width:30%">Scope</th><th style="width:18%" style="text-align:right">USD</th></tr></thead>
+      <thead><tr><th style="width:40%">Deliverable</th><th style="width:12%">Type</th><th style="width:30%">Scope / Acceptance Evidence</th><th style="width:18%" style="text-align:right">USD</th></tr></thead>
       <tbody>
-        <tr><td colspan="4" class="sub-hdr">Track ⑤ · Curriculum Localization</td></tr>
+        <tr><td colspan="4" class="sub-hdr">Track A · Curriculum Localization</td></tr>
         <tr>
           <td>NCS→BTEC Curriculum Mapping Table<div class="note">PLC · Smart Factory · Pneumatics — 3 flagship units</div></td>
           <td><span class="type-out">Deliverable</span></td>
-          <td>PDF report + Excel crosswalk · NQF L3–4 evidence descriptors</td>
+          <td>PDF report + Excel crosswalk · NQF L3-4 learning outcome and evidence descriptors</td>
           <td class="amount">$6,500</td>
         </tr>
         <tr>
-          <td>Saudi TAFE Gap Analysis Report<div class="note">Missing assessment evidence for BTEC recognition</div></td>
+          <td>BTEC Recognition Gap Analysis Report<div class="note">Missing assessment evidence for BTEC recognition</div></td>
           <td><span class="type-out">Deliverable</span></td>
-          <td>PDF report · TVTC alignment notes included</td>
+          <td>PDF report · gaps, required evidence, and TVTC alignment notes</td>
           <td class="amount">$1,500</td>
         </tr>
-        <tr class="subtotal"><td colspan="3">Track ⑤ Subtotal</td><td class="amount">$8,000</td></tr>
+        <tr>
+          <td>Assessment Evidence & QA Matrix<div class="note">Learning outcome · evidence type · assessor checklist · moderation note</div></td>
+          <td><span class="type-out">Deliverable</span></td>
+          <td>Excel/PDF matrix · portfolio evidence standards and sample scoring rubric</td>
+          <td class="amount">Included</td>
+        </tr>
+        <tr class="subtotal"><td colspan="3">Track A Subtotal</td><td class="amount">$8,000</td></tr>
 
-        <tr><td colspan="4" class="sub-hdr">Track ③ · Digital Walkthrough & Online Modules</td></tr>
+        <tr><td colspan="4" class="sub-hdr">Track B · Digital Walkthrough & Online Modules</td></tr>
         <tr>
           <td>8-Process XR Storyboard (8 stations)<div class="note">High-fidelity Unity-ready brief per process station</div></td>
           <td><span class="type-out">Deliverable</span></td>
@@ -853,7 +1045,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
         <tr>
           <td>Interactive Browser Simulator<div class="note">Deal-Grove · Rayleigh · Murphy · RIE · CVD engines</div></td>
           <td><span class="type-out">Deliverable</span></td>
-          <td>HTML/JS · No install · EN/AR toggle · Inquiry form</td>
+          <td>HTML/JS · no install · EN/AR-ready interface · inquiry form</td>
           <td class="amount">$3,000</td>
         </tr>
         <tr>
@@ -862,12 +1054,24 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <td>Script documents · Ready for voiceover production</td>
           <td class="amount">$2,000</td>
         </tr>
-        <tr class="subtotal"><td colspan="3">Track ③ Subtotal</td><td class="amount">$10,000</td></tr>
+        <tr>
+          <td>Technical Exercise Pack<div class="note">Process parameters · defects · safety · yield and OEE mini-cases</div></td>
+          <td><span class="type-out">Deliverable</span></td>
+          <td>Worksheets linked to simulator stations and instructor facilitation notes</td>
+          <td class="amount">Included</td>
+        </tr>
+        <tr>
+          <td>Simulator-to-Lab Traceability Matrix<div class="note">Simulator station · learning outcome · lab task · assessment evidence · equipment implication</div></td>
+          <td><span class="type-out">Deliverable</span></td>
+          <td>Excel/PDF matrix used as the technical basis for Phase 2 Model C scoping</td>
+          <td class="amount">Included</td>
+        </tr>
+        <tr class="subtotal"><td colspan="3">Track B Subtotal</td><td class="amount">$10,000</td></tr>
 
         <tr><td colspan="4" class="sub-hdr">Project Management</td></tr>
         <tr>
-          <td>Dedicated PM · 2 months<div class="note">Review cycles, stakeholder comms, QC</div></td>
-          <td><span class="type-in">Internal</span></td>
+          <td>Dedicated PM · 2 months<div class="note">Review cycles, stakeholder communication, QC</div></td>
+          <td><span class="type-out">Service</span></td>
           <td>Fixed fee · Includes 4 video review sessions</td>
           <td class="amount">$2,000</td>
         </tr>
@@ -876,28 +1080,15 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
     </table>
   </div>
 
-  <!-- 1A INTERNAL COST -->
-  <p style="font-size:12px;color:var(--ink3);margin-bottom:10px;margin-top:20px">Phase 1A · Internal Cost Basis (IEG Reference Only · ₩182,000/day in-house · Market rates for outsourced)</p>
-  <div class="budget-wrap">
-    <table>
-      <thead><tr><th style="width:40%">Item</th><th style="width:12%">Type</th><th style="width:18%">Rate / Volume</th><th style="width:30%" style="text-align:right">KRW</th></tr></thead>
-      <tbody>
-        <tr><td>Curriculum analyst (NCS→BTEC mapping)</td><td><span class="type-in">In-house</span></td><td>10 days × ₩182K</td><td class="amount">₩1,820,000</td></tr>
-        <tr><td>Technical translator (KO→EN)</td><td><span class="type-ext">Outsource</span></td><td>5,000 words × ₩60</td><td class="amount">₩300,000</td></tr>
-        <tr><td>BTEC mapping table layout</td><td><span class="type-in">In-house</span></td><td>3 days × ₩182K</td><td class="amount">₩546,000</td></tr>
-        <tr><td>Saudi TAFE gap analysis</td><td><span class="type-in">In-house</span></td><td>2 days × ₩182K</td><td class="amount">₩364,000</td></tr>
-        <tr><td>Instructional designer (8-process scripts)</td><td><span class="type-in">In-house</span></td><td>8 days × ₩182K</td><td class="amount">₩1,456,000</td></tr>
-        <tr><td>XR storyboard / UI designer</td><td><span class="type-ext">Outsource</span></td><td>10 days × ₩250K</td><td class="amount">₩2,500,000</td></tr>
-        <tr><td>Arabic bilingual placeholder</td><td><span class="type-ext">Outsource</span></td><td>2,000 words × ₩250</td><td class="amount">₩500,000</td></tr>
-        <tr><td>Concept deck production (PDF/HTML)</td><td><span class="type-in">In-house</span></td><td>3 days × ₩182K</td><td class="amount">₩546,000</td></tr>
-        <tr><td>PM & QC</td><td><span class="type-in">In-house</span></td><td>4 days × ₩182K</td><td class="amount">₩728,000</td></tr>
-        <tr><td>Software licenses (Figma/Adobe 2mo)</td><td><span class="type-in">In-house</span></td><td>Pro-rated</td><td class="amount">₩300,000</td></tr>
-        <tr><td>Outsourcing platform fee (~10%)</td><td><span class="type-ext">Outsource</span></td><td>On outsourced items</td><td class="amount">₩300,000</td></tr>
-        <tr><td>Communication & admin</td><td><span class="type-in">In-house</span></td><td>Lump sum</td><td class="amount">₩200,000</td></tr>
-        <tr class="subtotal"><td colspan="3"><strong>Phase 1A Internal Cost Total</strong></td><td class="amount">₩9,560,000 ≈ $7,081</td></tr>
-        <tr><td colspan="3" style="font-size:12px;color:var(--ink3)">IEG Margin on Phase 1A</td><td class="amount" style="color:var(--teal)">~64.6%</td></tr>
-      </tbody>
-    </table>
+  <div class="note-grid" style="margin-top:16px">
+    <div class="note-box teal">
+      <h5>Phase 1A Acceptance Package</h5>
+      ALAT/TVTC receives the curriculum mapping matrix, simulator access files, module scripts, technical exercise pack, assessment evidence guide, QA matrix, traceability matrix, and a review log documenting stakeholder comments and IEG responses.
+    </div>
+    <div class="note-box gold">
+      <h5>Quality Assurance</h5>
+      Each curriculum item is checked against learning outcome, technical competency, assessment evidence, instructor guidance, and TVTC alignment status before delivery.
+    </div>
   </div>
 
   <hr class="divider">
@@ -955,33 +1146,45 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
         </tr>
         <tr>
           <td>Co-design workshop materials<div class="note">Printed curriculum workbooks + Arabic support docs</div></td>
-          <td><span class="type-in">Internal</span></td>
+          <td><span class="type-out">Service</span></td>
           <td>8 participant sets + facilitator guide</td>
           <td class="amount">$500</td>
         </tr>
         <tr>
           <td>Certificates + ceremony<div class="note">IEG-stamped bilingual certificates + framing</div></td>
-          <td><span class="type-in">Internal</span></td>
+          <td><span class="type-out">Service</span></td>
           <td>10 units + ceremony coordination</td>
           <td class="amount">$500</td>
         </tr>
         <tr><td colspan="4" class="sub-hdr">IEG Coordination (Pre + Post Tour)</td></tr>
         <tr>
           <td>IEG programme coordinator · 2 months<div class="note">Visa support, scheduling, logistics, follow-up report</div></td>
-          <td><span class="type-in">Internal</span></td>
-          <td>₩182,000/day × 10 days + overhead</td>
+          <td><span class="type-out">Service</span></td>
+          <td>Planning, logistics control, participant communication, and post-tour follow-up</td>
           <td class="amount">$2,000</td>
         </tr>
         <tr>
           <td>TTT Pilot Report + Digital Showcase<div class="note">Post-tour deliverable for ALAT internal use</div></td>
-          <td><span class="type-in">Internal</span></td>
+          <td><span class="type-out">Deliverable</span></td>
           <td>PDF report + video testimonials + infographic</td>
           <td class="amount">$1,500</td>
         </tr>
         <tr>
+          <td>Model C Readiness Brief<div class="note">Training capacity · instructor readiness · facility assumptions · equipment implications</div></td>
+          <td><span class="type-out">Deliverable</span></td>
+          <td>Decision brief for proceed / revise / defer Phase 2 cleanroom scope</td>
+          <td class="amount">Included</td>
+        </tr>
+        <tr>
           <td>Visa invitation letters + admin<div class="note">Official IEG letters for Saudi participants</div></td>
-          <td><span class="type-in">Internal</span></td>
+          <td><span class="type-out">Service</span></td>
           <td>Korean visa support documentation</td>
+          <td class="amount">$500</td>
+        </tr>
+        <tr>
+          <td>Contingency &amp; coordination buffer (~2%)<div class="note">FX movement, schedule changes, incidental logistics</div></td>
+          <td><span class="type-out">Reserve</span></td>
+          <td>Held by IEG · reconciled against actuals at programme close</td>
           <td class="amount">$500</td>
         </tr>
         <tr><td colspan="4" class="sub-hdr">Note: International airfare NOT included</td></tr>
@@ -1007,17 +1210,59 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
       50% on contract signing (M1) · 25% on Phase 1A delivery (M2) · 25% on TTT completion (M7)
     </div>
     <div class="note-box teal">
-      <h5>📌 Phase 1 Margin</h5>
-      Phase 1A all-in cost ≈ $7,081 (margin 64.6%). Phase 1B direct costs ≈ $21,000 (margin ~24%). Combined Phase 1 margin ≈ 44%.
+      <h5>📌 Acceptance Gate</h5>
+      Phase 1A is accepted when the curriculum mapping package, digital simulator, assessment matrix, and traceability matrix are delivered. Phase 1B is accepted when the TTT Pilot Report, certificates, and Model C Readiness Brief are delivered.
     </div>
     <div class="note-box green">
       <h5>📌 What This Unlocks</h5>
-      Phase 1 completion = TTT Pilot Report = Phase 2 hardware proposal credential. ALAT cannot get a credible Model C proposal from any provider without Phase 1 data.
+      Phase 1 completion gives ALAT/TVTC the evidence needed to decide whether to proceed to a Model C cleanroom concept, revise scope, or expand instructor preparation before procurement.
     </div>
     <div class="note-box gold">
       <h5>📌 Revenue Ladder</h5>
-      Phase 1: $47,500 · Phase 2 hardware: TBD (est. $800K–2M) · Annual support: $30–60K/yr
+      Phase 1: $47,500 · Phase 2 cleanroom concept: TBD after Phase 1 evidence review · Annual support and curriculum refresh available as optional scope
     </div>
+  </div>
+
+  <hr class="divider">
+  <p class="sec-title">Assumptions &amp; Exclusions</p>
+  <p class="sec-sub">The Phase 1 price holds against the conditions below. Items outside IEG scope are stated up front so there are no surprises at invoicing.</p>
+  <div class="two-col">
+    <div class="info-box">
+      <h5>Key Assumptions</h5>
+      <ul>
+        <li>ALAT/TVTC nominates 5–10 instructors meeting basic technical prerequisites</li>
+        <li>Participants hold valid passports; ALAT supports the visa process</li>
+        <li>Phase 1A is delivered remotely; ALAT provides internet-enabled rooms</li>
+        <li>Quote valid 60 days from issue; FX basis ₩1,350–1,400 / USD</li>
+        <li>Smart-factory site visit subject to host confirmation &amp; NDA</li>
+      </ul>
+    </div>
+    <div class="info-box">
+      <h5>Excluded from IEG Invoice</h5>
+      <ul>
+        <li>International airfare Riyadh ↔ Seoul (ALAT scope, ~$12,000 / 8 pax)</li>
+        <li>Saudi-side facility, hardware or cleanroom works (Phase 2+)</li>
+        <li>Pearson / TVTC accreditation fees payable to awarding bodies</li>
+        <li>Voiceover production &amp; translation beyond script delivery</li>
+        <li>Taxes, duties or withholding imposed outside Korea</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="sec-title" style="margin-top:8px">Phase 1 Risk Register</p>
+  <p class="sec-sub">Principal delivery risks and how IEG controls them.</p>
+  <div class="budget-wrap risk-table">
+    <table>
+      <thead><tr><th style="width:25%">Risk</th><th style="width:12%">Likelihood</th><th style="width:11%">Impact</th><th style="width:52%">Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td>Visa / travel delay for instructors</td><td><span class="sev sev-m">Medium</span></td><td><span class="sev sev-h">High</span></td><td>IEG issues invitation letters early; the Month 4–7 window absorbs slippage; remote pre-work continues regardless</td></tr>
+        <tr><td>Instructor release from duties</td><td><span class="sev sev-m">Medium</span></td><td><span class="sev sev-m">Medium</span></td><td>Two cohorts/year option; flexible 5–10 cohort size; async Phase 1A removes scheduling pressure</td></tr>
+        <tr><td>Arabic localisation quality</td><td><span class="sev sev-l">Low</span></td><td><span class="sev sev-m">Medium</span></td><td>Bilingual review built into Phase 1A; co-design workshop validates terminology with native instructors</td></tr>
+        <tr><td>FX volatility (KRW/USD)</td><td><span class="sev sev-m">Medium</span></td><td><span class="sev sev-l">Low</span></td><td>Priced in USD; ~2% contingency line; quote valid 60 days</td></tr>
+        <tr><td>Phase 2 financing not secured</td><td><span class="sev sev-m">Medium</span></td><td><span class="sev sev-m">Medium</span></td><td>Phase 1 is self-contained &amp; self-funded; EDCF / bilateral pathways scoped in the Model C brief before any commitment</td></tr>
+        <tr><td>Smart-factory access withdrawn</td><td><span class="sev sev-l">Low</span></td><td><span class="sev sev-l">Low</span></td><td>Multiple partner sites on standby; Korea Polytechnic visit is the anchor, the factory is supplementary</td></tr>
+      </tbody>
+    </table>
   </div>
 
 </div>
@@ -1029,7 +1274,125 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 <div id="tab-curriculum" class="tab-panel">
 <div class="container">
   <p class="sec-title">Curriculum Framework — All Phases</p>
-  <p class="sec-sub">Unit-level learning objectives, NCS codes, BTEC mapping, and TVTC alignment status across the full partnership lifecycle.</p>
+  <p class="sec-sub">Unit-level learning objectives, NCS codes, BTEC mapping, technical competency evidence, and TVTC alignment status across the full partnership lifecycle.</p>
+
+  <div class="budget-wrap" style="margin-bottom:24px">
+    <table>
+      <thead><tr><th style="width:22%">Technical Domain</th><th style="width:31%">What Trainees Must Understand</th><th style="width:24%">Assessment Evidence</th><th style="width:23%">Phase 1 Asset</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Semiconductor Process Flow</td>
+          <td>Wafer preparation, oxidation, lithography, etch, implant, deposition, metallisation, test and package sequence</td>
+          <td>Process-flow map, station quiz, defect-cause explanation</td>
+          <td>8-process simulator + module scripts</td>
+        </tr>
+        <tr>
+          <td>Process Physics</td>
+          <td>Deal-Grove oxidation growth, Rayleigh resolution, etch anisotropy/selectivity, Gaussian implant profile, CMP removal rate</td>
+          <td>Parameter-change worksheet and short calculation tasks</td>
+          <td>Simulation engines and guided exercises</td>
+        </tr>
+        <tr>
+          <td>Automation & Control</td>
+          <td>PLC I/O, ladder logic, interlocks, HMI operation, MPS sequence control, pneumatic actuation</td>
+          <td>Practical observation checklist, troubleshooting log</td>
+          <td>Korea TTT lab session + instructor guide</td>
+        </tr>
+        <tr>
+          <td>Cleanroom Operations</td>
+          <td>ISO-class concept, gowning discipline, contamination control, EHS, tool access, maintenance log discipline</td>
+          <td>Readiness checklist and simulated incident response</td>
+          <td>Model C facility brief + TTT briefing</td>
+        </tr>
+        <tr>
+          <td>Quality & Yield</td>
+          <td>SPC basics, defect density, yield impact, OEE, root-cause analysis, corrective action documentation</td>
+          <td>Mini case report using 8D/Ishikawa structure</td>
+          <td>Assessment rubric + portfolio template</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="budget-wrap" style="margin-bottom:24px">
+    <table>
+      <thead><tr><th style="width:20%">Reference Area</th><th style="width:28%">Technical Standard / Practice</th><th style="width:28%">IEG Application</th><th style="width:24%">Review Output</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Automation</td>
+          <td>IEC 61131-3 programming logic, industrial I/O wiring discipline, interlock and fault-state handling</td>
+          <td>PLC and MPS lab tasks, ladder logic exercises, fault diagnosis scenarios</td>
+          <td>Instructor operation checklist and troubleshooting record</td>
+        </tr>
+        <tr>
+          <td>Pneumatics</td>
+          <td>ISO 1219 circuit symbols, actuator sequencing, pressure regulation, valve fault analysis</td>
+          <td>Electro-pneumatic trainer tasks linked to PLC control and safety logic</td>
+          <td>Circuit reading worksheet and practical observation evidence</td>
+        </tr>
+        <tr>
+          <td>Cleanroom</td>
+          <td>ISO 14644 cleanroom classification concept, particle control, gowning, contamination prevention</td>
+          <td>Model C readiness checklist and cleanroom operations module</td>
+          <td>Facility readiness assumptions for Phase 2</td>
+        </tr>
+        <tr>
+          <td>Semiconductor Process</td>
+          <td>Oxidation kinetics, lithography resolution, plasma etch selectivity, deposition uniformity, CMP removal rate, yield loss</td>
+          <td>8-process simulator, parameter trade-off exercises, defect mode analysis</td>
+          <td>Process competency matrix and worksheet portfolio</td>
+        </tr>
+        <tr>
+          <td>Assessment & QA</td>
+          <td>Competency-based assessment, portfolio evidence, assessor moderation, learning outcome traceability</td>
+          <td>BTEC/TVTC evidence mapping, rubrics, sample portfolio review</td>
+          <td>Assessment Evidence & QA Matrix</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="two-col" style="margin-bottom:24px">
+    <div class="info-box">
+      <h5>Assessment Architecture</h5>
+      <ul>
+        <li>Knowledge evidence: quizzes, calculations, process explanation</li>
+        <li>Performance evidence: lab observation and equipment operation checklist</li>
+        <li>Product evidence: worksheet, troubleshooting log, process map, mini case report</li>
+        <li>Instructor evidence: facilitation plan and learner feedback review</li>
+      </ul>
+    </div>
+    <div class="info-box">
+      <h5>Quality Assurance & Moderation</h5>
+      <ul>
+        <li>Learning outcome to assessment evidence crosswalk</li>
+        <li>Assessor checklist and minimum evidence standard</li>
+        <li>Sample portfolio review before certificate issue</li>
+        <li>Phase 2 moderation pathway prepared for Pearson BTEC / TVTC alignment</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-bottom:24px">
+    <div class="info-box">
+      <h5>Model C Readiness Logic</h5>
+      <ul>
+        <li>Training requirement: number of trainees, instructor ratio, module hours</li>
+        <li>Process requirement: which process stations must be simulated or physically installed</li>
+        <li>Facility requirement: cleanroom class, MEP, exhaust, compressed air, safety zoning</li>
+        <li>Operational requirement: consumables, maintenance plan, spare parts, calibration schedule</li>
+      </ul>
+    </div>
+    <div class="info-box">
+      <h5>Technical Review Board</h5>
+      <ul>
+        <li>IEG curriculum lead reviews learning outcome coverage</li>
+        <li>IEG technical trainer reviews lab task feasibility</li>
+        <li>ALAT/TVTC reviewer confirms local delivery assumptions</li>
+        <li>Joint review decides whether to proceed, revise, or defer Phase 2 scope</li>
+      </ul>
+    </div>
+  </div>
 
   <!-- Phase 1A -->
   <div style="background:var(--teal-lt);border:1px solid rgba(15,110,86,.2);border-radius:var(--r);padding:18px 20px;margin-bottom:20px">
@@ -1065,7 +1428,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
         </ul>
         <div style="margin-top:8px"><span class="tag tag-violet">BTEC 4039 Supp. · L3</span><span class="tag tag-teal">NCS 15010101</span></div>
       </div>
-      <div class="info-box" style="background:white" style="grid-column:span 3">
+      <div class="info-box" style="background:white;grid-column:1 / -1">
         <h5>Unit 4–11 — Semiconductor 8-Process Digital Walkthrough (IEG-SEM-01)</h5>
         <ul>
           <li>Station 1: Wafer Preparation — RCA clean, crystal growth, specification</li>
@@ -1079,12 +1442,34 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
         </ul>
         <div style="margin-top:8px"><span class="tag tag-gold">IEG-SEM-01 · Proprietary</span><span class="tag tag-violet">NQF L3–4 Reference</span><span class="tag tag-green">Interactive Simulator Included</span></div>
       </div>
+      <div class="info-box" style="background:white">
+        <h5>Technical Evidence Package</h5>
+        <ul>
+          <li>Process parameter worksheet for each station</li>
+          <li>Defect mode and corrective action exercise</li>
+          <li>Cleanroom EHS and contamination-control checklist</li>
+          <li>Portfolio template for trainee evidence collection</li>
+          <li>Instructor notes linking theory, simulator, and future Model C lab practice</li>
+        </ul>
+        <div style="margin-top:8px"><span class="tag tag-green">Assessment Evidence</span><span class="tag tag-teal">QA Ready</span></div>
+      </div>
+      <div class="info-box" style="background:white">
+        <h5>Simulator-to-Lab Traceability</h5>
+        <ul>
+          <li>Each simulator station maps to a future Model C lab task</li>
+          <li>Each lab task maps to a learning outcome and evidence type</li>
+          <li>Each evidence type maps to assessor checklist criteria</li>
+          <li>Each equipment requirement is justified by a training outcome</li>
+          <li>Traceability prevents over-specification of Phase 2 hardware</li>
+        </ul>
+        <div style="margin-top:8px"><span class="tag tag-violet">Traceability Matrix</span><span class="tag tag-gold">Phase 2 Input</span></div>
+      </div>
     </div>
   </div>
 
   <!-- Phase 1B -->
   <div style="background:var(--gold-lt);border:1px solid var(--gold-bd);border-radius:var(--r);padding:18px 20px;margin-bottom:20px">
-    <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:8px">Phase 1B · Korea TTT — Instructor Certification · Month 6–7</div>
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:8px">Phase 1B · Korea TTT — Instructor Certification · Month 4–7</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
       <div class="info-box" style="background:white">
         <h5>Day 1–2 · IEG HQ Lab Sessions</h5>
@@ -1094,6 +1479,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <li>Session 2A: MPS integration & HMI operation</li>
           <li>Session 2B: XR Walkthrough facilitation script</li>
           <li>Assessment: practical observation checklist</li>
+          <li>Evidence: commissioning log, fault log, learner demonstration record</li>
         </ul>
       </div>
       <div class="info-box" style="background:white">
@@ -1104,6 +1490,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <li>Day 5: Curriculum adaptation workshop (2-page output each)</li>
           <li>Day 5 PM: Competency assessment + certificate</li>
           <li>Output: TTT Pilot Report compiled by IEG</li>
+          <li>Output: Saudi delivery adaptation notes and lab-readiness implications</li>
         </ul>
       </div>
     </div>
@@ -1119,7 +1506,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <li>BTEC Unit 4039: PLC Systems (NQF L3)</li>
           <li>BTEC Unit 4039 Supp.: Pneumatics (NQF L3)</li>
           <li>Portfolio assessment: process logs + obs. checklist</li>
-          <li>External moderation: Saudi TAFE / Pearson</li>
+          <li>External moderation: Pearson BTEC</li>
           <li>TVTC occupational crosswalk included</li>
         </ul>
       </div>
@@ -1144,25 +1531,33 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 <div id="tab-recommend" class="tab-panel">
 <div class="container">
   <p class="sec-title">IEG Recommendations</p>
-  <p class="sec-sub">Direct answers to ALAT/TVTC's three supplementary questions — stated plainly, based on 15 years of Korean TVET delivery experience.</p>
+  <p class="sec-sub">Direct answers to ALAT/TVTC's three supplementary questions, stated as implementation recommendations for a staged semiconductor TVET partnership.</p>
 
   <div class="rec-card">
     <h4>⭐ Priority 1: Which laboratories should be prioritised for Phase 1?</h4>
-    <p>Do not build any laboratory in Phase 1. The single highest-ROI action in Phase 1 is getting 5–10 Saudi instructors to IEG HQ in Korea. A laboratory without trained instructors is an expensive storage room. The online curriculum (Phase 1A) plus the Korea Technology Tour (Phase 1B) must come first — they produce the certified instructors and the adapted curriculum that will determine exactly which laboratory configuration makes sense for Saudi Arabia. IEG will use the TTT Pilot Report to specify the optimal Model C layout for your specific workforce profile.</p>
+    <p>IEG recommends that ALAT/TVTC does not prioritise a new laboratory build in Phase 1. The higher-value first step is to validate curriculum, assessment, and instructor readiness through Phase 1A online delivery and Phase 1B Korea-based TTT. This produces trained instructors, localised curriculum evidence, and a TTT Pilot Report that can guide the optimal Model C configuration for Saudi workforce requirements.</p>
   </div>
 
   <div class="rec-card teal">
     <h4>⭐ Priority 2: Which digital content should ALAT/TVTC deploy immediately?</h4>
-    <p>The IEG Semiconductor 8-Process Interactive Simulator is available now, at no cost, for ALAT/TVTC internal evaluation. We recommend distributing it to your existing instructors and engineering trainers as a baseline assessment tool. Their performance and engagement with the simulator will help IEG calibrate the Phase 1A curriculum to exactly the right entry level — avoiding both over-pitching and under-pitching the content for your audience.</p>
+    <p>The IEG Semiconductor 8-Process Interactive Simulator can be used for ALAT/TVTC internal evaluation as an early diagnostic tool. IEG recommends distributing it to selected instructors and engineering trainers to establish baseline familiarity with semiconductor process flow, terminology, and operational decisions. Their feedback will help calibrate Phase 1A content to the correct starting level for Saudi delivery.</p>
   </div>
 
   <div class="rec-card violet">
     <h4>⭐ Priority 3: Minimum investment to launch Phase 1</h4>
-    <p>USD 20,000 for Phase 1A (online curriculum + simulator). This is the minimum viable investment and delivers tangible, usable deliverables: a complete BTEC mapping table, an interactive digital simulator in EN/AR, and 8 video module scripts. It also gives ALAT/TVTC 60 days of curriculum content to evaluate before committing to the Korea Technology Tour. The full Phase 1 investment (1A + 1B) is USD 47,500 — less than the annual salary of one semiconductor engineer, and it certifies 5–10 instructors who will each train 20+ technicians per year.</p>
+    <p>USD 20,000 launches Phase 1A and provides a concrete evaluation package: BTEC mapping table, TVTC alignment notes, interactive simulator, and 8 video module scripts. The full Phase 1 package is USD 47,500 and adds the Korea TTT pilot for 5-10 instructors, including certificates, co-design workshop outputs, and a Phase 2 concept brief.</p>
   </div>
 
   <hr class="divider">
   <p class="sec-title">Expected Annual Output — Trained Engineers & Technicians</p>
+
+  <div class="cap-chart">
+    <div class="cap-bar-row"><div class="yr">Year 1</div><div class="cap-track"><div class="cap-fill" style="width:5%">10–30</div></div></div>
+    <div class="cap-bar-row"><div class="yr">Year 2</div><div class="cap-track"><div class="cap-fill" style="width:15%">50–90</div></div></div>
+    <div class="cap-bar-row"><div class="yr">Year 3</div><div class="cap-track"><div class="cap-fill" style="width:32%">130–190</div></div></div>
+    <div class="cap-bar-row"><div class="yr">Year 4–5</div><div class="cap-track"><div class="cap-fill" style="width:100%">400–600</div></div></div>
+  </div>
+  <p class="sec-sub" style="margin-bottom:16px">Cumulative certified instructors &amp; technicians (online foundation + BTEC + TTT). Bars scaled to the upper-bound estimate.</p>
 
   <div style="background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;margin-bottom:20px">
     <table style="width:100%;border-collapse:collapse;font-size:13px">
@@ -1183,8 +1578,32 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 
   <div class="strategy-banner">
     <h3>The Core Argument for Phase 1 Approval</h3>
-    <p>ALAT/TVTC is being asked to invest USD 47,500 in Phase 1. In return, by Month 7: (1) a complete BTEC-mapped, TVTC-aligned curriculum in EN/AR exists, (2) 5–10 Saudi instructors are certified and have operated real IEG equipment, (3) a TTT Pilot Report is ready to anchor the Phase 2 hardware bid, and (4) IEG has proven delivery capability. No other TVET equipment provider offers this sequence. The hardware comes after the instructors are ready — not before.</p>
+    <p>ALAT/TVTC is being asked to invest USD 47,500 in Phase 1. In return, by Month 7: (1) a BTEC-mapped and TVTC-aligned curriculum package is available for review, (2) 5-10 Saudi instructors have completed structured TTT and operated relevant IEG training equipment, (3) a TTT Pilot Report is ready to inform the Phase 2 cleanroom concept, and (4) ALAT/TVTC has evidence to decide whether, when, and how to proceed with hardware procurement. The hardware decision is therefore based on validated curriculum and instructor readiness.</p>
   </div>
+
+  <hr class="divider">
+  <p class="sec-title">Glossary of Terms</p>
+  <p class="sec-sub">Key acronyms used throughout this proposal.</p>
+  <dl class="gloss-grid">
+    <div class="gloss-item"><dt>TVET</dt><dd>Technical &amp; Vocational Education and Training</dd></div>
+    <div class="gloss-item"><dt>TVTC</dt><dd>Technical &amp; Vocational Training Corporation (Saudi Arabia)</dd></div>
+    <div class="gloss-item"><dt>TTT</dt><dd>Train-the-Trainer — instructor certification programme</dd></div>
+    <div class="gloss-item"><dt>BTEC</dt><dd>Business &amp; Technology Education Council qualification (Pearson, UK)</dd></div>
+    <div class="gloss-item"><dt>NQF</dt><dd>National Qualifications Framework (levels L3–L4 referenced)</dd></div>
+    <div class="gloss-item"><dt>NCS</dt><dd>National Competency Standards (Korea)</dd></div>
+    <div class="gloss-item"><dt>PLC</dt><dd>Programmable Logic Controller (industrial automation)</dd></div>
+    <div class="gloss-item"><dt>MPS</dt><dd>Modular Production System — automation training rig</dd></div>
+    <div class="gloss-item"><dt>OEE</dt><dd>Overall Equipment Effectiveness (manufacturing KPI)</dd></div>
+    <div class="gloss-item"><dt>SPC</dt><dd>Statistical Process Control</dd></div>
+    <div class="gloss-item"><dt>MEP</dt><dd>Mechanical, Electrical &amp; Plumbing (facility services)</dd></div>
+    <div class="gloss-item"><dt>CVD / PVD</dt><dd>Chemical / Physical Vapour Deposition (thin film)</dd></div>
+    <div class="gloss-item"><dt>RIE</dt><dd>Reactive Ion Etching</dd></div>
+    <div class="gloss-item"><dt>CMP</dt><dd>Chemical Mechanical Planarisation</dd></div>
+    <div class="gloss-item"><dt>ISO 14644</dt><dd>Cleanroom air-cleanliness classification standard</dd></div>
+    <div class="gloss-item"><dt>EDCF</dt><dd>Economic Development Cooperation Fund (Korea concessional finance)</dd></div>
+    <div class="gloss-item"><dt>PIF</dt><dd>Public Investment Fund (Saudi sovereign wealth fund; owns ALAT)</dd></div>
+    <div class="gloss-item"><dt>XR</dt><dd>Extended Reality (VR / AR training content)</dd></div>
+  </dl>
 
 </div>
 </div>
@@ -1195,7 +1614,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 <div id="tab-notes" class="tab-panel">
 <div class="container">
   <p class="sec-title">Partner Notes & Questions</p>
-  <p class="sec-sub">ALAT / TVTC / Saudi TAFE representatives can log questions, comments, and action items directly on this document. Notes are saved in your browser and persist across sessions.</p>
+  <p class="sec-sub">ALAT / TVTC / Saudi partner representatives can log questions, comments, and action items directly on this document. Notes are saved in your browser and persist across sessions.</p>
 
   <!-- Add note form -->
   <div class="note-form-card">
@@ -1211,7 +1630,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
         </div>
         <div class="note-form-field">
           <label class="nf-label">Organisation</label>
-          <input class="nf-input" type="text" id="nf-org" placeholder="e.g. ALAT / TVTC / Saudi TAFE">
+          <input class="nf-input" type="text" id="nf-org" placeholder="e.g. ALAT / TVTC / Saudi partner">
         </div>
         <div class="note-form-field">
           <label class="nf-label">Type</label>
@@ -1312,7 +1731,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           </div>
           <div class="note-form-field">
             <label class="nf-label">Organisation <span style="color:var(--red)">*</span></label>
-            <input class="nf-input" type="text" id="send-org" placeholder="ALAT / TVTC / Saudi TAFE">
+            <input class="nf-input" type="text" id="send-org" placeholder="ALAT / TVTC / Saudi partner">
           </div>
           <div class="note-form-field">
             <label class="nf-label">Reply-to Email <span style="color:var(--red)">*</span></label>
@@ -1344,16 +1763,6 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 .send-success{background:var(--green-lt);border:1px solid rgba(22,163,74,.25);border-radius:6px;padding:12px 14px;font-size:13px;color:var(--green);line-height:1.6;margin-bottom:14px}
 .send-error{background:var(--red-lt);border:1px solid rgba(185,28,28,.2);border-radius:6px;padding:12px 14px;font-size:13px;color:var(--red);line-height:1.6;margin-bottom:14px}
 </style>
-    <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px">📧 Email Draft — Copy and send to kellycho824@ieg.kr</div>
-    <div style="background:var(--surf);border:1px solid var(--rule);border-radius:var(--r);padding:20px;font-size:12.5px;line-height:1.8;color:var(--ink2);white-space:pre-wrap;font-family:var(--mono)" id="export-text"></div>
-    <div style="display:flex;gap:10px;margin-top:12px">
-      <button class="nf-btn-primary" onclick="copyExport()">Copy to Clipboard</button>
-      <button class="nf-btn-secondary" onclick="document.getElementById('export-preview').style.display='none'">Close</button>
-    </div>
-  </div>
-
-</div>
-</div>
 
 <style>
 /* ── PARTNER NOTES STYLES ── */
@@ -1363,7 +1772,17 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 .note-form-title{font-size:13px;font-weight:600;color:#fff;letter-spacing:.01em}
 .note-form-body{padding:20px}
 .note-form-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
-@media(max-width:700px){.note-form-row{grid-template-columns:1fr}}
+@media(max-width:900px){
+  .container{padding:32px 18px 64px}
+  .hero{padding:42px 24px 36px}
+  .tab-nav{padding:0 18px}
+  .timeline,.prog-grid,.two-col,.note-grid{grid-template-columns:1fr}
+  div[style*="grid-template-columns:1fr 1fr 1fr"],div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}
+  .qa-body{padding:18px 16px}
+  .total-bar{align-items:flex-start;gap:12px;flex-direction:column}
+  .budget-wrap table{min-width:720px}
+  .note-form-row{grid-template-columns:1fr}
+}
 .note-form-field{display:flex;flex-direction:column;gap:5px}
 .nf-label{font-size:12px;font-weight:600;color:var(--ink2)}
 .nf-input{background:var(--surf2);border:1px solid var(--rule);border-radius:6px;padding:9px 12px;font-size:13px;color:var(--ink);font-family:var(--body);outline:none;transition:border-color .15s;width:100%}
@@ -1405,7 +1824,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 </style>
 <footer class="page-footer">
   IEG Co., Ltd. · Global Business Division · Seongnam, Gyeonggi-do, Republic of Korea<br>
-  <span>IEG × ALAT/TVTC</span> · Semiconductor TVET Partnership Proposal · v3.0 · June 2026
+  <span>IEG × ALAT/TVTC</span> · Semiconductor TVET Partnership Proposal · v3.2 · June 2026
 </footer>
 
 <script>
@@ -1536,7 +1955,7 @@ function exportNotes() {
 
   const lines = [
     'IEG × ALAT/TVTC — Partner Notes Export',
-    'Document: Semiconductor TVET Partnership Proposal v3.0',
+    'Document: Semiconductor TVET Partnership Proposal v3.2',
     'Exported: ' + new Date().toLocaleString('en-GB'),
     'Send to: kellycho824@ieg.kr',
     '─'.repeat(60),
