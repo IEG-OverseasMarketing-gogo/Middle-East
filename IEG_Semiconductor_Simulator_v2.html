@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IEG Semiconductor 8-Process Interactive Simulator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{--bg:#eef2f7;--surf:#fff;--surf2:#f5f7fb;--surf3:#e4eaf3;--bdr:rgba(0,0,0,.09);--bdr2:rgba(0,0,0,.16);--tx:#0d1520;--tx2:#243550;--tx3:#4a6280;--gold:#a07820;--mono:'IBM Plex Mono',monospace;--body:'Inter',sans-serif;--disp:'Space Grotesk',sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);background:var(--bg);color:var(--tx);font-size:14px;line-height:1.6}
+.site-header{border-bottom:1px solid var(--bdr);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(238,242,247,.96);backdrop-filter:blur(12px);z-index:100}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-badge{background:#0d1520;color:#f5c842;font-family:var(--disp);font-weight:700;font-size:13px;padding:4px 10px;border-radius:4px}
+.logo-text{font-family:var(--mono);font-size:11px;color:var(--tx3);letter-spacing:.08em}
+.hdr-right{display:flex;align-items:center;gap:16px}
+.progress-wrap{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--tx3)}
+.progress-bar{width:120px;height:3px;background:var(--surf3);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .4s ease}
+.inq-btn{background:#0d1520;color:#f5c842;font-family:var(--mono);font-size:11px;font-weight:600;padding:6px 14px;border-radius:5px;text-decoration:none;letter-spacing:.04em;white-space:nowrap}
+.app-layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 57px)}
+.sidebar{border-right:1px solid var(--bdr);padding:20px 0;overflow-y:auto;position:sticky;top:57px;height:calc(100vh - 57px);background:var(--surf)}
+.sb-title{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);padding:0 16px 10px;border-bottom:1px solid var(--bdr);margin-bottom:6px}
+.step-btn{width:100%;background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 16px;text-align:left;transition:background .15s;position:relative}
+.step-btn:hover{background:var(--surf2)}
+.step-btn.active{background:var(--surf3)}
+.step-btn.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--pc,#a07820);border-radius:0 2px 2px 0}
+.step-btn.done .snum{background:rgba(22,163,74,.15);color:#16a34a;border-color:rgba(22,163,74,.4)}
+.snum{flex-shrink:0;width:26px;height:26px;border-radius:50%;border:1px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--tx3);background:var(--surf2);transition:all .2s}
+.step-btn.active .snum{background:rgba(var(--pcr),0.12);border-color:var(--pc,#a07820);color:var(--pc,#a07820)}
+.sinfo{flex:1;min-width:0}
+.slabel{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)}
+.sname{font-size:12px;font-weight:500;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.step-btn.active .sname{color:var(--tx);font-weight:600}
+.chk{flex-shrink:0;font-size:12px;color:#16a34a;display:none}
+.step-btn.done .chk{display:block}
+.main-content{padding:36px 40px 80px;max-width:880px}
+.process-panel{display:none}
+.process-panel.active{display:block}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--pc,#a07820);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:'';display:inline-block;width:18px;height:1px;background:var(--pc,#a07820)}
+.ptitle{font-family:var(--disp);font-size:28px;font-weight:700;color:var(--tx);line-height:1.15;margin-bottom:6px}
+.psub{font-size:13.5px;color:var(--tx2);margin-bottom:24px;line-height:1.7}
+/* Curriculum card */
+.curriculum{background:var(--surf);border:1px solid var(--bdr2);border-radius:10px;margin-bottom:20px;overflow:hidden}
+.curriculum-hdr{background:var(--surf2);padding:12px 18px;display:flex;align-items:center;gap:10px;cursor:pointer;border-bottom:1px solid var(--bdr)}
+.curriculum-hdr h4{font-size:13px;font-weight:600;color:var(--tx);flex:1}
+.curriculum-hdr .toggle-icon{font-size:12px;color:var(--tx3);transition:transform .2s}
+.curriculum-hdr.open .toggle-icon{transform:rotate(90deg)}
+.curriculum-body{display:none;padding:16px 18px}
+.curriculum-hdr.open+.curriculum-body{display:block}
+.obj-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.obj-list li{font-size:12.5px;color:var(--tx2);padding-left:16px;position:relative;line-height:1.55}
+.obj-list li::before{content:'→';position:absolute;left:0;color:var(--pc,#a07820);font-size:11px;top:1px}
+.btec-tag{display:inline-block;background:rgba(var(--pcr),0.1);color:var(--pc,#a07820);font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;border:1px solid rgba(var(--pcr),0.25);margin-bottom:10px}
+/* Simulator box */
+.sim-box{background:var(--surf);border:1px solid var(--bdr2);border-radius:12px;padding:24px;margin-bottom:20px}
+.sim-title{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.sim-title::before{content:'';display:inline-block;width:3px;height:14px;background:var(--pc,#a07820);border-radius:1px}
+.controls{display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
+.ctrl{display:grid;grid-template-columns:140px 1fr 70px;align-items:center;gap:10px}
+.ctrl label{font-size:12px;font-weight:500;color:var(--tx2)}
+.ctrl input[type=range]{width:100%;accent-color:var(--pc,#a07820);height:4px}
+.ctrl select{font-size:12px;padding:4px 8px;border:1px solid var(--bdr2);border-radius:5px;background:var(--surf2);color:var(--tx);font-family:var(--body);height:28px}
+.ctrl-val{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--pc,#a07820);text-align:right}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.result-card{background:var(--surf2);border-radius:8px;padding:12px 14px;text-align:center;border:1px solid var(--bdr)}
+.result-val{font-family:var(--mono);font-size:18px;font-weight:500;color:var(--pc,#a07820);line-height:1}
+.result-lbl{font-size:11px;color:var(--tx3);margin-top:3px;font-weight:500}
+.verdict{border-radius:7px;padding:10px 14px;font-size:12.5px;line-height:1.6;margin-top:4px}
+.verdict.ok{background:#dcfce7;color:#14532d;border:1px solid #86efac}
+.verdict.warn{background:#fef9c3;color:#713f12;border:1px solid #fde047}
+.verdict.bad{background:#fee2e2;color:#7f1d1d;border:1px solid #fca5a5}
+.chart-wrap{position:relative;height:200px;margin-top:12px}
+/* IEG ref */
+.ieg-ref{background:#fffbec;border:1px solid #e8c84a;border-radius:8px;padding:12px 16px;margin-bottom:20px;display:flex;gap:12px;font-size:12.5px;color:#2d3f1f;line-height:1.65}
+.ieg-ref strong{color:#0d1520;font-weight:600}
+.ieg-badge{flex-shrink:0;background:#0d1520;color:#f5c842;font-family:var(--disp);font-weight:700;font-size:9px;padding:3px 7px;border-radius:3px;letter-spacing:.03em;margin-top:1px;height:fit-content}
+/* Nav */
+.nav-row{display:flex;justify-content:space-between;margin-top:16px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:var(--body);transition:all .15s}
+.btn-ghost{background:var(--surf);color:var(--tx2);border:1px solid var(--bdr2)}
+.btn-ghost:hover{color:var(--tx);border-color:#8aabcc;background:var(--surf3)}
+.btn-primary{color:#fff;font-weight:600}
+.btn-primary:hover{opacity:.88}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+/* Inquiry */
+.inq-section{background:#f5f8fc;border-top:1px solid rgba(0,0,0,.1);padding:56px 40px}
+.inq-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:300px 1fr;gap:56px;align-items:start}
+.inq-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.inq-eyebrow::before{content:'';display:inline-block;width:18px;height:1px;background:var(--gold)}
+.inq-title{font-family:var(--disp);font-size:26px;font-weight:700;color:#0d1520;margin-bottom:12px;line-height:1.2}
+.inq-desc{font-size:13px;color:#2d4060;line-height:1.75;margin-bottom:28px}
+.inq-meta{display:flex;flex-direction:column;gap:10px}
+.inq-meta-item .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#7a9ab8}
+.inq-meta-item .val{font-size:13px;font-weight:500;color:#0d1520}
+.inq-form{background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:14px;padding:28px}
+.inq-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.inq-field{display:flex;flex-direction:column;gap:5px}
+.inq-label{font-size:12px;font-weight:600;color:#1e3452}
+.req{color:#dc2626}
+.inq-input{background:#f5f8fc;border:1px solid rgba(0,0,0,.13);border-radius:7px;padding:9px 12px;font-size:13px;color:#0d1520;font-family:var(--body);outline:none;transition:border-color .15s;width:100%}
+.inq-input:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.inq-input::placeholder{color:#8aabcc}
+.inq-select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238aabcc' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+.inq-textarea{min-height:100px;resize:vertical;line-height:1.6}
+.submit-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:20px}
+.privacy-note{font-size:11px;color:#5a7090;line-height:1.5;flex:1}
+.btn-submit{background:#0d1520;color:#fff;border:none;border-radius:8px;padding:11px 26px;font-size:13px;font-weight:600;font-family:var(--body);cursor:pointer;transition:opacity .15s;white-space:nowrap;flex-shrink:0}
+.btn-submit:hover{opacity:.85}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed}
+.inq-success{display:none;background:#fff;border:1px solid #16a34a;border-radius:14px;padding:36px 28px;text-align:center}
+.inq-success.show{display:block}
+.success-icon{width:48px;height:48px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;color:#16a34a;margin:0 auto 14px}
+.success-title{font-family:var(--disp);font-size:18px;font-weight:700;color:#0d1520;margin-bottom:8px}
+.success-desc{font-size:13px;color:#2d4060;line-height:1.7;margin-bottom:20px}
+.btn-reset{background:none;border:1px solid rgba(0,0,0,.15);border-radius:7px;padding:8px 18px;font-size:12px;color:#2d4060;cursor:pointer;font-family:var(--body)}
+.completion{display:none;text-align:center;padding:48px 32px}
+.completion.show{display:block}
+.cert-box{background:#fffbec;border:1px solid #e8c84a;border-radius:12px;padding:24px;max-width:460px;margin:16px auto 24px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">
+    <span class="logo-badge">IEG</span>
+    <span class="logo-text">Semiconductor 8-Process · Interactive Simulator v2</span>
+  </div>
+  <div class="hdr-right">
+    <div class="progress-wrap">
+      <span id="prog-label">Station 1 / 8</span>
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:12.5%"></div></div>
+      <span id="score-label">Score: 0/8</span>
+    </div>
+    <a href="#inquiry" class="inq-btn">✉ Inquiry</a>
+  </div>
+</header>
+
+<div class="app-layout">
+<aside class="sidebar">
+  <div class="sb-title">Process Stations</div>
+  <button class="step-btn active" onclick="goTo(0)" id="btn-0" style="--pc:#2563eb;--pcr:37,99,235"><div class="snum">1</div><div class="sinfo"><div class="slabel">Station 01</div><div class="sname">Wafer Preparation</div></div><span class="chk">✓</span></button>
+  <button class="step-btn" onclick="goTo(1)" id="btn-1" style="--pc:#ea580c;--pcr:234,88,12"><div class="snum">2</div><div class="sinfo"><div class="slabel">Station 02</div><div class="sname">Thermal Oxidation</div></div><span class="chk">✓</span></button>
+  <button class="step-btn" onclick="goTo(2)" id="btn-2" style="--pc:#7c3aed;--pcr:124,58,237"><div class="snum">3</div><div class="sinfo"><div class="slabel">Station 03</div><div class="sname">Photolithography</div></div><span class="chk">✓</span></button>
+  <button class="step-btn" onclick="goTo(3)" id="btn-3" style="--pc:#059669;--pcr:5,150,105"><div class="snum">4</div><div class="sinfo"><div class="slabel">Station 04</div><div class="sname">Etching</div></div><span class="chk">✓</span></button>
+  <button class="step-btn" onclick="goTo(4)" id="btn-4" style="--pc:#db2777;--pcr:219,39,119"><div class="snum">5</div><div class="sinfo"><div class="slabel">Station 05</div><div class="sname">Ion Implantation</div></div><span class="chk">✓</span></button>
+  <button class="step-btn" onclick="goTo(5)" id="btn-5" style="--pc:#d97706;--pcr:217,119,6"><div class="snum">6</div><div class="sinfo"><div class="slabel">Station 06</div><div class="sname">CVD / Thin Film</div></div><span class="chk">✓</span></button>
+  <button class="step-btn" onclick="goTo(6)" id="btn-6" style="--pc:#0284c7;--pcr:2,132,199"><div class="snum">7</div><div class="sinfo"><div class="slabel">Station 07</div><div class="sname">Metallisation</div></div><span class="chk">✓</span></button>
+  <button class="step-btn" onclick="goTo(7)" id="btn-7" style="--pc:#c2410c;--pcr:194,65,12"><div class="snum">8</div><div class="sinfo"><div class="slabel">Station 08</div><div class="sname">Testing & Packaging</div></div><span class="chk">✓</span></button>
+</aside>
+
+<main class="main-content">
+
+<!-- ══ STATION 1 ══ -->
+<section class="process-panel active" id="panel-0" style="--pc:#2563eb;--pcr:37,99,235">
+  <div class="eyebrow">Station 01 · Wafer Preparation</div>
+  <h1 class="ptitle">Wafer Preparation & Surface Cleaning</h1>
+  <p class="psub">Silicon ingots are sliced, lapped, and chemically cleaned to atomic-level purity. The RCA clean sequence (SC-1 → SC-2) removes organic, ionic, and metallic contaminants that would destroy device yield if left on the surface.</p>
+
+  <div class="curriculum">
+    <div class="curriculum-hdr" onclick="toggleCurr(this)">
+      <h4>Learning Objectives — Unit 1: Wafer Preparation</h4>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="curriculum-body">
+      <div class="btec-tag">BTEC Unit 4039 · NQF Level 3 · NCS 15010201</div>
+      <ul class="obj-list">
+        <li>Explain the Czochralski crystal growth process and how crystal orientation (100/111) affects device properties</li>
+        <li>Describe the wire-saw slicing process and specify acceptable warp/bow tolerances for 300mm wafers (±30µm)</li>
+        <li>Perform a two-step RCA clean (SC-1: NH₄OH/H₂O₂/H₂O and SC-2: HCl/H₂O₂/H₂O) and explain the chemistry of each step</li>
+        <li>Calculate surface particle density before and after cleaning and interpret pass/fail against specification</li>
+        <li>Identify four metallic contamination sources (handling, chemicals, equipment) and apply prevention protocols</li>
+        <li>Operate a spin-dry station and confirm wafer cleanliness by water break test (contact angle &gt;70° = hydrophobic pass)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ieg-ref"><div class="ieg-badge">IEG REF</div><div><strong>Incheon Semiconductor High School</strong> — IEG delivered the complete 8-process semiconductor testbed including wafer prep and inspection stations. Students handle actual 300mm Si wafers in a controlled educational environment.</div></div>
+
+  <div class="sim-box">
+    <div class="sim-title">RCA Clean Simulator — Adjust parameters and observe contamination removal</div>
+    <div class="controls">
+      <div class="ctrl"><label>SC-1 Temperature</label><input type="range" min="60" max="90" value="75" step="1" oninput="s1calc()" id="s1t"><span class="ctrl-val" id="s1t-v">75°C</span></div>
+      <div class="ctrl"><label>SC-1 Time</label><input type="range" min="5" max="30" value="15" step="1" oninput="s1calc()" id="s1d"><span class="ctrl-val" id="s1d-v">15 min</span></div>
+      <div class="ctrl"><label>SC-2 Temperature</label><input type="range" min="60" max="80" value="70" step="1" oninput="s1calc()" id="s1t2"><span class="ctrl-val" id="s1t2-v">70°C</span></div>
+      <div class="ctrl"><label>DI Rinse Cycles</label><input type="range" min="1" max="10" value="5" step="1" oninput="s1calc()" id="s1r"><span class="ctrl-val" id="s1r-v">5×</span></div>
+    </div>
+    <div class="result-grid">
+      <div class="result-card"><div class="result-val" id="s1-org">—</div><div class="result-lbl">Organic Removal</div></div>
+      <div class="result-card"><div class="result-val" id="s1-metal">—</div><div class="result-lbl">Metal Removal</div></div>
+      <div class="result-card"><div class="result-val" id="s1-particle">—</div><div class="result-lbl">Particles/cm²</div></div>
+    </div>
+    <div class="verdict" id="s1-verdict"></div>
+  </div>
+  <div class="nav-row"><button class="btn btn-ghost" disabled>← Previous</button><button class="btn btn-primary" style="background:var(--pc)" onclick="goTo(1)">Next Station →</button></div>
+</section>
+
+<!-- ══ STATION 2 ══ -->
+<section class="process-panel" id="panel-1" style="--pc:#ea580c;--pcr:234,88,12">
+  <div class="eyebrow">Station 02 · Thermal Oxidation</div>
+  <h1 class="ptitle">Thermal Oxidation — SiO₂ Gate Insulator Growth</h1>
+  <p class="psub">Silicon wafers are heated in a furnace at 800–1200°C. The Deal-Grove model governs oxide growth: parabolic at thin layers, linear at thick. Gate oxides require dry oxidation for density; field oxides use wet for speed.</p>
+
+  <div class="curriculum">
+    <div class="curriculum-hdr" onclick="toggleCurr(this)">
+      <h4>Learning Objectives — Unit 2: Thermal Oxidation</h4>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="curriculum-body">
+      <div class="btec-tag">BTEC Unit 4039 · NQF Level 3 · NCS 15010201</div>
+      <ul class="obj-list">
+        <li>Apply the Deal-Grove model (x² + Ax = B(t+τ)) to predict oxide thickness given temperature and time inputs</li>
+        <li>Distinguish between dry oxidation (Si + O₂ → SiO₂, slow/dense) and wet oxidation (Si + 2H₂O → SiO₂ + 2H₂, fast/porous)</li>
+        <li>Explain why approximately 46% of SiO₂ film thickness sits above the original Si surface while 54% consumes Si</li>
+        <li>Calculate the required furnace time to achieve a target gate oxide thickness of 2.5nm ±0.2nm</li>
+        <li>Identify interface trap density (Dit) as the key quality metric for gate dielectrics and describe how it is minimised</li>
+        <li>Specify post-oxidation anneal conditions (N₂, 950°C, 20 min) and explain the mechanism of H passivation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ieg-ref"><div class="ieg-badge">IEG REF</div><div><strong>Korea Polytechnic University, Asan Campus</strong> — IEG's Semiconductor Photolithography Equipment suite includes a pre-lithography furnace station where students observe real Deal-Grove oxide growth kinetics on 200mm training wafers.</div></div>
+
+  <div class="sim-box">
+    <div class="sim-title">Deal-Grove Oxidation Simulator — Real-time thickness calculation</div>
+    <div class="controls">
+      <div class="ctrl"><label>Temperature</label><input type="range" min="800" max="1200" value="1000" step="10" oninput="s2calc()" id="s2temp"><span class="ctrl-val" id="s2temp-v">1000°C</span></div>
+      <div class="ctrl"><label>Time</label><input type="range" min="1" max="240" value="30" step="1" oninput="s2calc()" id="s2time"><span class="ctrl-val" id="s2time-v">30 min</span></div>
+      <div class="ctrl"><label>Method</label>
+        <select oninput="s2calc()" id="s2mode" style="width:100%">
+          <option value="dry">Dry (O₂)</option>
+          <option value="wet">Wet (H₂O steam)</option>
+        </select>
+      <span class="ctrl-val" id="s2mode-v"></span></div>
+    </div>
+    <div class="result-grid">
+      <div class="result-card"><div class="result-val" id="s2-thick">—</div><div class="result-lbl">Oxide Thickness</div></div>
+      <div class="result-card"><div class="result-val" id="s2-rate">—</div><div class="result-lbl">Growth Rate</div></div>
+      <div class="result-card"><div class="result-val" id="s2-use">—</div><div class="result-lbl">Application</div></div>
+    </div>
+    <div class="verdict" id="s2-verdict"></div>
+    <div class="chart-wrap"><canvas id="s2chart"></canvas></div>
+  </div>
+  <div class="nav-row"><button class="btn btn-ghost" onclick="goTo(0)">← Previous</button><button class="btn btn-primary" style="background:var(--pc)" onclick="goTo(2)">Next Station →</button></div>
+</section>
+
+<!-- ══ STATION 3 ══ -->
+<section class="process-panel" id="panel-2" style="--pc:#7c3aed;--pcr:124,58,237">
+  <div class="eyebrow">Station 03 · Photolithography</div>
+  <h1 class="ptitle">Photolithography — Pattern Transfer via Light</h1>
+  <p class="psub">The Rayleigh resolution limit (R = k₁·λ/NA) defines the smallest printable feature. Manipulate wavelength, numerical aperture, and process factor k₁ to see how resolution, depth of field, and process window change in real time.</p>
+
+  <div class="curriculum">
+    <div class="curriculum-hdr" onclick="toggleCurr(this)">
+      <h4>Learning Objectives — Unit 3: Photolithography</h4>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="curriculum-body">
+      <div class="btec-tag">BTEC Unit 4039 · NQF Level 4 · NCS 15020101</div>
+      <ul class="obj-list">
+        <li>Apply the Rayleigh equations R = k₁·λ/NA and DOF = k₂·λ/NA² to calculate resolution and depth of field for given tool parameters</li>
+        <li>Explain the COBD process sequence: HMDS prime → spin coat → soft bake → align/expose → PEB → develop → inspect</li>
+        <li>Compare i-line (365nm), KrF (248nm), ArF (193nm), and EUV (13.5nm) sources by resolution capability and cost</li>
+        <li>Describe how immersion lithography increases effective NA beyond 1.0 by using high-refractive-index fluid</li>
+        <li>Identify the four main photoresist defect modes: scumming, bridging, footing, and T-topping, with root causes</li>
+        <li>Calculate overlay budget for a 4-layer metal stack given alignment tool precision of ±2nm 3σ</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ieg-ref"><div class="ieg-badge">IEG REF</div><div><strong>Korea Polytechnic University, Asan Campus</strong> — IEG's dedicated Photolithography Equipment covers the full COBD sequence. Trainees use a mask aligner with UV source to expose real photoresist patterns on training wafers.</div></div>
+
+  <div class="sim-box">
+    <div class="sim-title">Rayleigh Resolution Simulator — Adjust lithography parameters</div>
+    <div class="controls">
+      <div class="ctrl"><label>Light Source</label>
+        <select oninput="s3calc()" id="s3src" style="width:100%">
+          <option value="365">i-line · 365 nm</option>
+          <option value="248">KrF · 248 nm</option>
+          <option value="193" selected>ArF · 193 nm</option>
+          <option value="13.5">EUV · 13.5 nm</option>
+        </select>
+      <span class="ctrl-val" id="s3src-v"></span></div>
+      <div class="ctrl"><label>Numerical Aperture</label><input type="range" min="0.3" max="1.35" value="0.85" step="0.05" oninput="s3calc()" id="s3na"><span class="ctrl-val" id="s3na-v">0.85</span></div>
+      <div class="ctrl"><label>k₁ Process Factor</label><input type="range" min="0.25" max="0.8" value="0.4" step="0.01" oninput="s3calc()" id="s3k1"><span class="ctrl-val" id="s3k1-v">0.40</span></div>
+    </div>
+    <div class="result-grid">
+      <div class="result-card"><div class="result-val" id="s3-res">—</div><div class="result-lbl">Resolution (R)</div></div>
+      <div class="result-card"><div class="result-val" id="s3-dof">—</div><div class="result-lbl">Depth of Field</div></div>
+      <div class="result-card"><div class="result-val" id="s3-node">—</div><div class="result-lbl">Process Node</div></div>
+    </div>
+    <div class="verdict" id="s3-verdict"></div>
+    <div class="chart-wrap"><canvas id="s3chart"></canvas></div>
+  </div>
+  <div class="nav-row"><button class="btn btn-ghost" onclick="goTo(1)">← Previous</button><button class="btn btn-primary" style="background:var(--pc)" onclick="goTo(3)">Next Station →</button></div>
+</section>
+
+<!-- ══ STATION 4 ══ -->
+<section class="process-panel" id="panel-3" style="--pc:#059669;--pcr:5,150,105">
+  <div class="eyebrow">Station 04 · Etching</div>
+  <h1 class="ptitle">Etching — Material Removal & Pattern Definition</h1>
+  <p class="psub">RIE (Reactive Ion Etching) uses RF-powered plasma to etch anisotropically. The etch rate, selectivity, and profile angle are controlled by RF power, chamber pressure, and gas chemistry. Find the optimal window for a given target.</p>
+
+  <div class="curriculum">
+    <div class="curriculum-hdr" onclick="toggleCurr(this)">
+      <h4>Learning Objectives — Unit 4: Etching</h4>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="curriculum-body">
+      <div class="btec-tag">BTEC Unit 4039 · NQF Level 3–4 · NCS 15020201</div>
+      <ul class="obj-list">
+        <li>Distinguish isotropic (wet) and anisotropic (dry/plasma) etching and specify when each is appropriate</li>
+        <li>Calculate etch selectivity (S = ER_target / ER_mask) and determine minimum photoresist thickness for a given etch depth</li>
+        <li>Identify the four plasma etch mechanisms: physical sputtering, chemical etching, ion-enhanced chemical, and passivation</li>
+        <li>Explain how increasing RF bias voltage increases ion energy and improves anisotropy at the cost of selectivity</li>
+        <li>Use OES (Optical Emission Spectroscopy) endpoint signal to determine etch completion without over-etching</li>
+        <li>Diagnose etch non-uniformity from a wafer map and identify whether the root cause is gas flow, pressure, or power distribution</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ieg-ref"><div class="ieg-badge">IEG REF</div><div><strong>Korea Semiconductor Academy</strong> — IEG supplied Plasma Equipment for process control training. Trainees set RF power, gas mix, and pressure parameters to achieve target etch profiles on training wafers.</div></div>
+
+  <div class="sim-box">
+    <div class="sim-title">RIE Plasma Etch Simulator — Tune the process window</div>
+    <div class="controls">
+      <div class="ctrl"><label>RF Power</label><input type="range" min="50" max="500" value="200" step="10" oninput="s4calc()" id="s4rf"><span class="ctrl-val" id="s4rf-v">200 W</span></div>
+      <div class="ctrl"><label>Chamber Pressure</label><input type="range" min="1" max="100" value="20" step="1" oninput="s4calc()" id="s4p"><span class="ctrl-val" id="s4p-v">20 mTorr</span></div>
+      <div class="ctrl"><label>Gas Chemistry</label>
+        <select oninput="s4calc()" id="s4gas" style="width:100%">
+          <option value="CF4">CF₄/O₂ — SiO₂</option>
+          <option value="Cl2">Cl₂/HBr — Si/poly</option>
+          <option value="SF6">SF₆ — Si (isotropic)</option>
+          <option value="BCl3">BCl₃/Cl₂ — Al metal</option>
+        </select>
+      <span class="ctrl-val" id="s4gas-v"></span></div>
+    </div>
+    <div class="result-grid">
+      <div class="result-card"><div class="result-val" id="s4-er">—</div><div class="result-lbl">Etch Rate</div></div>
+      <div class="result-card"><div class="result-val" id="s4-sel">—</div><div class="result-lbl">Selectivity</div></div>
+      <div class="result-card"><div class="result-val" id="s4-ang">—</div><div class="result-lbl">Profile Angle</div></div>
+    </div>
+    <div class="verdict" id="s4-verdict"></div>
+    <div class="chart-wrap"><canvas id="s4chart"></canvas></div>
+  </div>
+  <div class="nav-row"><button class="btn btn-ghost" onclick="goTo(2)">← Previous</button><button class="btn btn-primary" style="background:var(--pc)" onclick="goTo(4)">Next Station →</button></div>
+</section>
+
+<!-- ══ STATION 5 ══ -->
+<section class="process-panel" id="panel-4" style="--pc:#db2777;--pcr:219,39,119">
+  <div class="eyebrow">Station 05 · Ion Implantation</div>
+  <h1 class="ptitle">Ion Implantation — Dopant Introduction by Acceleration</h1>
+  <p class="psub">Dopant ions (B, P, As) are accelerated to 10–200 keV and implanted into silicon. Energy controls depth (R_p), dose controls concentration. The resulting Gaussian profile and post-anneal activation determine transistor threshold voltage.</p>
+
+  <div class="curriculum">
+    <div class="curriculum-hdr" onclick="toggleCurr(this)">
+      <h4>Learning Objectives — Unit 5: Ion Implantation</h4>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="curriculum-body">
+      <div class="btec-tag">BTEC Unit 4040 · NQF Level 4 · NCS 15020301</div>
+      <ul class="obj-list">
+        <li>Relate ion energy (keV) to projected range R_p using LSS theory and predict implant depth within ±10% accuracy</li>
+        <li>Calculate peak dopant concentration from dose (Φ) and straggle (ΔR_p) using the Gaussian formula N(x) = N_p·exp[-(x-R_p)²/2ΔR_p²]</li>
+        <li>Explain why a 7° tilt angle is applied during implantation and calculate the resulting depth correction factor</li>
+        <li>Specify RTA conditions (temperature, time, ambient) for full dopant activation with &lt;2nm junction depth shift</li>
+        <li>Describe the three stages of implant damage repair: annealing of point defects, recrystallisation, and dopant activation</li>
+        <li>Interpret a SIMS (Secondary Ion Mass Spectrometry) depth profile and extract junction depth and peak concentration values</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ieg-ref"><div class="ieg-badge">IEG REF</div><div><strong>Gangwon Technopark</strong> — IEG Semiconductor Maintenance Equipment covers doping and implantation stages. Engineers calibrate dose-energy relationships and interpret SIMS dopant profiles.</div></div>
+
+  <div class="sim-box">
+    <div class="sim-title">Ion Implant Profile Simulator — Real-time Gaussian dopant distribution</div>
+    <div class="controls">
+      <div class="ctrl"><label>Ion Species</label>
+        <select oninput="s5calc()" id="s5ion" style="width:100%">
+          <option value="B">Boron (B) — p-type</option>
+          <option value="P" selected>Phosphorus (P) — n-type</option>
+          <option value="As">Arsenic (As) — n-type, heavy</option>
+        </select>
+      <span class="ctrl-val" id="s5ion-v"></span></div>
+      <div class="ctrl"><label>Implant Energy</label><input type="range" min="10" max="200" value="80" step="5" oninput="s5calc()" id="s5e"><span class="ctrl-val" id="s5e-v">80 keV</span></div>
+      <div class="ctrl"><label>Dose (×10¹³/cm²)</label><input type="range" min="1" max="100" value="20" step="1" oninput="s5calc()" id="s5dose"><span class="ctrl-val" id="s5dose-v">2×10¹³</span></div>
+      <div class="ctrl"><label>RTA Temperature</label><input type="range" min="800" max="1100" value="950" step="25" oninput="s5calc()" id="s5rta"><span class="ctrl-val" id="s5rta-v">950°C</span></div>
+    </div>
+    <div class="result-grid">
+      <div class="result-card"><div class="result-val" id="s5-rp">—</div><div class="result-lbl">Peak Depth (Rp)</div></div>
+      <div class="result-card"><div class="result-val" id="s5-peak">—</div><div class="result-lbl">Peak Conc.</div></div>
+      <div class="result-card"><div class="result-val" id="s5-jd">—</div><div class="result-lbl">Junction Depth</div></div>
+    </div>
+    <div class="verdict" id="s5-verdict"></div>
+    <div class="chart-wrap"><canvas id="s5chart"></canvas></div>
+  </div>
+  <div class="nav-row"><button class="btn btn-ghost" onclick="goTo(3)">← Previous</button><button class="btn btn-primary" style="background:var(--pc)" onclick="goTo(5)">Next Station →</button></div>
+</section>
+
+<!-- ══ STATION 6 ══ -->
+<section class="process-panel" id="panel-5" style="--pc:#d97706;--pcr:217,119,6">
+  <div class="eyebrow">Station 06 · CVD / Thin Film Deposition</div>
+  <h1 class="ptitle">CVD & Thin Films — Chemical Vapour Deposition</h1>
+  <p class="psub">Gaseous precursors react at the wafer surface to grow thin films. Temperature, pressure, and gas flow govern deposition rate, step coverage, and film stress. Tune the recipe for your target film type and observe uniformity impact.</p>
+
+  <div class="curriculum">
+    <div class="curriculum-hdr" onclick="toggleCurr(this)">
+      <h4>Learning Objectives — Unit 6: CVD / Thin Film Deposition</h4>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="curriculum-body">
+      <div class="btec-tag">BTEC Unit 4040 · NQF Level 4 · NCS 15020401</div>
+      <ul class="obj-list">
+        <li>Compare LPCVD, PECVD, APCVD, and ALD by temperature, pressure, conformality, and typical applications</li>
+        <li>Derive the Arrhenius-type deposition rate equation and predict rate change for a 50°C temperature increase</li>
+        <li>Define step coverage and calculate the aspect-ratio-dependent fill factor for a 4:1 trench using PECVD parameters</li>
+        <li>Specify an ALD (Atomic Layer Deposition) recipe cycle sequence for HfO₂ gate dielectric deposition at sub-2nm thickness</li>
+        <li>Measure and interpret film stress (compressive vs. tensile) from wafer bow data using Stoney's equation</li>
+        <li>Identify WERR (Wet Etch Rate Ratio) as a quality metric and specify the acceptance criterion for LPCVD SiO₂ (&lt;2× thermal oxide)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ieg-ref"><div class="ieg-badge">IEG REF</div><div><strong>Korea Semiconductor Academy</strong> — IEG's Process Control Software Testing Equipment lets trainees simulate and monitor PECVD recipes before running on actual chambers, reducing material waste and risk.</div></div>
+
+  <div class="sim-box">
+    <div class="sim-title">CVD Recipe Simulator — Optimise deposition parameters</div>
+    <div class="controls">
+      <div class="ctrl"><label>CVD Method</label>
+        <select oninput="s6calc()" id="s6mode" style="width:100%">
+          <option value="LPCVD">LPCVD — 550–900°C</option>
+          <option value="PECVD" selected>PECVD — 200–400°C</option>
+          <option value="ALD">ALD — 150–300°C</option>
+        </select>
+      <span class="ctrl-val" id="s6mode-v"></span></div>
+      <div class="ctrl"><label>Temperature</label><input type="range" min="150" max="900" value="350" step="10" oninput="s6calc()" id="s6t"><span class="ctrl-val" id="s6t-v">350°C</span></div>
+      <div class="ctrl"><label>Pressure</label><input type="range" min="0.1" max="760" value="2" step="0.1" oninput="s6calc()" id="s6p"><span class="ctrl-val" id="s6p-v">2.0 Torr</span></div>
+      <div class="ctrl"><label>Deposition Time</label><input type="range" min="1" max="120" value="30" step="1" oninput="s6calc()" id="s6time"><span class="ctrl-val" id="s6time-v">30 min</span></div>
+    </div>
+    <div class="result-grid">
+      <div class="result-card"><div class="result-val" id="s6-rate">—</div><div class="result-lbl">Deposition Rate</div></div>
+      <div class="result-card"><div class="result-val" id="s6-thick">—</div><div class="result-lbl">Film Thickness</div></div>
+      <div class="result-card"><div class="result-val" id="s6-cov">—</div><div class="result-lbl">Step Coverage</div></div>
+    </div>
+    <div class="verdict" id="s6-verdict"></div>
+  </div>
+  <div class="nav-row"><button class="btn btn-ghost" onclick="goTo(4)">← Previous</button><button class="btn btn-primary" style="background:var(--pc)" onclick="goTo(6)">Next Station →</button></div>
+</section>
+
+<!-- ══ STATION 7 ══ -->
+<section class="process-panel" id="panel-6" style="--pc:#0284c7;--pcr:2,132,199">
+  <div class="eyebrow">Station 07 · Metallisation</div>
+  <h1 class="ptitle">Metallisation — Interconnect & Contact Formation</h1>
+  <p class="psub">Copper damascene wiring connects transistors into circuits across 10–15+ metal layers. CMP (Chemical Mechanical Planarisation) removes overburden and achieves global flatness. Adjust slurry, pressure, and time to hit the target removal.</p>
+
+  <div class="curriculum">
+    <div class="curriculum-hdr" onclick="toggleCurr(this)">
+      <h4>Learning Objectives — Unit 7: Metallisation & CMP</h4>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="curriculum-body">
+      <div class="btec-tag">BTEC Unit 4040 · NQF Level 4 · NCS 15020501</div>
+      <ul class="obj-list">
+        <li>Explain why copper replaced aluminium as the primary interconnect metal and quantify the resistivity advantage (Cu 1.68 vs Al 2.65 µΩ·cm)</li>
+        <li>Describe the dual-damascene process sequence: via etch → trench etch → TaN/Ta barrier PVD → Cu seed PVD → Cu ECD → CMP</li>
+        <li>Apply Preston's equation (RR = k_p · P · v) to calculate Cu CMP removal rate for given platen pressure and velocity</li>
+        <li>Explain the role of the TaN diffusion barrier in preventing Cu migration into SiO₂ and Si junction regions</li>
+        <li>Identify the three CMP failure modes: dishing, erosion, and micro-scratch, and specify the process conditions that cause each</li>
+        <li>Calculate interconnect RC delay for a given Cu line geometry and low-k dielectric constant and explain its impact on circuit speed</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ieg-ref"><div class="ieg-badge">IEG REF</div><div><strong>Korea Polytechnic University, Incheon Campus</strong> — IEG Semiconductor Packaging Equipment covers back-end metallisation and contact formation. Trainees learn PVD sputtering and CMP endpoint control.</div></div>
+
+  <div class="sim-box">
+    <div class="sim-title">CMP (Chemical Mechanical Planarisation) Simulator — Preston's Equation</div>
+    <div class="controls">
+      <div class="ctrl"><label>Platen Pressure</label><input type="range" min="1" max="10" value="4" step="0.5" oninput="s7calc()" id="s7p"><span class="ctrl-val" id="s7p-v">4.0 psi</span></div>
+      <div class="ctrl"><label>Platen Velocity</label><input type="range" min="20" max="120" value="60" step="5" oninput="s7calc()" id="s7v"><span class="ctrl-val" id="s7v-v">60 rpm</span></div>
+      <div class="ctrl"><label>Slurry Type</label>
+        <select oninput="s7calc()" id="s7sl" style="width:100%">
+          <option value="Cu">Cu slurry (BTA inhibitor)</option>
+          <option value="Ox">Oxide slurry (SiO₂ abrasive)</option>
+          <option value="W">W slurry (H₂O₂ oxidiser)</option>
+        </select>
+      <span class="ctrl-val" id="s7sl-v"></span></div>
+      <div class="ctrl"><label>Polish Time</label><input type="range" min="10" max="180" value="60" step="5" oninput="s7calc()" id="s7t"><span class="ctrl-val" id="s7t-v">60 sec</span></div>
+    </div>
+    <div class="result-grid">
+      <div class="result-card"><div class="result-val" id="s7-rr">—</div><div class="result-lbl">Removal Rate</div></div>
+      <div class="result-card"><div class="result-val" id="s7-rem">—</div><div class="result-lbl">Material Removed</div></div>
+      <div class="result-card"><div class="result-val" id="s7-unif">—</div><div class="result-lbl">Uniformity</div></div>
+    </div>
+    <div class="verdict" id="s7-verdict"></div>
+    <div class="chart-wrap"><canvas id="s7chart"></canvas></div>
+  </div>
+  <div class="nav-row"><button class="btn btn-ghost" onclick="goTo(5)">← Previous</button><button class="btn btn-primary" style="background:var(--pc)" onclick="goTo(7)">Next Station →</button></div>
+</section>
+
+<!-- ══ STATION 8 ══ -->
+<section class="process-panel" id="panel-7" style="--pc:#c2410c;--pcr:194,65,12">
+  <div class="eyebrow">Station 08 · Testing & Packaging</div>
+  <h1 class="ptitle">Testing & Packaging — Yield Economics & Cost Per Die</h1>
+  <p class="psub">Yield is the ultimate scorecard of the entire fabrication process. Adjust wafer size, die size, and defect density to calculate gross die, yield, and cost per good die. This is how semiconductor economics are built.</p>
+
+  <div class="curriculum">
+    <div class="curriculum-hdr" onclick="toggleCurr(this)">
+      <h4>Learning Objectives — Unit 8: Testing, Yield & Packaging</h4>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="curriculum-body">
+      <div class="btec-tag">BTEC Unit 4040 · NQF Level 4 · NCS 15020601</div>
+      <ul class="obj-list">
+        <li>Apply the Murphy yield model Y = [1 – exp(–D₀A)] / (D₀A) to calculate die yield from defect density and die area</li>
+        <li>Calculate gross die per wafer (GDW) using GDW = π·(d/2)² / A – π·d / √(2A) and explain the edge exclusion penalty</li>
+        <li>Compute cost per good die = (wafer cost / GDW) / yield and perform sensitivity analysis on each variable</li>
+        <li>Interpret a wafer map showing clustered vs. random failures and identify the process stage most likely responsible</li>
+        <li>Describe the BEOL assembly sequence: probe test → thin → dice → DAF → wire bond/flip-chip → mould → FT → burn-in</li>
+        <li>Compare BGA, QFN, CSP, and 3D-IC packaging formats by pin count, thermal resistance, and use case</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ieg-ref"><div class="ieg-badge">IEG REF</div><div><strong>Korea Polytechnic University, Incheon Campus</strong> — IEG Semiconductor Packaging Equipment covers wafer probe, dicing, wire bonding, and final test simulation. Trainees generate and interpret wafer maps and calculate yield from real test data.</div></div>
+
+  <div class="sim-box">
+    <div class="sim-title">Yield & Cost-Per-Die Calculator — Murphy's Yield Model</div>
+    <div class="controls">
+      <div class="ctrl"><label>Wafer Diameter</label>
+        <select oninput="s8calc()" id="s8wd" style="width:100%">
+          <option value="200">200mm (8")</option>
+          <option value="300" selected>300mm (12")</option>
+          <option value="450">450mm (18" — future)</option>
+        </select>
+      <span class="ctrl-val" id="s8wd-v"></span></div>
+      <div class="ctrl"><label>Die Area</label><input type="range" min="10" max="800" value="100" step="10" oninput="s8calc()" id="s8da"><span class="ctrl-val" id="s8da-v">100 mm²</span></div>
+      <div class="ctrl"><label>Defect Density D₀</label><input type="range" min="0.01" max="2" value="0.1" step="0.01" oninput="s8calc()" id="s8dd"><span class="ctrl-val" id="s8dd-v">0.10 /cm²</span></div>
+      <div class="ctrl"><label>Wafer Cost</label><input type="range" min="1000" max="20000" value="5000" step="500" oninput="s8calc()" id="s8wc"><span class="ctrl-val" id="s8wc-v">$5,000</span></div>
+    </div>
+    <div class="result-grid">
+      <div class="result-card"><div class="result-val" id="s8-gdw">—</div><div class="result-lbl">Gross Die/Wafer</div></div>
+      <div class="result-card"><div class="result-val" id="s8-yield">—</div><div class="result-lbl">Die Yield</div></div>
+      <div class="result-card"><div class="result-val" id="s8-cpd">—</div><div class="result-lbl">Cost/Good Die</div></div>
+    </div>
+    <div class="verdict" id="s8-verdict"></div>
+    <div class="chart-wrap"><canvas id="s8chart"></canvas></div>
+  </div>
+  <div class="nav-row"><button class="btn btn-ghost" onclick="goTo(6)">← Previous</button><button class="btn btn-primary" style="background:var(--pc)" onclick="complete()">Complete Walkthrough ✓</button></div>
+</section>
+
+<!-- COMPLETION -->
+<div class="completion" id="completion">
+  <div style="font-size:40px;margin-bottom:16px">🎓</div>
+  <h2 style="font-family:var(--disp);font-size:26px;font-weight:700;color:var(--gold);margin-bottom:8px">Walkthrough Complete</h2>
+  <p style="font-size:14px;color:var(--tx2);margin-bottom:24px">All 8 semiconductor process stations completed.</p>
+  <div class="cert-box">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:10px">IEG Certificate of Completion</div>
+    <div style="font-family:var(--disp);font-size:17px;font-weight:700;color:#0d1520;margin-bottom:6px">Semiconductor 8-Process Interactive Simulator</div>
+    <div style="font-size:12.5px;color:#2d4060">IEG-SEM-01 · BTEC Unit 4039/4040 · NQF Level 3–4<br>IEG × ALAT Korea Technology Tour Programme</div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:360px;margin:0 auto 24px">
+    <div style="text-align:center"><div style="font-family:var(--mono);font-size:20px;font-weight:500;color:var(--gold)" id="c-stations">8</div><div style="font-size:11px;color:var(--tx3)">Stations</div></div>
+    <div style="text-align:center"><div style="font-family:var(--mono);font-size:20px;font-weight:500;color:var(--gold)" id="c-sims">8</div><div style="font-size:11px;color:var(--tx3)">Simulations</div></div>
+    <div style="text-align:center"><div style="font-family:var(--mono);font-size:20px;font-weight:500;color:var(--gold)" id="c-objs">48</div><div style="font-size:11px;color:var(--tx3)">Learning Objectives</div></div>
+  </div>
+  <button class="btn btn-ghost" onclick="restart()" style="margin-top:8px">↺ Restart Simulator</button>
+</div>
+
+</main>
+</div>
+
+<!-- INQUIRY -->
+<section class="inq-section" id="inquiry">
+  <div class="inq-inner">
+    <div>
+      <div class="inq-eyebrow">Contact IEG</div>
+      <h2 class="inq-title">Send an Inquiry</h2>
+      <p class="inq-desc">Questions about IEG's semiconductor TVET equipment, curriculum partnership, or the Korea Technology Tour? Our Global Business team responds within 2 business days.</p>
+      <div class="inq-meta">
+        <div class="inq-meta-item"><div class="lbl">Email</div><div class="val">kellycho824@ieg.kr</div></div>
+        <div class="inq-meta-item"><div class="lbl">Division</div><div class="val">Global Business Division</div></div>
+        <div class="inq-meta-item"><div class="lbl">Company</div><div class="val">IEG Co., Ltd. · Seongnam, Korea</div></div>
+        <div class="inq-meta-item"><div class="lbl">Response Time</div><div class="val">Within 2 business days</div></div>
+      </div>
+    </div>
+    <div>
+      <form class="inq-form" id="inq-form" action="https://formspree.io/f/xnjkjnyy" method="POST">
+        <div class="inq-row">
+          <div class="inq-field"><label class="inq-label">Full Name <span class="req">*</span></label><input class="inq-input" type="text" name="name" placeholder="e.g. Ahmed Al-Rashidi" required></div>
+          <div class="inq-field"><label class="inq-label">Organisation <span class="req">*</span></label><input class="inq-input" type="text" name="organisation" placeholder="e.g. TAFE SA / ALAT" required></div>
+        </div>
+        <div class="inq-row">
+          <div class="inq-field"><label class="inq-label">Email <span class="req">*</span></label><input class="inq-input" type="email" name="email" id="inq-email" placeholder="your@email.com" required></div>
+          <div class="inq-field"><label class="inq-label">Phone / WhatsApp</label><input class="inq-input" type="tel" name="phone" placeholder="+966 xx xxx xxxx"></div>
+        </div>
+        <div class="inq-field" style="margin-bottom:14px"><label class="inq-label">Topic <span class="req">*</span></label>
+          <select class="inq-input inq-select" name="topic" required>
+            <option value="" disabled selected>Select a topic</option>
+            <option>Curriculum Partnership (BTEC / TAFE SA)</option>
+            <option>Equipment Quotation (Model C Cleanroom)</option>
+            <option>Korea Technology Tour (TTT Programme)</option>
+            <option>XR Digital Walkthrough Licensing</option>
+            <option>Phase 1 Budget Discussion</option>
+            <option>General Enquiry</option>
+          </select>
+        </div>
+        <div class="inq-field" style="margin-bottom:14px"><label class="inq-label">Message <span class="req">*</span></label><textarea class="inq-input inq-textarea" name="message" placeholder="Describe your inquiry — training centre context, learner group, equipment or curriculum questions." required></textarea></div>
+        <div class="inq-field" style="margin-bottom:0"><label class="inq-label">Additional Notes</label><input class="inq-input" type="text" name="notes" placeholder="Timeline, budget range, preferred contact time, etc."></div>
+        <input type="hidden" name="_subject" value="[IEG Simulator] New Inquiry from Digital Walkthrough">
+        <div class="submit-row">
+          <div class="privacy-note">✓ Your information is used solely to respond to this inquiry.</div>
+          <button type="submit" class="btn-submit" id="inq-submit"><span id="submit-label">Send Inquiry →</span></button>
+        </div>
+      </form>
+      <div class="inq-success" id="inq-success">
+        <div class="success-icon">✓</div>
+        <div class="success-title">Inquiry Sent</div>
+        <div class="success-desc">Thank you. The IEG Global Business team will respond to <span id="success-email" style="font-weight:600;color:#0d1520"></span> within 2 business days.</div>
+        <button class="btn-reset" onclick="resetForm()">Send Another Inquiry</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+let current=0, simsDone=new Set(), chartInstances={};
+
+// ── NAVIGATION ──
+function goTo(idx){
+  document.querySelectorAll('.process-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('completion').classList.remove('show');
+  const panel=document.getElementById('panel-'+idx);
+  if(panel)panel.classList.add('active');
+  const btn=document.getElementById('btn-'+idx);
+  if(btn)btn.classList.add('active');
+  current=idx;
+  updateHeader();
+  window.scrollTo({top:0,behavior:'smooth'});
+  // Init charts lazily
+  setTimeout(()=>{
+    if(idx===1&&!chartInstances['s2'])initS2Chart();
+    if(idx===2&&!chartInstances['s3'])initS3Chart();
+    if(idx===3&&!chartInstances['s4'])initS4Chart();
+    if(idx===4&&!chartInstances['s5'])initS5Chart();
+    if(idx===6&&!chartInstances['s7'])initS7Chart();
+    if(idx===7&&!chartInstances['s8'])initS8Chart();
+    // trigger calc
+    const calcs={0:s1calc,1:s2calc,2:s3calc,3:s4calc,4:s5calc,5:s6calc,6:s7calc,7:s8calc};
+    calcs[idx]&&calcs[idx]();
+  },80);
+}
+function updateHeader(){
+  document.getElementById('prog-fill').style.width=((current+1)/8*100)+'%';
+  document.getElementById('prog-label').textContent='Station '+(current+1)+' / 8';
+  document.getElementById('score-label').textContent='Done: '+simsDone.size+'/8';
+}
+function markDone(idx){
+  simsDone.add(idx);
+  document.getElementById('btn-'+idx).classList.add('done');
+  updateHeader();
+}
+function complete(){
+  document.querySelectorAll('.process-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('completion').classList.add('show');
+  document.getElementById('prog-fill').style.width='100%';
+  document.getElementById('prog-label').textContent='Complete';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function restart(){
+  simsDone.clear();
+  document.querySelectorAll('.step-btn').forEach(b=>b.classList.remove('done','active'));
+  document.getElementById('completion').classList.remove('show');
+  goTo(0);
+}
+function toggleCurr(el){el.classList.toggle('open')}
+
+// ── STATION 1: RCA Clean ──
+function s1calc(){
+  const t=+document.getElementById('s1t').value;
+  const d=+document.getElementById('s1d').value;
+  const t2=+document.getElementById('s1t2').value;
+  const r=+document.getElementById('s1r').value;
+  document.getElementById('s1t-v').textContent=t+'°C';
+  document.getElementById('s1d-v').textContent=d+' min';
+  document.getElementById('s1t2-v').textContent=t2+'°C';
+  document.getElementById('s1r-v').textContent=r+'×';
+  const org=Math.min(99.9,60+(t-60)*0.8+(d-5)*1.2);
+  const metal=Math.min(99.9,55+(t2-60)*1.0+r*3.5);
+  const base=500;
+  const particles=Math.max(0.1,Math.round(base*Math.pow(0.85,r)*Math.pow(0.92,(d-5))));
+  document.getElementById('s1-org').textContent=org.toFixed(1)+'%';
+  document.getElementById('s1-metal').textContent=metal.toFixed(1)+'%';
+  document.getElementById('s1-particle').textContent=particles+'/cm²';
+  const v=document.getElementById('s1-verdict');
+  if(org>95&&metal>95&&particles<50){v.className='verdict ok';v.textContent='✓ PASS — Wafer meets cleanliness specification. Proceed to oxidation.';}
+  else if(org>85&&metal>85&&particles<200){v.className='verdict warn';v.textContent='⚠ MARGINAL — Increase SC-1 temperature or extend rinse cycles. Risk of gate oxide defects.';}
+  else{v.className='verdict bad';v.textContent='✗ FAIL — Contamination level too high. Return to SC-1 clean or reject wafer.';}
+  markDone(0);
+}
+
+// ── STATION 2: Oxidation ──
+let s2Chart=null;
+function initS2Chart(){
+  const ctx=document.getElementById('s2chart');
+  if(!ctx)return;
+  s2Chart=new Chart(ctx,{type:'line',data:{labels:[],datasets:[{label:'Dry SiO₂ (nm)',borderColor:'#ea580c',backgroundColor:'rgba(234,88,12,0.08)',tension:0.4,pointRadius:0,data:[]},{label:'Wet SiO₂ (nm)',borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.08)',tension:0.4,pointRadius:0,data:[]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11}}}},scales:{x:{title:{display:true,text:'Time (min)',font:{size:11}}},y:{title:{display:true,text:'Oxide Thickness (nm)',font:{size:11}}}}}});
+  chartInstances['s2']=true;
+  s2calc();
+}
+function dealGrove(T,t,wet){
+  const B_dry=770*Math.exp(-2.0/(8.617e-5*(T+273)));
+  const B_wet=3800*Math.exp(-1.7/(8.617e-5*(T+273)));
+  const A_dry=0.165*Math.exp(-0.08/(8.617e-5*(T+273)));
+  const A_wet=0.226*Math.exp(-0.05/(8.617e-5*(T+273)));
+  const B=wet?B_wet:B_dry, A=wet?A_wet:A_dry;
+  return(A/2)*(Math.sqrt(1+4*B*t/A/A)-1)*1000;
+}
+function s2calc(){
+  const T=+document.getElementById('s2temp').value;
+  const t=+document.getElementById('s2time').value;
+  const wet=document.getElementById('s2mode').value==='wet';
+  document.getElementById('s2temp-v').textContent=T+'°C';
+  document.getElementById('s2time-v').textContent=t+' min';
+  const thick=Math.max(0.1,dealGrove(T,t,wet));
+  const rate=(thick/t).toFixed(2);
+  document.getElementById('s2-thick').textContent=thick.toFixed(1)+' nm';
+  document.getElementById('s2-rate').textContent=rate+' nm/min';
+  document.getElementById('s2-use').textContent=thick<10?'Gate oxide':thick<100?'Tunnel/pad':'Field oxide';
+  const v=document.getElementById('s2-verdict');
+  if(thick>=1.5&&thick<=5&&!wet){v.className='verdict ok';v.textContent='✓ Excellent gate oxide range. Dry oxidation producing high-density SiO₂.';}
+  else if(thick>200&&wet){v.className='verdict ok';v.textContent='✓ Field oxide range achieved. Wet oxidation providing good isolation thickness.';}
+  else if(thick>5&&thick<200){v.className='verdict warn';v.textContent='⚠ Intermediate thickness. Verify application — may be pad oxide or sacrificial layer.';}
+  else{v.className='verdict warn';v.textContent='⚠ Check recipe — adjust temperature or time for target application.';}
+  if(s2Chart){
+    const labels=[],dry=[],wet2=[];
+    for(let i=0;i<=t;i+=Math.max(1,Math.floor(t/40))){labels.push(i);dry.push(+dealGrove(T,i,false).toFixed(1));wet2.push(+dealGrove(T,i,true).toFixed(1));}
+    s2Chart.data.labels=labels;s2Chart.data.datasets[0].data=dry;s2Chart.data.datasets[1].data=wet2;s2Chart.update('none');
+  }
+  markDone(1);
+}
+
+// ── STATION 3: Lithography ──
+let s3Chart=null;
+function initS3Chart(){
+  const ctx=document.getElementById('s3chart');
+  if(!ctx)return;
+  s3Chart=new Chart(ctx,{type:'bar',data:{labels:['i-line 365nm','KrF 248nm','ArF 193nm','EUV 13.5nm'],datasets:[{label:'Resolution (nm)',backgroundColor:['rgba(124,58,237,0.2)','rgba(124,58,237,0.35)','rgba(124,58,237,0.55)','rgba(124,58,237,0.8)'],borderColor:'#7c3aed',borderWidth:1,data:[]}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'Minimum Feature Size (nm)',font:{size:11}},reverse:true}}}});
+  chartInstances['s3']=true;
+  s3calc();
+}
+function s3calc(){
+  const lam=+document.getElementById('s3src').value;
+  const na=+document.getElementById('s3na').value;
+  const k1=+document.getElementById('s3k1').value;
+  document.getElementById('s3na-v').textContent=na.toFixed(2);
+  document.getElementById('s3k1-v').textContent=k1.toFixed(2);
+  const R=(k1*lam/na).toFixed(1);
+  const DOF=((0.5*lam/na/na)*1000).toFixed(0);
+  let node='';
+  const Rn=+R;
+  if(Rn>200)node='≥250nm';else if(Rn>90)node='130–200nm';else if(Rn>40)node='65–90nm';else if(Rn>20)node='22–40nm';else node='≤7nm';
+  document.getElementById('s3-res').textContent=R+' nm';
+  document.getElementById('s3-dof').textContent=DOF+' nm';
+  document.getElementById('s3-node').textContent=node;
+  const v=document.getElementById('s3-verdict');
+  if(Rn<10){v.className='verdict ok';v.textContent='✓ EUV regime — cutting-edge logic node. Requires specialist EUV scanner infrastructure.';}
+  else if(Rn<50){v.className='verdict ok';v.textContent='✓ Advanced node capable. ArF immersion or multiple patterning required for mass production.';}
+  else if(Rn<100){v.className='verdict warn';v.textContent='⚠ Mature node. Suitable for analog, power, MEMS, and cost-sensitive products.';}
+  else{v.className='verdict warn';v.textContent='⚠ Legacy node ≥200nm. Low capital cost; used for discrete devices and automotive ICs.';}
+  if(s3Chart){
+    const nas=[0.63,0.85,1.2,0.33];
+    const lams=[365,248,193,13.5];
+    const k1s=[0.5,0.45,0.4,0.35];
+    s3Chart.data.datasets[0].data=lams.map((l,i)=>+(k1s[i]*l/nas[i]).toFixed(1));
+    s3Chart.update('none');
+  }
+  markDone(2);
+}
+
+// ── STATION 4: Etching ──
+let s4Chart=null;
+function initS4Chart(){
+  const ctx=document.getElementById('s4chart');
+  if(!ctx)return;
+  s4Chart=new Chart(ctx,{type:'radar',data:{labels:['Etch Rate','Selectivity','Anisotropy','Uniformity','Damage-Free'],datasets:[{label:'Current Recipe',backgroundColor:'rgba(5,150,105,0.15)',borderColor:'#059669',pointBackgroundColor:'#059669',data:[0,0,0,0,0]}]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:10,ticks:{stepSize:2,font:{size:10}},pointLabels:{font:{size:11}}}},plugins:{legend:{display:false}}}});
+  chartInstances['s4']=true;
+  s4calc();
+}
+function s4calc(){
+  const rf=+document.getElementById('s4rf').value;
+  const p=+document.getElementById('s4p').value;
+  const gas=document.getElementById('s4gas').value;
+  document.getElementById('s4rf-v').textContent=rf+' W';
+  document.getElementById('s4p-v').textContent=p+' mTorr';
+  const gasData={CF4:{base:150,selBase:20,aniso:0.7},Cl2:{base:200,selBase:30,aniso:0.85},SF6:{base:300,selBase:10,aniso:0.3},BCl3:{base:100,selBase:15,aniso:0.75}};
+  const g=gasData[gas];
+  const er=Math.round(g.base*(rf/200)*Math.pow(30/p,0.3));
+  const sel=+(g.selBase*(200/rf)*Math.pow(p/30,0.2)).toFixed(1);
+  const aniso=Math.min(0.99,g.aniso+0.1*(rf/500)-0.05*(p/100));
+  const ang=Math.round(80+aniso*15);
+  document.getElementById('s4-er').textContent=er+' nm/min';
+  document.getElementById('s4-sel').textContent=sel.toFixed(1)+':1';
+  document.getElementById('s4-ang').textContent=ang+'°';
+  const v=document.getElementById('s4-verdict');
+  if(sel>20&&ang>88&&er>50&&er<500){v.className='verdict ok';v.textContent='✓ Process window acceptable — good selectivity and anisotropy for sub-micron patterning.';}
+  else if(sel<5){v.className='verdict bad';v.textContent='✗ Selectivity too low — mask or substrate will be consumed. Reduce RF power or change gas mix.';}
+  else if(ang<82){v.className='verdict warn';v.textContent='⚠ Profile approaching isotropic — increase RF bias for better directionality.';}
+  else{v.className='verdict warn';v.textContent='⚠ Verify etch rate vs. target depth. Confirm endpoint detection is configured.';}
+  if(s4Chart){
+    const erN=Math.min(10,er/60);const selN=Math.min(10,sel/4);const anisoN=(ang-70)/4;const unifN=Math.max(0,10-p/15);const safeN=Math.max(0,10-rf/80);
+    s4Chart.data.datasets[0].data=[+erN.toFixed(1),+selN.toFixed(1),+anisoN.toFixed(1),+unifN.toFixed(1),+safeN.toFixed(1)];
+    s4Chart.update('none');
+  }
+  markDone(3);
+}
+
+// ── STATION 5: Ion Implant ──
+let s5Chart=null;
+function initS5Chart(){
+  const ctx=document.getElementById('s5chart');
+  if(!ctx)return;
+  s5Chart=new Chart(ctx,{type:'line',data:{labels:[],datasets:[{label:'Dopant Profile (cm⁻³)',borderColor:'#db2777',backgroundColor:'rgba(219,39,119,0.08)',tension:0.4,pointRadius:0,data:[]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11}}}},scales:{x:{title:{display:true,text:'Depth (nm)',font:{size:11}}},y:{type:'logarithmic',title:{display:true,text:'Concentration (cm⁻³)',font:{size:11}}}}}});
+  chartInstances['s5']=true;
+  s5calc();
+}
+function s5calc(){
+  const ion=document.getElementById('s5ion').value;
+  const E=+document.getElementById('s5e').value;
+  const dose=+document.getElementById('s5dose').value*1e13;
+  const rta=+document.getElementById('s5rta').value;
+  document.getElementById('s5e-v').textContent=E+' keV';
+  document.getElementById('s5dose-v').textContent=(dose/1e13).toFixed(0)+'×10¹³ /cm²';
+  document.getElementById('s5rta-v').textContent=rta+'°C';
+  const rpData={B:{a:1.2,b:0.4},P:{a:0.9,b:0.5},As:{a:0.6,b:0.35}};
+  const d=rpData[ion];
+  const rp=Math.round(d.a*Math.pow(E,0.7));
+  const drp=Math.round(rp*d.b);
+  const Np=dose/(Math.sqrt(2*Math.PI)*drp*1e-7);
+  const bg=1e15;
+  let jdNm=0;
+  for(let x=rp;x<rp+5*drp;x+=5){
+    const c=Np*Math.exp(-Math.pow(x-rp,2)/(2*drp*drp));
+    if(c<bg){jdNm=x;break;}
+  }
+  document.getElementById('s5-rp').textContent=rp+' nm';
+  document.getElementById('s5-peak').textContent=(Np/1e19).toFixed(1)+'×10¹⁹/cm³';
+  document.getElementById('s5-jd').textContent=jdNm+' nm';
+  const v=document.getElementById('s5-verdict');
+  if(rta>=900&&rta<=1000&&Np>1e18){v.className='verdict ok';v.textContent='✓ Good implant and anneal conditions. Activation expected >95%, minimal diffusion broadening.';}
+  else if(rta<850){v.className='verdict warn';v.textContent='⚠ RTA temperature too low — dopants may not fully activate. Expect sheet resistance 2–3× above target.';}
+  else if(rta>1050){v.className='verdict bad';v.textContent='✗ RTA temperature too high — excessive diffusion will broaden junction depth. Risk of short-channel effects.';}
+  else{v.className='verdict ok';v.textContent='✓ Parameters within acceptable range. Verify with SIMS analysis after anneal.';}
+  if(s5Chart){
+    const labels=[],data=[];
+    const maxX=rp+4*drp;
+    for(let x=0;x<=maxX;x+=Math.max(5,Math.round(maxX/60))){
+      labels.push(x);
+      const c=Math.max(1e13,Np*Math.exp(-Math.pow(x-rp,2)/(2*drp*drp)));
+      data.push(+c.toFixed(0));
+    }
+    s5Chart.data.labels=labels;s5Chart.data.datasets[0].data=data;s5Chart.update('none');
+  }
+  markDone(4);
+}
+
+// ── STATION 6: CVD ──
+function s6calc(){
+  const mode=document.getElementById('s6mode').value;
+  const T=+document.getElementById('s6t').value;
+  const P=+document.getElementById('s6p').value;
+  const time=+document.getElementById('s6time').value;
+  document.getElementById('s6t-v').textContent=T+'°C';
+  document.getElementById('s6p-v').textContent=P.toFixed(1)+' Torr';
+  document.getElementById('s6time-v').textContent=time+' min';
+  const modeData={LPCVD:{rateBase:8,coverBase:95,tMin:550,tMax:900},PECVD:{rateBase:15,coverBase:75,tMin:200,tMax:400},ALD:{rateBase:0.1,coverBase:99.9,tMin:150,tMax:300}};
+  const m=modeData[mode];
+  const inRange=(T>=m.tMin&&T<=m.tMax);
+  const tFactor=inRange?1+0.02*(T-m.tMin)/(m.tMax-m.tMin):0.3;
+  const pFactor=mode==='LPCVD'?Math.pow(0.1/Math.max(0.1,P),0.3):Math.pow(P/2,0.2);
+  const rate=+(m.rateBase*tFactor*pFactor).toFixed(2);
+  const thick=+(rate*time).toFixed(1);
+  const cov=+(m.coverBase*(inRange?1:0.7)).toFixed(1);
+  document.getElementById('s6-rate').textContent=rate+' nm/min';
+  document.getElementById('s6-thick').textContent=thick+' nm';
+  document.getElementById('s6-cov').textContent=cov+'%';
+  const v=document.getElementById('s6-verdict');
+  if(!inRange){v.className='verdict bad';v.textContent='✗ Temperature out of range for '+mode+' ('+m.tMin+'–'+m.tMax+'°C). Film quality will be poor or deposition may not initiate.';}
+  else if(cov>90&&rate>0.5){v.className='verdict ok';v.textContent='✓ Recipe valid — good step coverage and deposition rate. Film quality specification achievable.';}
+  else if(cov<80){v.className='verdict warn';v.textContent='⚠ Step coverage below 80% — gap fill in high-AR features may be incomplete. Consider LPCVD or ALD.';}
+  else{v.className='verdict warn';v.textContent='⚠ Rate is acceptable. Verify uniformity across wafer before committing to production recipe.';}
+  markDone(5);
+}
+
+// ── STATION 7: CMP ──
+let s7Chart=null;
+function initS7Chart(){
+  const ctx=document.getElementById('s7chart');
+  if(!ctx)return;
+  s7Chart=new Chart(ctx,{type:'line',data:{labels:[],datasets:[{label:'Surface Height (nm)',borderColor:'#0284c7',backgroundColor:'rgba(2,132,199,0.08)',tension:0.3,pointRadius:0,data:[]},{label:'Target (nm)',borderColor:'rgba(2,132,199,0.3)',borderDash:[5,5],pointRadius:0,data:[]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11}}}},scales:{x:{title:{display:true,text:'Polish Time (sec)',font:{size:11}}},y:{title:{display:true,text:'Overburden Remaining (nm)',font:{size:11}}}}}});
+  chartInstances['s7']=true;
+  s7calc();
+}
+function s7calc(){
+  const p=+document.getElementById('s7p').value;
+  const v=+document.getElementById('s7v').value;
+  const sl=document.getElementById('s7sl').value;
+  const t=+document.getElementById('s7t').value;
+  document.getElementById('s7p-v').textContent=p.toFixed(1)+' psi';
+  document.getElementById('s7v-v').textContent=v+' rpm';
+  document.getElementById('s7t-v').textContent=t+' sec';
+  const slData={Cu:{kp:0.18,initial:200},Ox:{kp:0.12,initial:300},W:{kp:0.15,initial:150}};
+  const s=slData[sl];
+  const rr=+(s.kp*p*v/60).toFixed(0);
+  const removed=Math.min(s.initial,Math.round(rr*t/60));
+  const unif=Math.max(60,100-p*2-v*0.1).toFixed(1);
+  document.getElementById('s7-rr').textContent=rr+' nm/min';
+  document.getElementById('s7-rem').textContent=removed+' nm';
+  document.getElementById('s7-unif').textContent=unif+'%';
+  const verdict=document.getElementById('s7-verdict');
+  const overPolish=removed>s.initial;
+  if(!overPolish&&removed>s.initial*0.85&&+unif>85){verdict.className='verdict ok';verdict.textContent='✓ Endpoint approaching — good removal with acceptable uniformity. Monitor ISRT for endpoint signal.';}
+  else if(overPolish){verdict.className='verdict bad';verdict.textContent='✗ Over-polish detected — dishing of Cu lines expected. Reduce time or pressure. Check ISRT endpoint.';}
+  else if(+unif<75){verdict.className='verdict warn';verdict.textContent='⚠ Uniformity marginal — consider reducing platen pressure or adjusting slurry flow rate.';}
+  else{verdict.className='verdict warn';verdict.textContent='⚠ Removal incomplete — extend polishing time or increase pressure within dishing tolerance.';}
+  if(s7Chart){
+    const times=[],heights=[],target=[];
+    for(let i=0;i<=Math.max(t,120);i+=5){times.push(i);const h=Math.max(0,s.initial-rr*i/60);heights.push(+h.toFixed(0));target.push(0);}
+    s7Chart.data.labels=times;s7Chart.data.datasets[0].data=heights;s7Chart.data.datasets[1].data=target;s7Chart.update('none');
+  }
+  markDone(6);
+}
+
+// ── STATION 8: Yield ──
+let s8Chart=null;
+function initS8Chart(){
+  const ctx=document.getElementById('s8chart');
+  if(!ctx)return;
+  s8Chart=new Chart(ctx,{type:'line',data:{labels:[],datasets:[{label:'Die Yield (%)',borderColor:'#c2410c',backgroundColor:'rgba(194,65,12,0.08)',tension:0.4,pointRadius:0,data:[]},{label:'Cost/Good Die ($)',borderColor:'#64748b',backgroundColor:'rgba(100,116,139,0.05)',tension:0.4,pointRadius:0,yAxisID:'y2',data:[]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11}}}},scales:{x:{title:{display:true,text:'Die Area (mm²)',font:{size:11}}},y:{title:{display:true,text:'Yield (%)',font:{size:11}},min:0,max:100},y2:{position:'right',title:{display:true,text:'Cost/Die ($)',font:{size:11}},grid:{drawOnChartArea:false}}}}});
+  chartInstances['s8']=true;
+  s8calc();
+}
+function murphyYield(D0,A){const x=D0*A/100;return Math.pow((1-Math.exp(-x))/x,2);}
+function s8calc(){
+  const wd=+document.getElementById('s8wd').value;
+  const da=+document.getElementById('s8da').value;
+  const dd=+document.getElementById('s8dd').value;
+  const wc=+document.getElementById('s8wc').value;
+  document.getElementById('s8da-v').textContent=da+' mm²';
+  document.getElementById('s8dd-v').textContent=dd.toFixed(2)+' /cm²';
+  document.getElementById('s8wc-v').textContent='$'+wc.toLocaleString();
+  const r=wd/2;
+  const gdw=Math.floor(Math.PI*r*r/da - Math.PI*wd/Math.sqrt(2*da));
+  const Y=murphyYield(dd,da);
+  const goodDie=Math.floor(gdw*Y);
+  const cpd=goodDie>0?(wc/goodDie):9999;
+  document.getElementById('s8-gdw').textContent=gdw;
+  document.getElementById('s8-yield').textContent=(Y*100).toFixed(1)+'%';
+  document.getElementById('s8-cpd').textContent='$'+cpd.toFixed(2);
+  const v=document.getElementById('s8-verdict');
+  if(Y>0.9){v.className='verdict ok';v.textContent='✓ Excellent yield. Defect density is well controlled — process is mature and production-ready.';}
+  else if(Y>0.7){v.className='verdict warn';v.textContent='⚠ Good yield but room for improvement. Analyse wafer maps for defect clustering patterns.';}
+  else if(Y>0.4){v.className='verdict warn';v.textContent='⚠ Moderate yield — significant revenue impact. Systematic process optimisation required.';}
+  else{v.className='verdict bad';v.textContent='✗ Yield critically low. Either reduce die size, improve process defect levels, or re-evaluate design rules.';}
+  if(s8Chart){
+    const areas=[],yields=[],costs=[];
+    for(let a=10;a<=800;a+=20){
+      const gdwA=Math.max(1,Math.floor(Math.PI*(wd/2)*(wd/2)/a-Math.PI*wd/Math.sqrt(2*a)));
+      const yA=murphyYield(dd,a);
+      const good=Math.max(1,Math.floor(gdwA*yA));
+      areas.push(a);yields.push(+(yA*100).toFixed(1));costs.push(+(wc/good).toFixed(2));
+    }
+    s8Chart.data.labels=areas;s8Chart.data.datasets[0].data=yields;s8Chart.data.datasets[1].data=costs;s8Chart.update('none');
+  }
+  markDone(7);
+}
+
+// ── INQUIRY ──
+const inqForm=document.getElementById('inq-form');
+if(inqForm){
+  inqForm.addEventListener('submit',async function(e){
+    e.preventDefault();
+    const btn=document.getElementById('inq-submit');
+    const label=document.getElementById('submit-label');
+    const emailVal=document.getElementById('inq-email').value;
+    btn.disabled=true;label.textContent='Sending…';
+    try{
+      const res=await fetch('https://formspree.io/f/xnjkjnyy',{method:'POST',headers:{'Accept':'application/json'},body:new FormData(inqForm)});
+      if(res.ok){inqForm.style.display='none';document.getElementById('success-email').textContent=emailVal;document.getElementById('inq-success').classList.add('show');}
+      else{label.textContent='Failed — retry';btn.disabled=false;}
+    }catch{label.textContent='Network error';btn.disabled=false;}
+  });
+}
+function resetForm(){
+  document.getElementById('inq-form').reset();
+  document.getElementById('inq-form').style.display='block';
+  document.getElementById('inq-success').classList.remove('show');
+  document.getElementById('submit-label').textContent='Send Inquiry →';
+  document.getElementById('inq-submit').disabled=false;
+}
+
+// Init
+s1calc();
+</script>
+</body>
+</html>
