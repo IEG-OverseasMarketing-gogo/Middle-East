@@ -244,7 +244,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
       <ul>
         <li>Deliver BTEC-mapped, TVTC-aligned online curriculum assets</li>
         <li>Run Korea-based TTT for 5-10 Saudi instructors</li>
-        <li>Produce a TTT Pilot Report and Phase 2 cleanroom concept brief</li>
+        <li>Produce a TTT Pilot Report, technical QA matrix, and Phase 2 cleanroom concept brief</li>
       </ul>
     </div>
   </div>
@@ -368,6 +368,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
         <tr><td>Delivery Mode</td><td>Remote first, then Korea-based instructor training</td><td>Zero facility requirement in Phase 1A; structured TTT in Phase 1B</td></tr>
         <tr><td>Equipment</td><td>No ALAT/TVTC hardware purchase required in Phase 1</td><td>Digital simulator first; IEG showroom equipment used during TTT</td></tr>
         <tr><td>Certification</td><td>IEG completion certificates first; BTEC/TVTC pathway in Phase 2</td><td>Portfolio, practical assessment, written assessment, alignment report</td></tr>
+        <tr><td>Technical Assurance</td><td>Process physics, automation, cleanroom, and assessment evidence are mapped together</td><td>Technical competency matrix, lab readiness checklist, QA/moderation workflow</td></tr>
         <tr><td>Commercial</td><td>USD 47,500 Phase 1 total</td><td>USD 20,000 Phase 1A + USD 27,500 Phase 1B, excluding international airfare</td></tr>
       </tbody>
     </table>
@@ -504,6 +505,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
               <li>Modular Production System (MPS) integration</li>
               <li>Pneumatic circuit design & fault diagnosis</li>
               <li>Semiconductor 8-process sequence knowledge</li>
+              <li>Oxidation thickness, lithography resolution, etch profile, and yield trade-off interpretation</li>
               <li>Smart factory IoT monitoring & OEE analysis</li>
               <li>CVD / PVD / etch process parameter control</li>
               <li>Wafer yield calculation (Murphy's model)</li>
@@ -518,6 +520,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
               <li>Equipment commissioning & maintenance logs</li>
               <li>Root cause analysis (8D / Ishikawa)</li>
               <li>Statistical Process Control (SPC) basics</li>
+              <li>Evidence portfolio preparation for assessor review</li>
               <li>Cross-cultural technical instruction delivery</li>
             </ul>
           </div>
@@ -876,6 +879,12 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <td>PDF report · gaps, required evidence, and TVTC alignment notes</td>
           <td class="amount">$1,500</td>
         </tr>
+        <tr>
+          <td>Assessment Evidence & QA Matrix<div class="note">Learning outcome · evidence type · assessor checklist · moderation note</div></td>
+          <td><span class="type-out">Deliverable</span></td>
+          <td>Excel/PDF matrix · portfolio evidence standards and sample scoring rubric</td>
+          <td class="amount">Included</td>
+        </tr>
         <tr class="subtotal"><td colspan="3">Track ⑤ Subtotal</td><td class="amount">$8,000</td></tr>
 
         <tr><td colspan="4" class="sub-hdr">Track ③ · Digital Walkthrough & Online Modules</td></tr>
@@ -897,6 +906,12 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <td>Script documents · Ready for voiceover production</td>
           <td class="amount">$2,000</td>
         </tr>
+        <tr>
+          <td>Technical Exercise Pack<div class="note">Process parameters · defects · safety · yield and OEE mini-cases</div></td>
+          <td><span class="type-out">Deliverable</span></td>
+          <td>Worksheets linked to simulator stations and instructor facilitation notes</td>
+          <td class="amount">Included</td>
+        </tr>
         <tr class="subtotal"><td colspan="3">Track ③ Subtotal</td><td class="amount">$10,000</td></tr>
 
         <tr><td colspan="4" class="sub-hdr">Project Management</td></tr>
@@ -914,11 +929,11 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
   <div class="note-grid" style="margin-top:16px">
     <div class="note-box teal">
       <h5>Phase 1A Acceptance Package</h5>
-      ALAT/TVTC receives the curriculum mapping matrix, simulator access files, module scripts, assessment evidence guide, and a review log documenting stakeholder comments and IEG responses.
+      ALAT/TVTC receives the curriculum mapping matrix, simulator access files, module scripts, technical exercise pack, assessment evidence guide, QA matrix, and a review log documenting stakeholder comments and IEG responses.
     </div>
     <div class="note-box gold">
       <h5>Quality Assurance</h5>
-      Each curriculum item is checked against learning outcome, assessment evidence, instructor guidance, and TVTC alignment status before delivery.
+      Each curriculum item is checked against learning outcome, technical competency, assessment evidence, instructor guidance, and TVTC alignment status before delivery.
     </div>
   </div>
 
@@ -1051,7 +1066,66 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
 <div id="tab-curriculum" class="tab-panel">
 <div class="container">
   <p class="sec-title">Curriculum Framework — All Phases</p>
-  <p class="sec-sub">Unit-level learning objectives, NCS codes, BTEC mapping, and TVTC alignment status across the full partnership lifecycle.</p>
+  <p class="sec-sub">Unit-level learning objectives, NCS codes, BTEC mapping, technical competency evidence, and TVTC alignment status across the full partnership lifecycle.</p>
+
+  <div class="budget-wrap" style="margin-bottom:24px">
+    <table>
+      <thead><tr><th style="width:22%">Technical Domain</th><th style="width:31%">What Trainees Must Understand</th><th style="width:24%">Assessment Evidence</th><th style="width:23%">Phase 1 Asset</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Semiconductor Process Flow</td>
+          <td>Wafer preparation, oxidation, lithography, etch, implant, deposition, metallisation, test and package sequence</td>
+          <td>Process-flow map, station quiz, defect-cause explanation</td>
+          <td>8-process simulator + module scripts</td>
+        </tr>
+        <tr>
+          <td>Process Physics</td>
+          <td>Deal-Grove oxidation growth, Rayleigh resolution, etch anisotropy/selectivity, Gaussian implant profile, CMP removal rate</td>
+          <td>Parameter-change worksheet and short calculation tasks</td>
+          <td>Simulation engines and guided exercises</td>
+        </tr>
+        <tr>
+          <td>Automation & Control</td>
+          <td>PLC I/O, ladder logic, interlocks, HMI operation, MPS sequence control, pneumatic actuation</td>
+          <td>Practical observation checklist, troubleshooting log</td>
+          <td>Korea TTT lab session + instructor guide</td>
+        </tr>
+        <tr>
+          <td>Cleanroom Operations</td>
+          <td>ISO-class concept, gowning discipline, contamination control, EHS, tool access, maintenance log discipline</td>
+          <td>Readiness checklist and simulated incident response</td>
+          <td>Model C facility brief + TTT briefing</td>
+        </tr>
+        <tr>
+          <td>Quality & Yield</td>
+          <td>SPC basics, defect density, yield impact, OEE, root-cause analysis, corrective action documentation</td>
+          <td>Mini case report using 8D/Ishikawa structure</td>
+          <td>Assessment rubric + portfolio template</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="two-col" style="margin-bottom:24px">
+    <div class="info-box">
+      <h5>Assessment Architecture</h5>
+      <ul>
+        <li>Knowledge evidence: quizzes, calculations, process explanation</li>
+        <li>Performance evidence: lab observation and equipment operation checklist</li>
+        <li>Product evidence: worksheet, troubleshooting log, process map, mini case report</li>
+        <li>Instructor evidence: facilitation plan and learner feedback review</li>
+      </ul>
+    </div>
+    <div class="info-box">
+      <h5>Quality Assurance & Moderation</h5>
+      <ul>
+        <li>Learning outcome to assessment evidence crosswalk</li>
+        <li>Assessor checklist and minimum evidence standard</li>
+        <li>Sample portfolio review before certificate issue</li>
+        <li>Phase 2 moderation pathway prepared for Saudi TAFE / Pearson / TVTC alignment</li>
+      </ul>
+    </div>
+  </div>
 
   <!-- Phase 1A -->
   <div style="background:var(--teal-lt);border:1px solid rgba(15,110,86,.2);border-radius:var(--r);padding:18px 20px;margin-bottom:20px">
@@ -1087,7 +1161,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
         </ul>
         <div style="margin-top:8px"><span class="tag tag-violet">BTEC 4039 Supp. · L3</span><span class="tag tag-teal">NCS 15010101</span></div>
       </div>
-      <div class="info-box" style="background:white" style="grid-column:span 3">
+      <div class="info-box" style="background:white;grid-column:1 / -1">
         <h5>Unit 4–11 — Semiconductor 8-Process Digital Walkthrough (IEG-SEM-01)</h5>
         <ul>
           <li>Station 1: Wafer Preparation — RCA clean, crystal growth, specification</li>
@@ -1100,6 +1174,17 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <li>Station 8: Testing & Packaging — Murphy yield, cost-per-die, BGA/QFN/3D-IC</li>
         </ul>
         <div style="margin-top:8px"><span class="tag tag-gold">IEG-SEM-01 · Proprietary</span><span class="tag tag-violet">NQF L3–4 Reference</span><span class="tag tag-green">Interactive Simulator Included</span></div>
+      </div>
+      <div class="info-box" style="background:white">
+        <h5>Technical Evidence Package</h5>
+        <ul>
+          <li>Process parameter worksheet for each station</li>
+          <li>Defect mode and corrective action exercise</li>
+          <li>Cleanroom EHS and contamination-control checklist</li>
+          <li>Portfolio template for trainee evidence collection</li>
+          <li>Instructor notes linking theory, simulator, and future Model C lab practice</li>
+        </ul>
+        <div style="margin-top:8px"><span class="tag tag-green">Assessment Evidence</span><span class="tag tag-teal">QA Ready</span></div>
       </div>
     </div>
   </div>
@@ -1116,6 +1201,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <li>Session 2A: MPS integration & HMI operation</li>
           <li>Session 2B: XR Walkthrough facilitation script</li>
           <li>Assessment: practical observation checklist</li>
+          <li>Evidence: commissioning log, fault log, learner demonstration record</li>
         </ul>
       </div>
       <div class="info-box" style="background:white">
@@ -1126,6 +1212,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:14p
           <li>Day 5: Curriculum adaptation workshop (2-page output each)</li>
           <li>Day 5 PM: Competency assessment + certificate</li>
           <li>Output: TTT Pilot Report compiled by IEG</li>
+          <li>Output: Saudi delivery adaptation notes and lab-readiness implications</li>
         </ul>
       </div>
     </div>
