@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IEG × Korea–ME Hub | Partner Response Form</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Serif+Display&display=swap');
+
+  :root {
+    --ink:        #0e0e0d;
+    --ink-2:      #3a3936;
+    --ink-3:      #6b6966;
+    --ink-4:      #a8a5a0;
+    --rule:       #dedad4;
+    --rule-light: #f0eee9;
+    --bg:         #faf9f6;
+    --bg-card:    #ffffff;
+    --accent:     #1a4f8a;
+    --accent-lt:  #e8f0f9;
+    --accent-mid: #b8d0ee;
+    --amber:      #c47c00;
+    --amber-lt:   #fff7e0;
+    --green:      #1a7048;
+    --green-lt:   #e5f4ed;
+    --red:        #b83030;
+    --red-lt:     #fdeaea;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans:  'Inter', system-ui, sans-serif;
+    --radius: 10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  #progress-bar-wrap {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--rule);
+    z-index: 100;
+  }
+  #progress-bar {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  /* ─── HEADER ─── */
+  .doc-header {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 56px 40px 36px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin-bottom: 16px;
+  }
+  .doc-title {
+    font-family: var(--serif);
+    font-size: 34px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .doc-sub {
+    font-size: 15px;
+    color: var(--ink-3);
+    max-width: 520px;
+    line-height: 1.75;
+    margin-bottom: 24px;
+  }
+  .intro-card {
+    background: var(--accent-lt);
+    border: 1px solid var(--accent-mid);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    font-size: 14px;
+    color: var(--ink-2);
+    line-height: 1.7;
+  }
+  .intro-card strong { color: var(--accent); font-weight: 500; }
+
+  /* ─── STEP NAV ─── */
+  .step-nav-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 40px 0;
+  }
+  .step-nav {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .step-pip {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-4);
+    background: var(--bg-card);
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .step-pip.active   { border-color: var(--accent); background: var(--accent); color: #fff; }
+  .step-pip.done     { border-color: var(--green); background: var(--green-lt); color: var(--green); }
+  .step-pip.done::after { content: '✓'; font-size: 11px; }
+  .step-pip.done span { display: none; }
+  .step-connector {
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+    min-width: 16px;
+    max-width: 48px;
+  }
+
+  /* ─── BODY ─── */
+  .body-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 40px 80px;
+  }
+
+  /* ─── QUESTION CARD ─── */
+  .q-panel {
+    display: none;
+    animation: fadeSlide 0.3s ease;
+  }
+  .q-panel.active { display: block; }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .q-num-badge {
+    font-family: var(--serif);
+    font-size: 28px;
+    color: var(--accent);
+    line-height: 1;
+    flex-shrink: 0;
+    padding-top: 4px;
+    min-width: 36px;
+  }
+  .q-meta {}
+  .q-category {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin-bottom: 6px;
+  }
+  .q-text {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  .context-block {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent-mid);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: 13.5px;
+    color: var(--ink-3);
+    line-height: 1.7;
+  }
+  .context-block .context-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin-bottom: 8px;
+  }
+
+  /* textarea */
+  .field-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+    display: block;
+  }
+  textarea {
+    width: 100%;
+    min-height: 160px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    padding: 16px 18px;
+    font-family: var(--sans);
+    font-size: 14.5px;
+    color: var(--ink);
+    line-height: 1.7;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  textarea:focus {
+    border-color: var(--accent-mid);
+    box-shadow: 0 0 0 3px rgba(26,79,138,0.08);
+  }
+  textarea::placeholder { color: var(--ink-4); }
+
+  /* quick-select options */
+  .quick-opts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .quick-opt {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 13px;
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    background: var(--bg-card);
+    color: var(--ink-3);
+    cursor: pointer;
+    transition: all 0.18s;
+    user-select: none;
+  }
+  .quick-opt:hover { border-color: var(--accent-mid); color: var(--accent); }
+  .quick-opt.selected { border-color: var(--accent); background: var(--accent-lt); color: var(--accent); font-weight: 600; }
+
+  /* confidence / readiness indicator */
+  .readiness-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .readiness-label { font-size: 12px; color: var(--ink-4); flex-shrink: 0; }
+  .readiness-opts { display: flex; gap: 6px; }
+  .r-btn {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 11px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: var(--bg-card);
+    color: var(--ink-3);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .r-btn:hover { border-color: var(--accent-mid); }
+  .r-btn.sel-green  { background: var(--green-lt);  border-color: var(--green);  color: var(--green); }
+  .r-btn.sel-amber  { background: var(--amber-lt);  border-color: var(--amber);  color: var(--amber); }
+  .r-btn.sel-red    { background: var(--red-lt);    border-color: var(--red);    color: var(--red); }
+
+  /* ─── NAV BUTTONS ─── */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule-light);
+  }
+  .btn {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 22px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.18s;
+    border: 1px solid;
+  }
+  .btn-back {
+    background: transparent;
+    border-color: var(--rule);
+    color: var(--ink-3);
+  }
+  .btn-back:hover { border-color: var(--ink-4); color: var(--ink-2); }
+  .btn-next {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-next:hover { background: #153f6e; border-color: #153f6e; }
+  .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
+  .char-count { font-size: 12px; color: var(--ink-4); }
+
+  /* ─── SUMMARY / SUBMIT PANEL ─── */
+  #panel-summary {
+    display: none;
+    animation: fadeSlide 0.3s ease;
+  }
+  #panel-summary.active { display: block; }
+
+  .summary-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .summary-sub {
+    font-size: 14px;
+    color: var(--ink-3);
+    margin-bottom: 28px;
+    line-height: 1.7;
+  }
+  .summary-item {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-bottom: 12px;
+  }
+  .summary-q {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-3);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .edit-link {
+    font-size: 11px;
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 400;
+    flex-shrink: 0;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    transition: text-decoration-color 0.15s;
+  }
+  .edit-link:hover { text-decoration-color: var(--accent); }
+  .summary-a {
+    font-size: 14px;
+    color: var(--ink-2);
+    line-height: 1.65;
+    white-space: pre-wrap;
+  }
+  .summary-a.empty { color: var(--ink-4); font-style: italic; }
+  .readiness-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-top: 8px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .badge-green { background: var(--green-lt); color: var(--green); }
+  .badge-amber { background: var(--amber-lt); color: var(--amber); }
+  .badge-red   { background: var(--red-lt);   color: var(--red); }
+
+  .submit-block {
+    background: var(--accent);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    color: #fff;
+    margin-top: 28px;
+  }
+  .submit-block h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+  .submit-block p {
+    font-size: 14px;
+    opacity: 0.85;
+    margin-bottom: 20px;
+    line-height: 1.65;
+  }
+  .sender-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .sender-field input {
+    width: 100%;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 7px;
+    padding: 10px 14px;
+    font-family: var(--sans);
+    font-size: 14px;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .sender-field input::placeholder { color: rgba(255,255,255,0.5); }
+  .sender-field input:focus { border-color: rgba(255,255,255,0.6); }
+  .sender-field label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .btn-submit {
+    background: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 12px 28px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-submit:hover { background: #f0f4fa; }
+
+  /* ─── THANK YOU STATE ─── */
+  #thank-you {
+    display: none;
+    text-align: center;
+    padding: 60px 40px;
+  }
+  #thank-you.active { display: block; animation: fadeSlide 0.4s ease; }
+  .ty-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--green-lt);
+    border: 2px solid var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 22px;
+  }
+  .ty-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .ty-sub { font-size: 15px; color: var(--ink-3); max-width: 440px; margin: 0 auto 32px; line-height: 1.75; }
+  .ty-copy-block {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    text-align: left;
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.8;
+    max-width: 560px;
+    margin: 0 auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    position: relative;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 12px; right: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    background: var(--bg);
+    color: var(--ink-3);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ─── FOOTER ─── */
+  .doc-footer {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .footer-brand { font-size: 12px; font-weight: 500; color: var(--ink-3); }
+  .footer-note  { font-size: 12px; color: var(--ink-4); }
+
+  @media (max-width: 640px) {
+    .doc-header, .body-wrap, .step-nav-wrap { padding-left: 20px; padding-right: 20px; }
+    .doc-title { font-size: 26px; }
+    .sender-fields { grid-template-columns: 1fr; }
+    .q-text { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+
+<!-- ═══ HEADER ═══ -->
+<header class="doc-header">
+  <div class="eyebrow">IEG Co., Ltd. · Global Business Division · June 2026</div>
+  <h1 class="doc-title">Partner Response Form</h1>
+  <p class="doc-sub">
+    This form is prepared by IEG for Ali Shayan, Founder of the Korea–Middle East Skills Technology Transfer Hub. Please respond to each question at your own pace — your answers will help IEG determine the most appropriate partnership structure and next steps.
+  </p>
+  <div class="intro-card">
+    <strong>How this works:</strong> Six questions, each with a brief context note explaining why IEG is asking. You can select quick-response options and/or write freely. A readiness indicator at the end of each question helps both parties track alignment. Your completed responses will be compiled into a summary you can copy and email back directly.
+  </div>
+</header>
+
+<!-- ═══ STEP NAV ═══ -->
+<div class="step-nav-wrap">
+  <div class="step-nav" id="step-nav">
+    <div class="step-pip active" onclick="goTo(0)" id="pip-0"><span>1</span></div>
+    <div class="step-connector"></div>
+    <div class="step-pip" onclick="goTo(1)" id="pip-1"><span>2</span></div>
+    <div class="step-connector"></div>
+    <div class="step-pip" onclick="goTo(2)" id="pip-2"><span>3</span></div>
+    <div class="step-connector"></div>
+    <div class="step-pip" onclick="goTo(3)" id="pip-3"><span>4</span></div>
+    <div class="step-connector"></div>
+    <div class="step-pip" onclick="goTo(4)" id="pip-4"><span>5</span></div>
+    <div class="step-connector"></div>
+    <div class="step-pip" onclick="goTo(5)" id="pip-5"><span>6</span></div>
+    <div class="step-connector"></div>
+    <div class="step-pip" onclick="goTo(6)" id="pip-6"><span>✦</span></div>
+  </div>
+</div>
+
+<!-- ═══ BODY ═══ -->
+<main class="body-wrap">
+
+  <!-- ── Q1 ── -->
+  <div class="q-panel active" id="panel-0">
+    <div class="q-header">
+      <div class="q-num-badge">1</div>
+      <div class="q-meta">
+        <div class="q-category">Governance &amp; Legal Structure</div>
+        <div class="q-text">What is the intended legal structure and jurisdiction of the Hub entity?</div>
+      </div>
+    </div>
+    <div class="context-block">
+      <div class="context-label">Why IEG asks</div>
+      The legal form determines which contracts IEG can sign, what procurement rules apply, and whether Korean government co-financing channels (KOICA IBS, EDCF, MOTIE) are accessible. Without a defined structure, no formal partnership agreement is possible.
+    </div>
+    <div class="quick-opts" id="opts-0">
+      <div class="quick-opt" onclick="selectOpt(this,0)">Korean Foundation / Non-profit Association</div>
+      <div class="quick-opt" onclick="selectOpt(this,0)">Korean SPC / JV</div>
+      <div class="quick-opt" onclick="selectOpt(this,0)">Middle Eastern entity (GCC)</div>
+      <div class="quick-opt" onclick="selectOpt(this,0)">Offshore holding structure</div>
+      <div class="quick-opt" onclick="selectOpt(this,0)">Informal consortium (no legal entity yet)</div>
+      <div class="quick-opt" onclick="selectOpt(this,0)">Still under consideration</div>
+    </div>
+    <label class="field-label">Your response — please elaborate as needed</label>
+    <textarea id="ta-0" placeholder="Describe the planned legal structure, jurisdiction, and any entities already in discussion…" oninput="updateChar(0)"></textarea>
+    <div class="readiness-row">
+      <span class="readiness-label">Readiness on this point:</span>
+      <div class="readiness-opts">
+        <div class="r-btn" id="rb-0-g" onclick="setReady(0,'green')">✓ Confirmed</div>
+        <div class="r-btn" id="rb-0-a" onclick="setReady(0,'amber')">~ In progress</div>
+        <div class="r-btn" id="rb-0-r" onclick="setReady(0,'red')">✗ Not yet defined</div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <span class="char-count" id="cc-0">0 characters</span>
+      <button class="btn btn-next" onclick="nextQ(0)">Next question →</button>
+    </div>
+  </div>
+
+  <!-- ── Q2 ── -->
+  <div class="q-panel" id="panel-1">
+    <div class="q-header">
+      <div class="q-num-badge">2</div>
+      <div class="q-meta">
+        <div class="q-category">Korean Institutional Co-Leadership</div>
+        <div class="q-text">Has any Korean government body or public institution formally expressed support or agreed to co-lead the Hub?</div>
+      </div>
+    </div>
+    <div class="context-block">
+      <div class="context-label">Why IEG asks</div>
+      Institutional scale cooperation with Middle Eastern government counterparts (TVTC, ACTVET, TVET Egypt) typically requires anchor backing from Korean bodies such as KRIVET, KIAT, KOICA, or a national polytechnic consortium. A co-leadership structure significantly raises the Hub's credibility profile.
+    </div>
+    <div class="quick-opts" id="opts-1">
+      <div class="quick-opt" onclick="selectOpt(this,1)">KRIVET — in discussion</div>
+      <div class="quick-opt" onclick="selectOpt(this,1)">KIAT — in discussion</div>
+      <div class="quick-opt" onclick="selectOpt(this,1)">KOICA — in discussion</div>
+      <div class="quick-opt" onclick="selectOpt(this,1)">Korean polytechnic / university</div>
+      <div class="quick-opt" onclick="selectOpt(this,1)">No Korean institution engaged yet</div>
+      <div class="quick-opt" onclick="selectOpt(this,1)">MOU already signed</div>
+    </div>
+    <label class="field-label">Your response — please specify institutions, status, and any signed documents</label>
+    <textarea id="ta-1" placeholder="Name any Korean public institutions approached, the current status of discussions, and whether any LOI or MOU has been signed…" oninput="updateChar(1)"></textarea>
+    <div class="readiness-row">
+      <span class="readiness-label">Readiness on this point:</span>
+      <div class="readiness-opts">
+        <div class="r-btn" id="rb-1-g" onclick="setReady(1,'green')">✓ Confirmed</div>
+        <div class="r-btn" id="rb-1-a" onclick="setReady(1,'amber')">~ In progress</div>
+        <div class="r-btn" id="rb-1-r" onclick="setReady(1,'red')">✗ Not yet started</div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="prevQ(1)">← Back</button>
+      <button class="btn btn-next" onclick="nextQ(1)">Next question →</button>
+    </div>
+  </div>
+
+  <!-- ── Q3 ── -->
+  <div class="q-panel" id="panel-2">
+    <div class="q-header">
+      <div class="q-num-badge">3</div>
+      <div class="q-meta">
+        <div class="q-category">F/S Financing Plan</div>
+        <div class="q-text">How will the USD 100,000–150,000 Feasibility Study budget be funded, and what is the current commitment status?</div>
+      </div>
+    </div>
+    <div class="context-block">
+      <div class="context-label">Why IEG asks</div>
+      IEG's assessment is that the proposed F/S scope — 8 deliverables, multi-country stakeholder engagement, 6 months — realistically requires USD 250,000–400,000 at institutional quality. Budget realism signals operational maturity and affects IEG's willingness to invest organizational time in F/S support.
+    </div>
+    <div class="quick-opts" id="opts-2">
+      <div class="quick-opt" onclick="selectOpt(this,2)">Self-funded (fully committed)</div>
+      <div class="quick-opt" onclick="selectOpt(this,2)">Korean partner co-financing</div>
+      <div class="quick-opt" onclick="selectOpt(this,2)">Development finance (GIZ / IDB / AIIB)</div>
+      <div class="quick-opt" onclick="selectOpt(this,2)">Middle Eastern government grant</div>
+      <div class="quick-opt" onclick="selectOpt(this,2)">Still being raised</div>
+      <div class="quick-opt" onclick="selectOpt(this,2)">Open to revised budget discussion</div>
+    </div>
+    <label class="field-label">Your response — current committed amount, sources, and contingency plan</label>
+    <textarea id="ta-2" placeholder="Describe the current funding committed vs. still being raised, the sources being pursued, and the contingency plan if the F/S budget target is not met…" oninput="updateChar(2)"></textarea>
+    <div class="readiness-row">
+      <span class="readiness-label">Readiness on this point:</span>
+      <div class="readiness-opts">
+        <div class="r-btn" id="rb-2-g" onclick="setReady(2,'green')">✓ Fully committed</div>
+        <div class="r-btn" id="rb-2-a" onclick="setReady(2,'amber')">~ Partially secured</div>
+        <div class="r-btn" id="rb-2-r" onclick="setReady(2,'red')">✗ Not yet secured</div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="prevQ(2)">← Back</button>
+      <button class="btn btn-next" onclick="nextQ(2)">Next question →</button>
+    </div>
+  </div>
+
+  <!-- ── Q4 ── -->
+  <div class="q-panel" id="panel-3">
+    <div class="q-header">
+      <div class="q-num-badge">4</div>
+      <div class="q-meta">
+        <div class="q-category">Phase I Country Selection</div>
+        <div class="q-text">What is the rationale for including Iran and Iraq in Phase I, and how do you address the OFAC sanctions and security constraints that affect Korean corporate participation?</div>
+      </div>
+    </div>
+    <div class="context-block">
+      <div class="context-label">Why IEG asks</div>
+      Korean companies participating in Iran-linked activities risk secondary sanctions exposure affecting US market access and USD banking. Iraqi operations carry contract enforceability and personal security risks. IEG cannot participate in any consortium activity involving sanctioned jurisdictions. IEG's proposed Phase I markets are <strong>Egypt, Saudi Arabia, and UAE</strong>.
+    </div>
+    <div class="quick-opts" id="opts-3">
+      <div class="quick-opt" onclick="selectOpt(this,3)">Iran included due to existing network</div>
+      <div class="quick-opt" onclick="selectOpt(this,3)">Iraq included due to existing network</div>
+      <div class="quick-opt" onclick="selectOpt(this,3)">Open to removing Iran from Phase I</div>
+      <div class="quick-opt" onclick="selectOpt(this,3)">Open to moving Iraq to Phase II</div>
+      <div class="quick-opt" onclick="selectOpt(this,3)">Phase I scope is negotiable</div>
+      <div class="quick-opt" onclick="selectOpt(this,3)">Legal opinion on sanctions already obtained</div>
+    </div>
+    <label class="field-label">Your response — rationale for country selection and your position on revision</label>
+    <textarea id="ta-3" placeholder="Explain the strategic rationale for Iran and Iraq inclusion, your awareness of the sanctions/security constraints, and whether you are open to revising Phase I to Egypt, Saudi Arabia, and UAE…" oninput="updateChar(3)"></textarea>
+    <div class="readiness-row">
+      <span class="readiness-label">Openness to Phase I revision:</span>
+      <div class="readiness-opts">
+        <div class="r-btn" id="rb-3-g" onclick="setReady(3,'green')">✓ Open to revision</div>
+        <div class="r-btn" id="rb-3-a" onclick="setReady(3,'amber')">~ Partially flexible</div>
+        <div class="r-btn" id="rb-3-r" onclick="setReady(3,'red')">✗ Iran/Iraq are fixed</div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="prevQ(3)">← Back</button>
+      <button class="btn btn-next" onclick="nextQ(3)">Next question →</button>
+    </div>
+  </div>
+
+  <!-- ── Q5 ── -->
+  <div class="q-panel" id="panel-4">
+    <div class="q-header">
+      <div class="q-num-badge">5</div>
+      <div class="q-meta">
+        <div class="q-category">Role Clarity &amp; IEG's Expected Contribution</div>
+        <div class="q-text">What specific role, contribution, and benefits does the Hub envision for IEG at each phase?</div>
+      </div>
+    </div>
+    <div class="context-block">
+      <div class="context-label">Why IEG asks</div>
+      IEG needs to understand its expected role before committing organizational resources. Key questions: Is IEG approached as a preferred supplier, a co-founder, a content partner, or a financial sponsor? What exclusivity, if any, is on offer in the smart manufacturing equipment category? How are F/S co-contributors recognized in the governance structure?
+    </div>
+    <div class="quick-opts" id="opts-4">
+      <div class="quick-opt" onclick="selectOpt(this,4)">Preferred equipment supplier</div>
+      <div class="quick-opt" onclick="selectOpt(this,4)">Curriculum &amp; content partner</div>
+      <div class="quick-opt" onclick="selectOpt(this,4)">F/S co-author / advisory</div>
+      <div class="quick-opt" onclick="selectOpt(this,4)">Financial co-sponsor</div>
+      <div class="quick-opt" onclick="selectOpt(this,4)">Founding consortium member</div>
+      <div class="quick-opt" onclick="selectOpt(this,4)">Role is open to IEG's preference</div>
+    </div>
+    <label class="field-label">Your response — envisioned role, exclusivity terms, and governance rights</label>
+    <textarea id="ta-4" placeholder="Describe what you envision IEG contributing at each phase, any exclusivity arrangements for smart manufacturing equipment, and how co-contributors are recognized in the Hub's governance structure…" oninput="updateChar(4)"></textarea>
+    <div class="readiness-row">
+      <span class="readiness-label">Role clarity at this stage:</span>
+      <div class="readiness-opts">
+        <div class="r-btn" id="rb-4-g" onclick="setReady(4,'green')">✓ Clearly defined</div>
+        <div class="r-btn" id="rb-4-a" onclick="setReady(4,'amber')">~ Broadly outlined</div>
+        <div class="r-btn" id="rb-4-r" onclick="setReady(4,'red')">✗ Open / undefined</div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="prevQ(4)">← Back</button>
+      <button class="btn btn-next" onclick="nextQ(4)">Next question →</button>
+    </div>
+  </div>
+
+  <!-- ── Q6 ── -->
+  <div class="q-panel" id="panel-5">
+    <div class="q-header">
+      <div class="q-num-badge">6</div>
+      <div class="q-meta">
+        <div class="q-category">Existing Traction &amp; Demand-Side Validation</div>
+        <div class="q-text">Are there any Middle Eastern government institutions or TVET bodies that have already expressed interest in the Hub — formally or informally?</div>
+      </div>
+    </div>
+    <div class="context-block">
+      <div class="context-label">Why IEG asks</div>
+      A Hub of this ambition requires demand-side validation, not only supply-side vision. Even informal expressions of interest from TVTC, ACTVET, or Egyptian TVET authorities would substantially de-risk the F/S investment for all partners. Existing relationships in target markets accelerate Phase I timeline significantly.
+    </div>
+    <div class="quick-opts" id="opts-5">
+      <div class="quick-opt" onclick="selectOpt(this,5)">Saudi TVTC — contact made</div>
+      <div class="quick-opt" onclick="selectOpt(this,5)">UAE ACTVET / KHDA — contact made</div>
+      <div class="quick-opt" onclick="selectOpt(this,5)">Egypt TVET authority — contact made</div>
+      <div class="quick-opt" onclick="selectOpt(this,5)">LOI / letter of interest received</div>
+      <div class="quick-opt" onclick="selectOpt(this,5)">Meetings conducted, no formal doc yet</div>
+      <div class="quick-opt" onclick="selectOpt(this,5)">No ME institution engaged yet</div>
+    </div>
+    <label class="field-label">Your response — institutions, status of discussions, and any documentation</label>
+    <textarea id="ta-5" placeholder="Name any Middle Eastern government or TVET institutions that have expressed interest, describe the nature of contact (meetings, emails, LOIs), and share any documentation if available…" oninput="updateChar(5)"></textarea>
+    <div class="readiness-row">
+      <span class="readiness-label">Demand-side traction:</span>
+      <div class="readiness-opts">
+        <div class="r-btn" id="rb-5-g" onclick="setReady(5,'green')">✓ Strong — documented</div>
+        <div class="r-btn" id="rb-5-a" onclick="setReady(5,'amber')">~ Informal interest</div>
+        <div class="r-btn" id="rb-5-r" onclick="setReady(5,'red')">✗ Not yet validated</div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="prevQ(5)">← Back</button>
+      <button class="btn btn-next" onclick="nextQ(5)">Review &amp; submit →</button>
+    </div>
+  </div>
+
+  <!-- ═══ SUMMARY PANEL ═══ -->
+  <div id="panel-summary">
+    <h2 class="summary-title">Review your responses</h2>
+    <p class="summary-sub">Please check each answer before submitting. Click "Edit" next to any question to revise your response.</p>
+
+    <div id="summary-list"></div>
+
+    <div class="submit-block">
+      <h3>Ready to send to IEG?</h3>
+      <p>Enter your name and email below. Your completed responses will be compiled into a formatted summary — ready to copy and send, or open directly in your email app addressed to <strong>kellycho824@ieg.kr</strong>.</p>
+      <div class="sender-fields">
+        <div class="sender-field">
+          <label for="sender-name">Your name</label>
+          <input type="text" id="sender-name" placeholder="Ali Shayan" />
+        </div>
+        <div class="sender-field">
+          <label for="sender-email">Your email</label>
+          <input type="email" id="sender-email" placeholder="ali@example.com" />
+        </div>
+      </div>
+      <button class="btn-submit" onclick="submitForm()">
+        <span>Generate response summary</span>
+        <span>→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ THANK YOU ═══ -->
+  <div id="thank-you">
+    <div class="ty-icon">✓</div>
+    <h2 class="ty-title">Responses compiled</h2>
+    <p class="ty-sub">Your answers have been formatted below. Copy this text and paste it into an email reply to Kelly Cho at IEG to complete your submission.</p>
+    <div class="ty-copy-block" id="copy-block">
+      <button class="copy-btn" onclick="copyText()">Copy all</button>
+      <div id="compiled-text"></div>
+    </div>
+    <a id="mailto-btn" href="#" style="
+      display:inline-flex; align-items:center; gap:8px;
+      margin-top:20px;
+      background: var(--accent);
+      color:#fff;
+      font-family:var(--sans);
+      font-size:14px;
+      font-weight:500;
+      padding:11px 24px;
+      border-radius:8px;
+      text-decoration:none;
+      transition:background 0.18s;
+    " onmouseover="this.style.background='#153f6e'" onmouseout="this.style.background='var(--accent)'">
+      ✉ Open in email app → kellycho824@ieg.kr
+    </a>
+  </div>
+
+</main>
+
+<footer class="doc-footer">
+  <span class="footer-brand">IEG Co., Ltd. · Global Business Division</span>
+  <span class="footer-note">Prepared for Ali Shayan · Confidential · June 2026</span>
+</footer>
+
+<script>
+const TOTAL = 6;
+let current = 0;
+const readiness = Array(TOTAL).fill(null);
+const quickSelected = Array(TOTAL).fill('');
+
+const qTitles = [
+  'Q1 · Governance & Legal Structure',
+  'Q2 · Korean Institutional Co-Leadership',
+  'Q3 · F/S Financing Plan',
+  'Q4 · Phase I Country Selection',
+  'Q5 · Role Clarity & IEG\'s Expected Contribution',
+  'Q6 · Existing Traction & Demand-Side Validation'
+];
+
+function updateProgress() {
+  const pct = (current / (TOTAL)) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function updatePips() {
+  for (let i = 0; i < TOTAL; i++) {
+    const pip = document.getElementById('pip-' + i);
+    pip.classList.remove('active','done');
+    if (i < current) pip.classList.add('done');
+    else if (i === current) pip.classList.add('active');
+  }
+  const sumPip = document.getElementById('pip-6');
+  sumPip.classList.remove('active','done');
+  if (current === TOTAL) sumPip.classList.add('active');
+}
+
+function showPanel(idx) {
+  document.querySelectorAll('.q-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-summary').classList.remove('active');
+  document.getElementById('thank-you').classList.remove('active');
+  if (idx < TOTAL) {
+    document.getElementById('panel-' + idx).classList.add('active');
+  } else {
+    buildSummary();
+    document.getElementById('panel-summary').classList.add('active');
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goTo(idx) {
+  current = idx;
+  showPanel(current);
+  updatePips();
+  updateProgress();
+}
+
+function nextQ(idx) {
+  current = idx + 1;
+  showPanel(current);
+  updatePips();
+  updateProgress();
+}
+
+function prevQ(idx) {
+  current = idx - 1;
+  showPanel(current);
+  updatePips();
+  updateProgress();
+}
+
+function updateChar(idx) {
+  const val = document.getElementById('ta-' + idx).value;
+  document.getElementById('cc-' + idx) && (document.getElementById('cc-' + idx).textContent = val.length + ' characters');
+}
+
+function selectOpt(el, idx) {
+  const opts = document.querySelectorAll('#opts-' + idx + ' .quick-opt');
+  opts.forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  quickSelected[idx] = el.textContent;
+  const ta = document.getElementById('ta-' + idx);
+  if (!ta.value) {
+    ta.placeholder = '"' + el.textContent + '" selected — add more detail below if needed…';
+  }
+}
+
+function setReady(idx, color) {
+  const colors = ['green','amber','red'];
+  colors.forEach(c => {
+    const btn = document.getElementById('rb-' + idx + '-' + c);
+    if (btn) { btn.classList.remove('sel-green','sel-amber','sel-red'); }
+  });
+  document.getElementById('rb-' + idx + '-' + color).classList.add('sel-' + color);
+  readiness[idx] = color;
+}
+
+function buildSummary() {
+  const list = document.getElementById('summary-list');
+  list.innerHTML = '';
+  for (let i = 0; i < TOTAL; i++) {
+    const ans = document.getElementById('ta-' + i).value.trim();
+    const quick = quickSelected[i];
+    const r = readiness[i];
+    const rLabel = r === 'green' ? 'Confirmed / Ready' : r === 'amber' ? 'In Progress' : r === 'red' ? 'Not Yet Defined' : 'Not indicated';
+    const rClass = r ? 'badge-' + r : 'badge-amber';
+    const displayAns = ans || (quick ? '[Selected: ' + quick + ']' : '');
+
+    const item = document.createElement('div');
+    item.className = 'summary-item';
+    item.innerHTML = `
+      <div class="summary-q">
+        <span>${qTitles[i]}</span>
+        <span class="edit-link" onclick="goTo(${i})">Edit</span>
+      </div>
+      <div class="summary-a ${displayAns ? '' : 'empty'}">${displayAns || 'No response provided'}</div>
+      ${r ? `<div><span class="readiness-badge ${rClass}">${rLabel}</span></div>` : ''}
+    `;
+    list.appendChild(item);
+  }
+}
+
+function submitForm() {
+  const name  = document.getElementById('sender-name').value.trim()  || 'Ali Shayan';
+  const email = document.getElementById('sender-email').value.trim() || '';
+  const date  = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+
+  let text = `KOREA – MIDDLE EAST SKILLS TECHNOLOGY TRANSFER HUB\nPartner Response to IEG Due Diligence Questions\n`;
+  text += `Submitted by: ${name}${email ? ' <' + email + '>' : ''}\nDate: ${date}\n`;
+  text += '─'.repeat(60) + '\n\n';
+
+  for (let i = 0; i < TOTAL; i++) {
+    const ans   = document.getElementById('ta-' + i).value.trim();
+    const quick = quickSelected[i];
+    const r     = readiness[i];
+    const rLabel = r === 'green' ? 'Confirmed / Ready' : r === 'amber' ? 'In Progress' : r === 'red' ? 'Not Yet Defined' : '—';
+
+    text += qTitles[i] + '\n';
+    if (quick) text += `[Quick select: ${quick}]\n`;
+    text += (ans || 'No written response provided.') + '\n';
+    text += `Readiness: ${rLabel}\n\n`;
+  }
+
+  text += '─'.repeat(60) + '\n';
+  text += 'End of response · Please reply to: Kelly Cho · kellycho824@ieg.kr · IEG Co., Ltd. · Global Business Division';
+
+  document.getElementById('compiled-text').textContent = text;
+
+  // Build mailto link
+  const subject = encodeURIComponent('Re: Korea–Middle East Skills Technology Transfer Hub — Partner Response (' + name + ')');
+  const body = encodeURIComponent(text);
+  document.getElementById('mailto-btn').href = 'mailto:kellycho824@ieg.kr?subject=' + subject + '&body=' + body;
+
+  document.getElementById('panel-summary').classList.remove('active');
+  document.getElementById('thank-you').classList.add('active');
+  document.getElementById('progress-bar').style.width = '100%';
+
+  const pip6 = document.getElementById('pip-6');
+  pip6.classList.remove('active');
+  pip6.classList.add('done');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function copyText() {
+  const text = document.getElementById('compiled-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy all', 2000);
+  });
+}
+
+updatePips();
+updateProgress();
+</script>
+</body>
+</html>
