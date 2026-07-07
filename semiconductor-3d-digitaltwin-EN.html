@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Semiconductor 8-Process 3D Simulator & Digital Twin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="three.min.js"></script>
+<style>
+  :root{
+    --bg:#2B3038;
+    --panel:#343A44;
+    --panel-2:#3D4450;
+    --line:#4C5462;
+    --silicon:#8B92A0;
+    --yellow:#FFC93C;   /* cleanroom / lithography-bay light */
+    --wafer-blue:#4FC3F7;
+    --alarm:#FF5C5C;
+    --text:#E8EAED;
+    --text-dim:#8D94A0;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:'IBM Plex Sans','IBM Plex Sans KR',sans-serif;overflow-x:hidden;}
+  body.lang-kr{font-family:'IBM Plex Sans KR','IBM Plex Sans',sans-serif;}
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+
+  /* ---------- Top bar ---------- */
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 22px;border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,#363C46,#2B3038);
+    position:sticky;top:0;z-index:20;
+  }
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand .chip{
+    width:34px;height:34px;border-radius:7px;background:var(--yellow);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:#181300;font-size:14px;letter-spacing:-0.5px;
+    box-shadow:0 0 18px rgba(255,201,60,0.45);
+  }
+  .brand .title{font-size:15px;font-weight:600;line-height:1.15;}
+  .brand .title small{display:block;font-size:11px;color:var(--text-dim);font-weight:400;letter-spacing:.02em;}
+  .lang-toggle{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  .lang-toggle button{
+    background:transparent;border:none;color:var(--text-dim);padding:8px 14px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;cursor:pointer;
+  }
+  .lang-toggle button.active{background:var(--yellow);color:#181300;font-weight:600;}
+
+  /* ---------- Layout ---------- */
+  .layout{display:grid;grid-template-columns:250px 1fr 300px;min-height:calc(100vh - 64px);}
+  @media (max-width:980px){ .layout{grid-template-columns:1fr;} }
+
+  /* ---------- Sidebar (process list) ---------- */
+  nav.steps{border-right:1px solid var(--line);padding:16px 10px;background:var(--panel);}
+  .steps-label{font-size:11px;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;
+    padding:6px 10px 10px;}
+  .step{
+    display:flex;align-items:flex-start;gap:10px;padding:11px 10px;border-radius:8px;
+    cursor:pointer;margin-bottom:2px;border:1px solid transparent;transition:background .15s;
+  }
+  .step:hover{background:var(--panel-2);}
+  .step.active{background:#1D1B10;border-color:rgba(255,201,60,0.35);
+    box-shadow:0 0 24px rgba(255,201,60,0.12) inset;}
+  .step .num{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-dim);
+    width:22px;flex-shrink:0;padding-top:1px;
+  }
+  .step.active .num{color:var(--yellow);}
+  .step .label{font-size:13.5px;line-height:1.35;}
+  .step .label .en{display:block;font-size:11px;color:var(--text-dim);margin-top:1px;}
+  .step.active .label{color:var(--text);font-weight:500;}
+  .step.capstone-step{margin-top:10px;border-top:1px dashed var(--line);padding-top:14px;}
+
+  /* ---------- Main viewport ---------- */
+  main{position:relative;display:flex;flex-direction:column;background:#31363f;}
+  #canvas-wrap{position:relative;flex:1;min-height:420px;}
+  #canvas-wrap canvas{display:block;width:100%;height:100%;}
+  .scene-tag{
+    position:absolute;top:16px;left:18px;font-family:'IBM Plex Mono',monospace;
+    font-size:11px;color:var(--text-dim);letter-spacing:.08em;
+    background:rgba(11,13,16,0.55);padding:6px 10px;border-radius:6px;border:1px solid var(--line);
+  }
+  .scene-tag b{color:var(--yellow);}
+  .fallback-msg{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    text-align:center;color:var(--text-dim);font-size:13px;line-height:1.7;
+    max-width:360px;display:none;
+  }
+  .fallback-msg.show{display:block;}
+  .fallback-msg b{color:var(--yellow);}
+  .drag-hint{
+    position:absolute;bottom:16px;left:18px;font-size:11px;color:var(--text-dim);
+    font-family:'IBM Plex Mono',monospace;opacity:.7;
+  }
+
+  .controls{border-top:1px solid var(--line);background:var(--panel);padding:16px 22px 20px;}
+  .controls h3{margin:0 0 4px;font-size:14px;}
+  .controls .obj{font-size:12.5px;color:var(--text-dim);margin:0 0 14px;max-width:640px;line-height:1.5;}
+  .slider-row{display:flex;align-items:center;gap:14px;margin-bottom:10px;}
+  .slider-row label{width:190px;flex-shrink:0;font-size:12.5px;color:var(--text-dim);}
+  .slider-row input[type=range]{flex:1;accent-color:var(--yellow);}
+  .slider-row .val{width:64px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--wafer-blue);}
+
+  .capstone-panel{display:flex;flex-direction:column;gap:14px;max-width:640px;}
+  button.primary-btn{
+    background:var(--yellow);color:#181300;border:none;border-radius:8px;
+    padding:11px 18px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:700;
+    cursor:pointer;align-self:flex-start;
+  }
+  button.primary-btn:hover{filter:brightness(1.08);}
+  .capstone-prompt{font-size:13px;color:var(--text-dim);}
+  .capstone-diagnose-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .capstone-select{
+    background:var(--panel-2);color:var(--text);border:1px solid var(--line);border-radius:7px;
+    padding:9px 12px;font-size:13px;min-width:220px;
+  }
+  .capstone-feedback{padding:10px 14px;border-radius:8px;font-size:13px;line-height:1.5;}
+  .capstone-feedback.correct{background:#0E2416;border:1px solid #4CD97B;color:#4CD97B;}
+  .capstone-feedback.wrong{background:#2A1414;border:1px solid var(--alarm);color:var(--alarm);}
+
+  /* ---------- Digital twin panel ---------- */
+  aside.twin{border-left:1px solid var(--line);background:var(--panel);padding:18px 18px 24px;display:flex;flex-direction:column;gap:16px;}
+  .twin-head{display:flex;align-items:center;justify-content:space-between;}
+  .twin-head h2{font-size:14px;margin:0;letter-spacing:.03em;}
+  .dot{width:8px;height:8px;border-radius:50%;background:#4CD97B;box-shadow:0 0 8px #4CD97B;}
+  .dot.alarm{background:var(--alarm);box-shadow:0 0 8px var(--alarm);}
+  .metric{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--panel-2);}
+  .metric .k{font-size:11px;color:var(--text-dim);letter-spacing:.05em;text-transform:uppercase;}
+  .metric .v{font-family:'IBM Plex Mono',monospace;font-size:22px;margin-top:4px;color:var(--text);}
+  .metric .v span{font-size:12px;color:var(--text-dim);margin-left:4px;}
+  .metric.warn{border-color:rgba(255,92,92,0.5);background:#1E1213;}
+  .metric.warn .v{color:var(--alarm);}
+  canvas#spark{width:100%;height:64px;display:block;}
+  .alarm-banner{
+    display:none;align-items:center;gap:8px;background:#1E1213;border:1px solid var(--alarm);
+    color:var(--alarm);border-radius:8px;padding:10px 12px;font-size:12px;font-family:'IBM Plex Mono',monospace;
+  }
+  .alarm-banner.show{display:flex;}
+  .week-tag{
+    margin-top:auto;font-size:11.5px;color:var(--text-dim);border-top:1px solid var(--line);
+    padding-top:14px;line-height:1.5;
+  }
+  .week-tag b{color:var(--wafer-blue);}
+</style>
+</head>
+<body class="lang-en">
+
+<header>
+  <div class="brand">
+    <div class="chip">Si</div>
+    <div class="title" id="brandTitle">Semiconductor 8-Process 3D Simulator
+      <small id="brandSub">3D Simulator · Digital Twin Dashboard — IEG Training Series</small>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="steps" id="stepsNav"></nav>
+
+  <main>
+    <div id="canvas-wrap">
+      <div class="scene-tag" id="sceneTag">STEP <b>01</b> / 08</div>
+      <div class="drag-hint" id="dragHint">Drag to rotate · Scroll to zoom</div>
+      <div class="fallback-msg" id="fallbackMsg">
+        <b>⚠ Unable to start 3D rendering</b><br><br>
+        Your browser may not support WebGL, or it may be disabled.<br>
+        Try opening this in the latest Chrome or Edge, or check your browser's hardware acceleration settings.
+      </div>
+    </div>
+    <div class="controls">
+      <h3 id="ctrlTitle"></h3>
+      <p class="obj" id="ctrlObjective"></p>
+      <div id="sliderHost"></div>
+    </div>
+  </main>
+
+  <aside class="twin">
+    <div class="twin-head">
+      <h2 id="twinTitle">DIGITAL TWIN</h2>
+      <div class="dot" id="twinDot"></div>
+    </div>
+
+    <div class="metric" id="mTemp"><div class="k" id="lblTemp">TEMPERATURE</div><div class="v"><span id="vTemp">0</span><span id="uTemp">°C</span></div></div>
+    <div class="metric" id="mPressure"><div class="k" id="lblPressure">PRESSURE</div><div class="v"><span id="vPressure">0</span><span id="uPressure">Torr</span></div></div>
+    <div class="metric" id="mYield"><div class="k" id="lblYield">YIELD</div><div class="v"><span id="vYield">0</span><span id="uYield">%</span></div></div>
+    <div class="metric" id="mDefect"><div class="k" id="lblDefect">DEFECT RATE</div><div class="v"><span id="vDefect">0</span><span id="uDefect">%</span></div></div>
+
+    <div>
+      <div class="k" id="lblTrend" style="font-size:11px;color:var(--text-dim);letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px;">YIELD TREND</div>
+      <canvas id="spark" width="260" height="64"></canvas>
+    </div>
+
+    <div class="alarm-banner" id="alarmBanner">⚠ <span id="alarmText">PROCESS ANOMALY DETECTED</span></div>
+
+    <div class="week-tag" id="weekTag"></div>
+  </aside>
+</div>
+
+<script>
+/* ============================================================
+   i18n
+   ============================================================ */
+const I18N = {
+  kr: {
+    brandTitle: "반도체 8대공정 3D 시뮬레이터",
+    brandSub: "3D 시뮬레이터 · 디지털트윈 대시보드 — IEG 훈련 시리즈",
+    stepsLabel: "8대공정",
+    twinTitle: "디지털트윈",
+    lblTemp: "온도", lblPressure: "압력", lblYield: "수율", lblDefect: "결함률", lblTrend: "수율 추이",
+    dragHint: "드래그: 회전 · 스크롤: 확대/축소",
+    alarmText: "공정 이상 감지",
+    weekPrefix: "커리큘럼 연계:",
+    stepsLabelWithCapstone: "8대공정 + 캡스톤",
+    capstoneTag: "CAPSTONE · WEEK 12",
+    lblCumYield: "누적 수율 (8-Station)",
+    lblHealthy: "정상 STATION",
+    lblAnomaly: "이상 STATION",
+    lblDiagnosis: "진단 결과",
+    runScenario: "새 시나리오 실행",
+    diagnosePrompt: "이상이 발생한 스테이션을 대시보드 데이터만 보고 골라보세요:",
+    diagnoseBtn: "진단 제출",
+    diagnoseCorrect: "정답입니다! 데이터만으로 이상 스테이션을 정확히 짚어냈습니다.",
+    diagnoseWrong: (correct)=>`오답입니다. 실제 이상 발생 지점은 ${correct}였습니다. 대시보드 결함률·수율 추이를 다시 살펴보세요.`,
+    selectPlaceholder: "-- 스테이션 선택 --",
+  },
+  en: {
+    brandTitle: "Semiconductor 8-Process 3D Simulator",
+    brandSub: "3D Simulator · Digital Twin Dashboard — IEG Training Series",
+    stepsLabel: "8 Major Processes",
+    twinTitle: "DIGITAL TWIN",
+    lblTemp: "TEMPERATURE", lblPressure: "PRESSURE", lblYield: "YIELD", lblDefect: "DEFECT RATE", lblTrend: "YIELD TREND",
+    dragHint: "Drag to rotate · Scroll to zoom",
+    alarmText: "PROCESS ANOMALY DETECTED",
+    weekPrefix: "Curriculum link:",
+    stepsLabelWithCapstone: "8 Stations + Capstone",
+    capstoneTag: "CAPSTONE · WEEK 12",
+    lblCumYield: "Cumulative Yield (8-Station)",
+    lblHealthy: "Healthy Stations",
+    lblAnomaly: "Anomaly Station",
+    lblDiagnosis: "Diagnosis Result",
+    runScenario: "Run New Scenario",
+    diagnosePrompt: "Using only dashboard data, pick which station has the anomaly:",
+    diagnoseBtn: "Submit Diagnosis",
+    diagnoseCorrect: "Correct! You pinpointed the anomalous station from data alone.",
+    diagnoseWrong: (correct)=>`Not quite. The actual anomaly was at ${correct}. Review the dashboard's defect-rate and yield trend again.`,
+    selectPlaceholder: "-- Select a station --",
+  }
+};
+
+/* ============================================================
+   Process definitions
+   ============================================================ */
+const PROCESSES = [
+  { id:1, week:"4주 / Week 4",
+    nameKR:"Station 1: 웨이퍼 준비", nameEN:"Station 1: Wafer Preparation",
+    loKR:"잉곳 성장→슬라이싱→연마 공정 순서와 원리를 이해합니다.",
+    loEN:"Understand the ingot growth → slicing → polishing sequence.",
+    sliders:[
+      {key:"slice", labelKR:"슬라이싱 진행도", labelEN:"Slicing progress", min:0,max:100,def:35,unit:"%"},
+      {key:"thickness", labelKR:"웨이퍼 두께", labelEN:"Wafer thickness", min:200,max:900,def:775,unit:"µm"},
+    ],
+    baseTemp:22, basePressure:1, baseYield:97,
+  },
+  { id:2, week:"5주 / Week 5",
+    nameKR:"Station 2: 열산화", nameEN:"Station 2: Thermal Oxidation",
+    loKR:"건식/습식 산화와 산화막 두께 제어 원리를 이해합니다.",
+    loEN:"Understand dry/wet oxidation and oxide-thickness control.",
+    sliders:[
+      {key:"temp", labelKR:"퍼니스 온도", labelEN:"Furnace temperature", min:700,max:1200,def:950,unit:"°C"},
+      {key:"time", labelKR:"산화 시간", labelEN:"Oxidation time", min:0,max:100,def:40,unit:"min"},
+    ],
+    baseTemp:950, basePressure:1, baseYield:95,
+  },
+  { id:3, week:"6주 / Week 6",
+    nameKR:"Station 3: 포토리소그래피", nameEN:"Station 3: Photolithography",
+    loKR:"마스크 정렬-노광-현상 과정과 미세패턴 형성 원리를 이해합니다.",
+    loEN:"Understand mask alignment, exposure and pattern formation.",
+    sliders:[
+      {key:"align", labelKR:"정렬 오차", labelEN:"Misalignment", min:0,max:100,def:8,unit:"nm"},
+      {key:"dose", labelKR:"노광량", labelEN:"Exposure dose", min:0,max:100,def:55,unit:"mJ"},
+    ],
+    baseTemp:23, basePressure:1, baseYield:93,
+  },
+  { id:4, week:"7주 / Week 7",
+    nameKR:"Station 4: 식각", nameEN:"Station 4: Etching",
+    loKR:"습식/건식(플라즈마) 식각 원리와 선택비 개념을 이해합니다.",
+    loEN:"Understand wet vs. dry (plasma) etching and selectivity.",
+    sliders:[
+      {key:"profile", labelKR:"프로파일 (등방성→수직형)", labelEN:"Profile (isotropic→anisotropic)", min:0,max:100,def:70,unit:""},
+      {key:"gas", labelKR:"가스 유량", labelEN:"Gas flow", min:0,max:100,def:50,unit:"sccm"},
+    ],
+    baseTemp:60, basePressure:0.05, baseYield:92,
+  },
+  { id:5, week:"8주 / Week 8",
+    nameKR:"Station 5: 이온 임플란트", nameEN:"Station 5: Ion Implantation",
+    loKR:"도즈·에너지로 도핑 위치와 농도를 정밀 제어하는 원리를 이해합니다.",
+    loEN:"Understand precision doping control via implant dose and energy.",
+    sliders:[
+      {key:"dose", labelKR:"도즈 (농도)", labelEN:"Dose (concentration)", min:0,max:100,def:50,unit:"×10¹⁴/cm²"},
+      {key:"energy", labelKR:"에너지 (깊이)", labelEN:"Energy (depth)", min:0,max:100,def:45,unit:"keV"},
+    ],
+    baseTemp:25, basePressure:0.02, baseYield:93,
+  },
+  { id:6, week:"9주 / Week 9",
+    nameKR:"Station 6: CVD/박막증착", nameEN:"Station 6: CVD / Thin Film Deposition",
+    loKR:"CVD/PVD 증착 원리와 박막 두께 균일도 관리를 이해합니다.",
+    loEN:"Understand CVD/PVD deposition and film-thickness uniformity.",
+    sliders:[
+      {key:"pressure", labelKR:"챔버 압력", labelEN:"Chamber pressure", min:0,max:100,def:30,unit:"mTorr"},
+      {key:"rate", labelKR:"증착 속도", labelEN:"Deposition rate", min:0,max:100,def:45,unit:"Å/s"},
+    ],
+    baseTemp:400, basePressure:0.03, baseYield:94,
+  },
+  { id:7, week:"10주 / Week 10",
+    nameKR:"Station 7: 금속화", nameEN:"Station 7: Metallisation",
+    loKR:"구리 다마신 공정과 CMP 평탄화 개념을 이해합니다.",
+    loEN:"Understand the copper damascene process and CMP planarization.",
+    sliders:[
+      {key:"layers", labelKR:"배선 레이어 수", labelEN:"Interconnect layers", min:1,max:8,def:4,unit:""},
+      {key:"defect", labelKR:"단선/단락 위험도", labelEN:"Open/short risk", min:0,max:100,def:12,unit:"%"},
+    ],
+    baseTemp:120, basePressure:1, baseYield:91,
+  },
+  { id:8, week:"11주 / Week 11",
+    nameKR:"Station 8: 테스트 & 패키징", nameEN:"Station 8: Testing & Packaging",
+    loKR:"웨이퍼 레벨 전기테스트(EDS)와 다이싱-본딩-몰딩 패키징을 이해합니다.",
+    loEN:"Understand wafer-level electrical test (EDS) and dicing-bonding-molding packaging.",
+    sliders:[
+      {key:"yieldTarget", labelKR:"목표 수율 (EDS)", labelEN:"Target yield (EDS)", min:50,max:100,def:88,unit:"%"},
+      {key:"bond", labelKR:"와이어본딩 강도", labelEN:"Wire-bond strength", min:0,max:100,def:75,unit:"%"},
+      {key:"mold", labelKR:"몰딩 진행도", labelEN:"Molding progress", min:0,max:100,def:60,unit:"%"},
+    ],
+    baseTemp:175, basePressure:1, baseYield:96,
+  },
+  { id:9, week:"12주 / Week 12", capstone:true,
+    nameKR:"캡스톤: 전체 공정 통합", nameEN:"Capstone: Full Process Integration",
+    loKR:"8-Station 전체를 하나의 팹(Fab) 흐름으로 통합하고, 디지털트윈 데이터만으로 이상 발생 스테이션을 진단합니다.",
+    loEN:"Integrate all 8 stations into a single fab flow and diagnose the anomalous station using digital twin data alone.",
+    sliders:[],
+    baseTemp:150, basePressure:1, baseYield:93,
+  },
+];
+
+const STATION_LABELS_KR = ["Station 1: 웨이퍼 준비","Station 2: 열산화","Station 3: 포토리소그래피","Station 4: 식각","Station 5: 이온 임플란트","Station 6: CVD/박막증착","Station 7: 금속화","Station 8: 테스트&패키징"];
+const STATION_LABELS_EN = ["Station 1: Wafer Prep","Station 2: Thermal Oxidation","Station 3: Photolithography","Station 4: Etching","Station 5: Ion Implantation","Station 6: CVD/Thin Film","Station 7: Metallisation","Station 8: Testing&Packaging"];
+
+let capstoneState = { stationYields: [], anomalyIndex: -1, diagnosed: false, guessIndex: null, revealed:false };
+
+function runCapstoneScenario(){
+  capstoneState.stationYields = Array.from({length:8}, ()=> 90 + Math.random()*9);
+  capstoneState.anomalyIndex = Math.floor(Math.random()*8);
+  capstoneState.stationYields[capstoneState.anomalyIndex] = 35 + Math.random()*30;
+  capstoneState.diagnosed = false;
+  capstoneState.guessIndex = null;
+  capstoneState.revealed = false;
+}
+
+let lang = "en";
+let current = PROCESSES[0];
+let sliderState = {};
+let yieldHistory = [];
+
+/* ============================================================
+   Three.js scene setup
+   ============================================================ */
+const wrap = document.getElementById("canvas-wrap");
+let renderer, scene, camera, ambient, key, rim, grid, sceneGroup;
+let RENDER_OK = true;
+
+try {
+  if (typeof THREE === "undefined") throw new Error("THREE not loaded");
+
+  renderer = new THREE.WebGLRenderer({ antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  wrap.appendChild(renderer.domElement);
+
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x454c58);
+  scene.fog = new THREE.Fog(0x454c58, 13, 34);
+
+  camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+  camera.position.set(4.2, 3.0, 5.4);
+
+  ambient = new THREE.AmbientLight(0xffffff, 1.1);
+  scene.add(ambient);
+  key = new THREE.DirectionalLight(0xffffff, 1.3);
+  key.position.set(5,8,4);
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0xbcd4ff, 0.6);
+  fill.position.set(-6,4,3);
+  scene.add(fill);
+  rim = new THREE.PointLight(0xffc93c, 0.8, 24);
+  rim.position.set(-4,2,-3);
+  scene.add(rim);
+
+  grid = new THREE.GridHelper(12, 24, 0x3a4150, 0x2a2f38);
+  grid.position.y = -1.4;
+  scene.add(grid);
+
+  sceneGroup = new THREE.Group();
+  scene.add(sceneGroup);
+} catch (err) {
+  RENDER_OK = false;
+  console.error("3D init failed:", err);
+  document.getElementById("fallbackMsg").classList.add("show");
+  document.getElementById("dragHint").style.display = "none";
+}
+
+function resize(){
+  if(!RENDER_OK) return;
+  const w = wrap.clientWidth, h = wrap.clientHeight;
+  renderer.setSize(w,h);
+  camera.aspect = w/h;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener("resize", resize);
+
+/* simple orbit drag (no external controls dependency) */
+let isDown=false, lastX=0, lastY=0, theta=0.7, phi=1.0, radius=7.2;
+function updateCam(){
+  if(!RENDER_OK) return;
+  camera.position.x = radius*Math.sin(phi)*Math.cos(theta);
+  camera.position.z = radius*Math.sin(phi)*Math.sin(theta);
+  camera.position.y = radius*Math.cos(phi);
+  camera.lookAt(0,0.2,0);
+}
+renderer.domElement.addEventListener("pointerdown", e=>{isDown=true;lastX=e.clientX;lastY=e.clientY;});
+window.addEventListener("pointerup", ()=>isDown=false);
+window.addEventListener("pointermove", e=>{
+  if(!isDown) return;
+  theta -= (e.clientX-lastX)*0.006;
+  phi = Math.min(Math.max(phi-(e.clientY-lastY)*0.006, 0.35), 2.5);
+  lastX=e.clientX; lastY=e.clientY;
+  updateCam();
+});
+renderer.domElement.addEventListener("wheel", e=>{
+  radius = Math.min(Math.max(radius + e.deltaY*0.004, 3.5), 13);
+  updateCam(); e.preventDefault();
+}, {passive:false});
+updateCam();
+
+/* ============================================================
+   Per-process 3D scene builders
+   ============================================================ */
+function clearGroup(){
+  if(!RENDER_OK) return;
+  while(sceneGroup.children.length) sceneGroup.remove(sceneGroup.children[0]);
+}
+function waferMesh(radius=1.5, thickness=0.06, color=0x8B92A0){
+  const geo = new THREE.CylinderGeometry(radius, radius, thickness, 64);
+  const mat = new THREE.MeshStandardMaterial({ color, metalness:0.55, roughness:0.35, envMapIntensity:1 });
+  return new THREE.Mesh(geo, mat);
+}
+
+function build_wafer(v){
+  const g = new THREE.Group();
+  const ingotH = 3.2*(1-v.slice/100)+0.5;
+  const ingot = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.85,0.85,ingotH,32),
+    new THREE.MeshStandardMaterial({color:0x5b6270, metalness:0.4, roughness:0.5})
+  );
+  ingot.position.y = ingotH/2 - 0.3;
+  g.add(ingot);
+  const count = Math.round(v.slice/8)+1;
+  for(let i=0;i<count;i++){
+    const w = waferMesh(1.35 - (v.thickness/900)*0.15, 0.045, 0x9aa1ac);
+    w.position.y = -1.1 + i*0.09;
+    g.add(w);
+  }
+  return g;
+}
+
+function build_oxidation(v){
+  const g = new THREE.Group();
+  const tube = new THREE.Mesh(
+    new THREE.CylinderGeometry(1.9,1.9,2.6,32,1,true),
+    new THREE.MeshStandardMaterial({color:0xff8a3c, transparent:true, opacity:0.10+v.temp/1200*0.18, side:THREE.DoubleSide, emissive:0xff5500, emissiveIntensity:v.temp/1200})
+  );
+  g.add(tube);
+  const wafer = waferMesh(1.3,0.05,0x8B92A0);
+  g.add(wafer);
+  const shellScale = 1 + (v.temp/1200)*(v.time/100)*0.35;
+  const shell = new THREE.Mesh(
+    new THREE.CylinderGeometry(1.32*shellScale,1.32*shellScale,0.07,64),
+    new THREE.MeshStandardMaterial({color:0x4FC3F7, transparent:true, opacity:0.5, roughness:0.2})
+  );
+  g.add(shell);
+  return g;
+}
+
+function build_litho(v){
+  const g = new THREE.Group();
+  const wafer = waferMesh(1.3,0.05,0x8B92A0);
+  g.add(wafer);
+  const mask = new THREE.Mesh(
+    new THREE.BoxGeometry(2.4,0.06,2.4),
+    new THREE.MeshStandardMaterial({color:0x2b2f38, metalness:0.3,roughness:0.6})
+  );
+  mask.position.y = 1.4;
+  mask.position.x = (v.align/100 - 0.5)*0.9;
+  g.add(mask);
+  const beam = new THREE.Mesh(
+    new THREE.ConeGeometry(1.1, 1.35, 32, 1, true),
+    new THREE.MeshBasicMaterial({color:0xffc93c, transparent:true, opacity:0.12+v.dose/100*0.25, side:THREE.DoubleSide})
+  );
+  beam.position.y = 0.75;
+  beam.rotation.x = Math.PI;
+  g.add(beam);
+  return g;
+}
+
+function build_etch(v){
+  const g = new THREE.Group();
+  const wafer = waferMesh(1.4,0.4,0x6c7280);
+  g.add(wafer);
+  const n=7;
+  for(let i=0;i<n;i++){
+    const ang = (i/n)*Math.PI*2;
+    const r = 0.7;
+    const trench = new THREE.Mesh(
+      new THREE.BoxGeometry(0.22,0.5,0.22),
+      new THREE.MeshStandardMaterial({color:0x0d0f13})
+    );
+    const skew = (1-v.profile/100)*0.35;
+    trench.position.set(Math.cos(ang)*r, 0.05, Math.sin(ang)*r);
+    trench.rotation.z = skew*(i%2?1:-1);
+    g.add(trench);
+  }
+  return g;
+}
+
+function build_deposit(v){
+  const g = new THREE.Group();
+  const wafer = waferMesh(1.3,0.05,0x8B92A0);
+  g.add(wafer);
+  const filmH = 0.03 + (v.rate/100)*0.25;
+  const film = new THREE.Mesh(
+    new THREE.CylinderGeometry(1.28,1.28,filmH,48),
+    new THREE.MeshStandardMaterial({color:0x4FC3F7, metalness:0.3, roughness:0.25, transparent:true, opacity:0.85})
+  );
+  film.position.y = 0.03+filmH/2;
+  g.add(film);
+  const N=140;
+  const pos = new Float32Array(N*3);
+  for(let i=0;i<N;i++){
+    pos[i*3]=(Math.random()-0.5)*2.6;
+    pos[i*3+1]=Math.random()*2.4+0.4;
+    pos[i*3+2]=(Math.random()-0.5)*2.6;
+  }
+  const pgeo = new THREE.BufferGeometry();
+  pgeo.setAttribute("position", new THREE.BufferAttribute(pos,3));
+  const pmat = new THREE.PointsMaterial({color:0xffc93c, size:0.045, transparent:true, opacity:0.4+v.pressure/200});
+  const points = new THREE.Points(pgeo,pmat);
+  points.name="rain";
+  g.add(points);
+  return g;
+}
+
+function build_metal(v){
+  const g = new THREE.Group();
+  const layers = Math.round(v.layers);
+  for(let i=0;i<layers;i++){
+    const disc = new THREE.Mesh(
+      new THREE.CylinderGeometry(1.1,1.1,0.07,48),
+      new THREE.MeshStandardMaterial({color: i%2? 0xd08b4a : 0x3a3f48, metalness:0.6, roughness:0.35})
+    );
+    disc.position.y = i*0.16 - 0.4;
+    g.add(disc);
+    if(i>0){
+      const brokenChance = v.defect/100;
+      const broken = Math.random() < brokenChance*0.5;
+      if(!broken){
+        const via = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.08,0.08,0.16,12),
+          new THREE.MeshStandardMaterial({color:0xd08b4a, metalness:0.7, roughness:0.25})
+        );
+        via.position.set(0.5,i*0.16-0.4-0.08,0.3);
+        g.add(via);
+      }
+    }
+  }
+  return g;
+}
+
+function build_implant(v){
+  const g = new THREE.Group();
+  const wafer = waferMesh(1.4, 0.12, 0x8B92A0);
+  g.add(wafer);
+
+  const doseIntensity = 0.3 + (v.dose/100)*0.7;
+  const beamCount = 6;
+  for(let i=0;i<beamCount;i++){
+    const spread = (i - beamCount/2) * 0.22;
+    const start = new THREE.Vector3(-2.3 + spread*0.3, 2.0, spread);
+    const end = new THREE.Vector3(spread*0.15, 0.08, spread*0.4);
+    const dir = end.clone().sub(start);
+    const len = dir.length();
+    const cyl = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.016,0.016,len,6),
+      new THREE.MeshBasicMaterial({color:0xFFC93C, transparent:true, opacity:doseIntensity})
+    );
+    cyl.position.copy(start.clone().add(end).multiplyScalar(0.5));
+    cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), dir.clone().normalize());
+    g.add(cyl);
+  }
+
+  const depth = 0.08 + (v.energy/100)*0.42;
+  const regionSize = 0.5 + (v.dose/100)*0.45;
+  const doping = new THREE.Mesh(
+    new THREE.SphereGeometry(regionSize, 24, 16),
+    new THREE.MeshStandardMaterial({color:0x4FC3F7, transparent:true, opacity:0.3+doseIntensity*0.35, roughness:0.3})
+  );
+  doping.scale.set(1, 0.32, 1);
+  doping.position.y = -depth;
+  g.add(doping);
+
+  return g;
+}
+
+function build_testpackage(v){
+  const g = new THREE.Group();
+
+  // Left: EDS die-map (compact)
+  const size = 6;
+  const yieldPct = v.yieldTarget;
+  const dieGroup = new THREE.Group();
+  for(let x=0;x<size;x++){
+    for(let z=0;z<size;z++){
+      const pass = Math.random()*100 < yieldPct;
+      const die = new THREE.Mesh(
+        new THREE.BoxGeometry(0.16,0.035,0.16),
+        new THREE.MeshStandardMaterial({color: pass? 0x4CD97B : 0xFF5C5C, roughness:0.5})
+      );
+      die.position.set((x-size/2)*0.19, 0, (z-size/2)*0.19);
+      dieGroup.add(die);
+    }
+  }
+  dieGroup.position.set(-1.5, 0, 0);
+  g.add(dieGroup);
+
+  // Right: packaged die (dicing → bonding → molding)
+  const pkg = new THREE.Group();
+  const die = new THREE.Mesh(
+    new THREE.BoxGeometry(0.7,0.1,0.7),
+    new THREE.MeshStandardMaterial({color:0x2b2f38, metalness:0.5, roughness:0.4})
+  );
+  die.position.y = 0.26;
+  pkg.add(die);
+  const frame = new THREE.Mesh(
+    new THREE.BoxGeometry(1.7,0.08,1.7),
+    new THREE.MeshStandardMaterial({color:0xd08b4a, metalness:0.7, roughness:0.3})
+  );
+  frame.position.y = 0.08;
+  pkg.add(frame);
+  const bondCount = 8;
+  for(let i=0;i<bondCount;i++){
+    const ang = (i/bondCount)*Math.PI*2;
+    const strong = v.bond/100;
+    const from = new THREE.Vector3(Math.cos(ang)*0.33, 0.31, Math.sin(ang)*0.33);
+    const to = new THREE.Vector3(Math.cos(ang)*0.78, 0.13, Math.sin(ang)*0.78);
+    const mid = from.clone().add(to).multiplyScalar(0.5).add(new THREE.Vector3(0,0.28*strong+0.04,0));
+    const curve = new THREE.QuadraticBezierCurve3(from, mid, to);
+    const tube = new THREE.Mesh(
+      new THREE.TubeGeometry(curve, 12, 0.016, 6, false),
+      new THREE.MeshStandardMaterial({color:0xEDEDED, metalness:0.6, roughness:0.3})
+    );
+    pkg.add(tube);
+  }
+  if(v.mold > 50){
+    const mold = new THREE.Mesh(
+      new THREE.BoxGeometry(1.8,0.68,1.8),
+      new THREE.MeshStandardMaterial({color:0x14171d, transparent:true, opacity:0.35+((v.mold-50)/50)*0.35})
+    );
+    mold.position.y = 0.36;
+    pkg.add(mold);
+  }
+  pkg.position.set(1.4, 0, 0);
+  g.add(pkg);
+
+  return g;
+}
+
+function build_capstone(v){
+  const g = new THREE.Group();
+  if(capstoneState.stationYields.length === 0) runCapstoneScenario();
+  const n = 8;
+  const spacing = 0.85;
+  const startX = -((n-1)*spacing)/2;
+  for(let i=0;i<n;i++){
+    const yieldVal = capstoneState.stationYields[i];
+    const healthy = yieldVal >= 80;
+    const platform = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.28,0.28,0.12,20),
+      new THREE.MeshStandardMaterial({color: healthy? 0x4CD97B : 0xFF5C5C, roughness:0.45, emissive: healthy? 0x0d3a1d : 0x3a0d0d, emissiveIntensity:0.4})
+    );
+    platform.position.set(startX + i*spacing, 0, 0);
+    g.add(platform);
+    const post = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.05,0.05,0.3,10),
+      new THREE.MeshStandardMaterial({color:0x8B92A0, metalness:0.5, roughness:0.4})
+    );
+    post.position.set(startX + i*spacing, 0.2, 0);
+    g.add(post);
+    const marker = new THREE.Mesh(
+      new THREE.SphereGeometry(0.09,12,10),
+      new THREE.MeshStandardMaterial({color:0xFFC93C, emissive:0xFFC93C, emissiveIntensity: healthy?0.1:0.6})
+    );
+    marker.position.set(startX + i*spacing, 0.42, 0);
+    g.add(marker);
+    if(i < n-1){
+      const rail = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.02,0.02,spacing-0.3,8),
+        new THREE.MeshStandardMaterial({color:0x4FC3F7, transparent:true, opacity:0.5})
+      );
+      rail.rotation.z = Math.PI/2;
+      rail.position.set(startX + i*spacing + spacing/2, 0.08, 0);
+      g.add(rail);
+    }
+  }
+  return g;
+}
+
+const BUILDERS = {1:build_wafer,2:build_oxidation,3:build_litho,4:build_etch,5:build_implant,6:build_deposit,7:build_metal,8:build_testpackage,9:build_capstone};
+
+/* ============================================================
+   UI construction
+   ============================================================ */
+const stepsNav = document.getElementById("stepsNav");
+function renderStepsNav(){
+  stepsNav.innerHTML = `<div class="steps-label">${I18N[lang].stepsLabelWithCapstone}</div>`;
+  PROCESSES.forEach(p=>{
+    const el = document.createElement("div");
+    el.className = "step" + (p.id===current.id ? " active":"") + (p.capstone ? " capstone-step":"");
+    const numLabel = p.capstone ? "★" : String(p.id).padStart(2,"0");
+    el.innerHTML = `<div class="num">${numLabel}</div>
+      <div class="label">${lang==="kr"?p.nameKR:p.nameEN}<span class="en">${lang==="kr"?p.nameEN:p.nameKR}</span></div>`;
+    el.addEventListener("click", ()=>selectProcess(p.id));
+    stepsNav.appendChild(el);
+  });
+}
+
+const sliderHost = document.getElementById("sliderHost");
+function renderSliders(){
+  sliderHost.innerHTML="";
+  if(current.capstone){
+    renderCapstonePanel();
+    return;
+  }
+  current.sliders.forEach(s=>{
+    const row = document.createElement("div");
+    row.className="slider-row";
+    const label = lang==="kr"?s.labelKR:s.labelEN;
+    row.innerHTML = `<label>${label}</label>
+      <input type="range" min="${s.min}" max="${s.max}" value="${sliderState[s.key]}" step="1">
+      <span class="val">${sliderState[s.key]}${s.unit}</span>`;
+    const input = row.querySelector("input");
+    const val = row.querySelector(".val");
+    input.addEventListener("input", ()=>{
+      sliderState[s.key] = Number(input.value);
+      val.textContent = sliderState[s.key]+s.unit;
+      rebuild3D();
+    });
+    sliderHost.appendChild(row);
+  });
+}
+
+function renderCapstonePanel(){
+  const t = I18N[lang];
+  const wrap = document.createElement("div");
+  wrap.className = "capstone-panel";
+
+  const runBtn = document.createElement("button");
+  runBtn.className = "primary-btn";
+  runBtn.textContent = t.runScenario;
+  runBtn.addEventListener("click", ()=>{
+    runCapstoneScenario();
+    yieldHistory = [];
+    rebuild3D();
+    renderCapstonePanel();
+  });
+  wrap.appendChild(runBtn);
+
+  const promptEl = document.createElement("div");
+  promptEl.className = "capstone-prompt";
+  promptEl.textContent = t.diagnosePrompt;
+  wrap.appendChild(promptEl);
+
+  const row = document.createElement("div");
+  row.className = "capstone-diagnose-row";
+  const select = document.createElement("select");
+  select.className = "capstone-select";
+  const labels = lang==="kr" ? STATION_LABELS_KR : STATION_LABELS_EN;
+  select.innerHTML = `<option value="">${t.selectPlaceholder}</option>` +
+    labels.map((l,i)=>`<option value="${i}">${l}</option>`).join("");
+  row.appendChild(select);
+
+  const submitBtn = document.createElement("button");
+  submitBtn.className = "primary-btn";
+  submitBtn.textContent = t.diagnoseBtn;
+  submitBtn.addEventListener("click", ()=>{
+    if(select.value === "") return;
+    capstoneState.guessIndex = Number(select.value);
+    capstoneState.diagnosed = true;
+    capstoneState.revealed = true;
+    renderCapstonePanel();
+  });
+  row.appendChild(submitBtn);
+  wrap.appendChild(row);
+
+  if(capstoneState.diagnosed){
+    const fb = document.createElement("div");
+    const correct = capstoneState.guessIndex === capstoneState.anomalyIndex;
+    fb.className = "capstone-feedback " + (correct ? "correct" : "wrong");
+    fb.textContent = correct ? t.diagnoseCorrect : t.diagnoseWrong(labels[capstoneState.anomalyIndex]);
+    wrap.appendChild(fb);
+  }
+
+  sliderHost.appendChild(wrap);
+}
+
+function selectProcess(id){
+  current = PROCESSES.find(p=>p.id===id);
+  sliderState = {};
+  current.sliders.forEach(s=> sliderState[s.key]=s.def);
+  yieldHistory = [];
+  renderStepsNav();
+  renderSliders();
+  renderTexts();
+  rebuild3D();
+}
+
+function rebuild3D(){
+  if(!RENDER_OK) return;
+  clearGroup();
+  const built = BUILDERS[current.id](sliderState);
+  sceneGroup.add(built);
+}
+
+function renderTexts(){
+  const t = I18N[lang];
+  document.getElementById("brandTitle").childNodes[0].textContent = t.brandTitle;
+  document.getElementById("brandSub").textContent = t.brandSub;
+  document.getElementById("twinTitle").textContent = t.twinTitle;
+  document.getElementById("dragHint").textContent = t.dragHint;
+  document.getElementById("alarmText").textContent = t.alarmText;
+  document.getElementById("ctrlTitle").textContent = (lang==="kr"?current.nameKR:current.nameEN);
+  document.getElementById("ctrlObjective").textContent = (lang==="kr"?current.loKR:current.loEN);
+  document.getElementById("weekTag").innerHTML = `${t.weekPrefix} <b>${current.week}</b>`;
+
+  if(current.capstone){
+    document.getElementById("sceneTag").innerHTML = `<b>${t.capstoneTag}</b>`;
+    document.getElementById("lblTemp").textContent = t.lblCumYield;
+    document.getElementById("lblPressure").textContent = t.lblHealthy;
+    document.getElementById("lblYield").textContent = t.lblAnomaly;
+    document.getElementById("lblDefect").textContent = t.lblDiagnosis;
+    document.getElementById("uTemp").textContent = "%";
+    document.getElementById("uPressure").textContent = "/8";
+    document.getElementById("uYield").textContent = "";
+    document.getElementById("uDefect").textContent = "";
+  } else {
+    document.getElementById("sceneTag").innerHTML = `STEP <b>${String(current.id).padStart(2,"0")}</b> / 08`;
+    document.getElementById("lblTemp").textContent = t.lblTemp;
+    document.getElementById("lblPressure").textContent = t.lblPressure;
+    document.getElementById("lblYield").textContent = t.lblYield;
+    document.getElementById("lblDefect").textContent = t.lblDefect;
+    document.getElementById("uTemp").textContent = "°C";
+    document.getElementById("uPressure").textContent = "Torr";
+    document.getElementById("uYield").textContent = "%";
+    document.getElementById("uDefect").textContent = "%";
+  }
+}
+
+// language fixed to English — no toggle needed
+
+/* ============================================================
+   Digital twin loop
+   ============================================================ */
+const sparkCanvas = document.getElementById("spark");
+const sctx = sparkCanvas.getContext("2d");
+
+function drawSpark(){
+  const w = sparkCanvas.width, h = sparkCanvas.height;
+  sctx.clearRect(0,0,w,h);
+  if(yieldHistory.length<2) return;
+  const min = Math.min(...yieldHistory)-2, max = Math.max(...yieldHistory)+2;
+  sctx.beginPath();
+  yieldHistory.forEach((v,i)=>{
+    const x = (i/(yieldHistory.length-1))*w;
+    const y = h - ((v-min)/(max-min||1))*h;
+    if(i===0) sctx.moveTo(x,y); else sctx.lineTo(x,y);
+  });
+  sctx.strokeStyle = "#4FC3F7";
+  sctx.lineWidth = 2;
+  sctx.stroke();
+}
+
+function tickTwin(){
+  if(current.capstone){
+    if(capstoneState.stationYields.length === 0) runCapstoneScenario();
+    const noise = ()=> (Math.random()-0.5)*1.2;
+    const yields = capstoneState.stationYields.map(y=> Math.max(20, Math.min(99.9, y+noise())));
+    capstoneState.stationYields = yields;
+    const cumulative = yields.reduce((acc,y)=> acc*(y/100), 1) * 100;
+    const healthyCount = yields.filter(y=>y>=80).length;
+    const alarm = cumulative < 60 || healthyCount < 8;
+
+    document.getElementById("vTemp").textContent = cumulative.toFixed(1);
+    document.getElementById("vPressure").textContent = healthyCount;
+    document.getElementById("vYield").textContent = capstoneState.revealed
+      ? `${lang==="kr"?"St.":"St."} ${capstoneState.anomalyIndex+1}`
+      : "?";
+    document.getElementById("vDefect").textContent = capstoneState.diagnosed
+      ? (capstoneState.guessIndex===capstoneState.anomalyIndex ? (lang==="kr"?"정답":"HIT") : (lang==="kr"?"오답":"MISS"))
+      : "--";
+
+    document.getElementById("mYield").classList.toggle("warn", alarm);
+    document.getElementById("mDefect").classList.toggle("warn", alarm);
+    document.getElementById("twinDot").classList.toggle("alarm", alarm);
+    document.getElementById("alarmBanner").classList.toggle("show", alarm);
+
+    yieldHistory.push(cumulative);
+    if(yieldHistory.length>40) yieldHistory.shift();
+    drawSpark();
+    return;
+  }
+
+  const noise = ()=> (Math.random()-0.5)*2;
+  const temp = Math.round(current.baseTemp + noise()*3);
+  const pressure = (current.basePressure + noise()*0.02).toFixed(current.basePressure<1?3:1);
+  let yieldVal = current.baseYield + noise()*1.5;
+
+  // sliders influence yield roughly
+  const sVals = Object.values(sliderState);
+  const stressFactor = current.id===3 ? sliderState.align||0 :
+                        current.id===7 ? sliderState.defect||0 :
+                        current.id===4 ? (100-(sliderState.profile||70))*0.4 :
+                        current.id===5 ? Math.max(0, (sliderState.dose||0)-80)*1.2 : 0;
+  yieldVal -= stressFactor*0.15;
+  yieldVal = Math.max(40, Math.min(99.5, yieldVal));
+
+  const defectRate = Math.max(0.2, (100-yieldVal)*0.6 + noise());
+  const alarm = yieldVal < 75 || defectRate > 18;
+
+  document.getElementById("vTemp").textContent = temp;
+  document.getElementById("vPressure").textContent = pressure;
+  document.getElementById("vYield").textContent = yieldVal.toFixed(1);
+  document.getElementById("vDefect").textContent = defectRate.toFixed(1);
+
+  document.getElementById("mYield").classList.toggle("warn", alarm);
+  document.getElementById("mDefect").classList.toggle("warn", alarm);
+  document.getElementById("twinDot").classList.toggle("alarm", alarm);
+  document.getElementById("alarmBanner").classList.toggle("show", alarm);
+
+  yieldHistory.push(yieldVal);
+  if(yieldHistory.length>40) yieldHistory.shift();
+  drawSpark();
+}
+setInterval(tickTwin, 1200);
+
+/* ============================================================
+   Animate loop
+   ============================================================ */
+function animate(){
+  requestAnimationFrame(animate);
+  if(!RENDER_OK) return;
+  sceneGroup.rotation.y += 0.0025;
+  sceneGroup.traverse(o=>{
+    if(o.name==="rain"){
+      const pos = o.geometry.attributes.position.array;
+      for(let i=1;i<pos.length;i+=3){
+        pos[i] -= 0.02;
+        if(pos[i] < 0.05) pos[i] = 2.6;
+      }
+      o.geometry.attributes.position.needsUpdate = true;
+    }
+  });
+  renderer.render(scene, camera);
+}
+
+/* ============================================================
+   Init
+   ============================================================ */
+function init(){
+  resize();
+  selectProcess(1);
+  tickTwin();
+  animate();
+}
+init();
+</script>
+</body>
+</html>
