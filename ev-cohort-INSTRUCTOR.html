@@ -1090,8 +1090,8 @@ function updateProgramTimer() {
   if (isProgramPermanentlyUnlocked()) {
     status.textContent = 'Administrator authenticated · Time lock permanently removed.';
     countdown.textContent = 'UNLOCKED';
-    button.textContent = 'Admin Unlocked';
-    button.disabled = true;
+    button.textContent = 'Re-enable Time Lock';
+    button.disabled = false;
     overlay.classList.remove('show');
     return;
   }
@@ -1102,12 +1102,24 @@ function updateProgramTimer() {
   overlay.classList.toggle('show', remaining <= 0);
 }
 function openAdminLogin() {
-  if (isProgramPermanentlyUnlocked()) return;
+  if (isProgramPermanentlyUnlocked()) {
+    reenableProgramTimeLock();
+    return;
+  }
   document.getElementById('adminIdInput').value = '';
   document.getElementById('adminPasswordInput').value = '';
   document.getElementById('adminLoginError').style.display = 'none';
   document.getElementById('adminLoginModal').classList.add('show');
   setTimeout(() => document.getElementById('adminIdInput').focus(), 50);
+}
+function reenableProgramTimeLock() {
+  const confirmed = window.confirm('Re-enable the 20-day time lock? The access period will restart from now.');
+  if (!confirmed) return;
+  try {
+    localStorage.removeItem(PROGRAM_TIMER_UNLOCK_KEY);
+    localStorage.setItem(PROGRAM_TIMER_START_KEY, String(Date.now()));
+  } catch (e) {}
+  updateProgramTimer();
 }
 function closeAdminLogin() { document.getElementById('adminLoginModal').classList.remove('show'); }
 async function hashAdminPassword(password) {
