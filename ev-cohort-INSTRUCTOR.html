@@ -875,11 +875,11 @@ body {
 </head>
 <body>
 
-<!-- The 15-day term begins once, on this browser's first launch. -->
+<!-- The 20-day term begins once, on this browser's first launch. -->
 <div class="access-timer-bar" id="accessTimerBar">
   <div class="access-timer-copy">
-    <div class="access-timer-label">Program Access · 15-Day Time Lock</div>
-    <div class="access-timer-status" id="accessTimerStatus">사용 가능 기간을 확인하는 중...</div>
+    <div class="access-timer-label">Program Access · 20-Day Time Lock</div>
+    <div class="access-timer-status" id="accessTimerStatus">Checking the available access period...</div>
   </div>
   <div class="access-countdown" id="accessCountdown">--일 --:--:--</div>
   <button class="admin-login-btn" id="adminLoginButton" type="button" onclick="openAdminLogin()">Admin Login</button>
@@ -888,8 +888,8 @@ body {
 <div class="timelock-overlay" id="timelockExpired" role="dialog" aria-modal="true" aria-labelledby="timelockExpiredTitle">
   <div class="timelock-card">
     <div class="timelock-icon">🔒</div>
-    <div class="timelock-title" id="timelockExpiredTitle">프로그램 사용 기간이 만료되었습니다</div>
-    <div class="timelock-description">최초 가동 후 15일의 사용 기간이 종료되었습니다.<br>관리자는 로그인하여 타임락을 영구 해제할 수 있습니다.</div>
+    <div class="timelock-title" id="timelockExpiredTitle">Program Access Has Expired</div>
+    <div class="timelock-description">The 20-day access period has ended.<br>An administrator can sign in to remove the time lock permanently.</div>
     <button class="admin-login-btn" type="button" onclick="openAdminLogin()">Admin Login</button>
   </div>
 </div>
@@ -898,10 +898,10 @@ body {
   <div class="unlock-card">
     <div class="unlock-lock-icon">🛡️</div>
     <div class="unlock-title" id="adminLoginTitle">Admin Login</div>
-    <div class="unlock-sub">관리자 인증에 성공하면 이 브라우저에서는 타임락이 영구 해제됩니다.</div>
+    <div class="unlock-sub">Successful administrator authentication permanently removes the time lock in this browser.</div>
     <input type="text" class="unlock-input admin-input" id="adminIdInput" placeholder="Admin ID" autocomplete="username">
     <input type="password" class="unlock-input admin-input" id="adminPasswordInput" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter') submitAdminLogin()">
-    <div class="admin-error" id="adminLoginError">ID 또는 비밀번호가 올바르지 않습니다.</div>
+    <div class="admin-error" id="adminLoginError">The admin ID or password is incorrect.</div>
     <div class="unlock-btn-row">
       <button class="unlock-btn unlock-btn-cancel" type="button" onclick="closeAdminLogin()">Cancel</button>
       <button class="unlock-btn unlock-btn-submit" type="button" onclick="submitAdminLogin()">Unlock Permanently</button>
@@ -1055,7 +1055,7 @@ body {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // ══════════════ 15-DAY PROGRAM TIME LOCK ══════════════
-const PROGRAM_ACCESS_MS = 15 * 24 * 60 * 60 * 1000;
+const PROGRAM_ACCESS_MS = 20 * 24 * 60 * 60 * 1000;
 const PROGRAM_TIMER_START_KEY = 'ieg_ev_instructor_timer_started_v1';
 const PROGRAM_TIMER_UNLOCK_KEY = 'ieg_ev_instructor_timer_unlocked_v1';
 const ADMIN_ID = 'admin';
@@ -1075,12 +1075,12 @@ function getProgramStartTime() {
   return now;
 }
 function formatProgramDate(timestamp) {
-  return new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(new Date(timestamp));
+  return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(new Date(timestamp));
 }
 function formatProgramCountdown(ms) {
   const total = Math.max(0, Math.floor(ms / 1000));
   const two = value => String(value).padStart(2, '0');
-  return `${Math.floor(total / 86400)}일 ${two(Math.floor((total % 86400) / 3600))}:${two(Math.floor((total % 3600) / 60))}:${two(total % 60)}`;
+  return `${Math.floor(total / 86400)}d ${two(Math.floor((total % 86400) / 3600))}:${two(Math.floor((total % 3600) / 60))}:${two(total % 60)}`;
 }
 function updateProgramTimer() {
   const status = document.getElementById('accessTimerStatus');
@@ -1088,7 +1088,7 @@ function updateProgramTimer() {
   const button = document.getElementById('adminLoginButton');
   const overlay = document.getElementById('timelockExpired');
   if (isProgramPermanentlyUnlocked()) {
-    status.textContent = '관리자 인증 완료 · 타임락이 영구 해제되었습니다.';
+    status.textContent = 'Administrator authenticated · Time lock permanently removed.';
     countdown.textContent = 'UNLOCKED';
     button.textContent = 'Admin Unlocked';
     button.disabled = true;
@@ -1097,8 +1097,8 @@ function updateProgramTimer() {
   }
   const expiresAt = getProgramStartTime() + PROGRAM_ACCESS_MS;
   const remaining = expiresAt - Date.now();
-  status.textContent = `사용 가능 종료: ${formatProgramDate(expiresAt)}`;
-  countdown.textContent = remaining <= 0 ? '기간 만료' : formatProgramCountdown(remaining);
+  status.textContent = `Access available until: ${formatProgramDate(expiresAt)}`;
+  countdown.textContent = remaining <= 0 ? 'EXPIRED' : formatProgramCountdown(remaining);
   overlay.classList.toggle('show', remaining <= 0);
 }
 function openAdminLogin() {
