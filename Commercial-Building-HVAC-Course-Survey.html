@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Commercial Building HVAC Digital Twin — Course Survey</title>
+<style>
+:root{
+  --bg:#EEF1F4; --bg-soft:#F7F9FB; --panel:#FFFFFF; --line:#D9DEE5; --line-soft:#E7EBF0;
+  --ink:#0F1A2E; --ink-2:#2E3A52; --ink-3:#5B6577; --ink-4:#8A93A4;
+  --primary:#14B8A6; --primary-d:#0E8A7C; --navy:#0F2D55;
+  --sky:#DDEBFB; --sky-d:#2A6FDB;
+  --radius:14px;
+  --font-sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--bg);}
+body{font-family:var(--font-sans);color:var(--ink);line-height:1.55;}
+h1,h2,h3{color:var(--navy);margin:0 0 8px;}
+p{margin:0 0 12px;}
+header.top{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;padding:14px 20px;box-shadow:0 2px 10px rgba(15,26,46,.15);}
+.top-inner{max-width:980px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.brand{display:flex;flex-direction:column;}
+.brand .eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8FD9CC;font-weight:600;}
+.brand .title{font-size:18px;font-weight:700;color:#fff;}
+.actions{display:flex;gap:8px;}
+.btn{background:var(--primary);color:#04231d;border:none;padding:8px 14px;border-radius:999px;font-weight:700;font-size:13px;cursor:pointer;}
+nav.tabs{background:#123A6B;padding:0 20px;}
+nav.tabs .tabs-inner{max-width:980px;margin:0 auto;display:flex;gap:2px;}
+nav.tabs button{background:none;border:none;color:#C9D6E8;padding:12px 16px;font-size:13px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;}
+nav.tabs button.active{color:#fff;border-bottom-color:var(--primary);}
+main{max-width:980px;margin:0 auto;padding:28px 20px 80px;}
+section.page{display:none;}
+section.page.active{display:block;}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;margin-bottom:18px;}
+.card h3{font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--primary-d);margin-bottom:14px;}
+.hero{background:linear-gradient(135deg,var(--navy),#173F73);color:#fff;border-radius:var(--radius);padding:34px 30px;margin-bottom:24px;}
+.hero .kicker{color:#8FD9CC;font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.hero h1{color:#fff;font-size:26px;margin-bottom:8px;}
+.hero p{color:#D7E1F1;max-width:660px;}
+.fields{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:22px;}
+.field{background:rgba(255,255,255,.08);border:1px dashed rgba(255,255,255,.4);border-radius:10px;padding:10px 12px;}
+.field label{display:block;font-size:11px;color:#AEC1DE;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+.field .line{border-bottom:1px solid rgba(255,255,255,.5);height:18px;}
+table.likert{width:100%;border-collapse:collapse;margin-bottom:6px;}
+table.likert th{font-size:11px;color:var(--ink-3);text-align:center;padding:6px 4px;font-weight:600;}
+table.likert th.topic-head{text-align:left;width:38%;}
+table.likert td{border-top:1px solid var(--line-soft);padding:10px 4px;font-size:13px;}
+table.likert td.topic{text-align:left;padding-right:10px;}
+table.likert td.opt{text-align:center;}
+.radio{width:18px;height:18px;border:2px solid var(--sky-d);border-radius:50%;display:inline-block;}
+.radio.sq{border-radius:4px;}
+.answer-line{border-bottom:1px solid var(--ink-4);height:26px;margin-bottom:10px;}
+.answer-block{border:1px solid var(--line);border-radius:8px;min-height:70px;background:var(--bg-soft);margin-bottom:10px;}
+.choice-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;}
+.choice{display:flex;align-items:center;gap:6px;background:var(--bg-soft);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;}
+.nps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.nps span{width:32px;height:32px;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-3);}
+footer{text-align:center;color:var(--ink-4);font-size:12px;padding:30px 0;}
+@media print{
+  header.top, nav.tabs, .no-print{display:none !important;}
+  section.page{display:block !important;page-break-after:always;}
+  body{background:#fff;} .card{break-inside:avoid;border:1px solid #ccc;} main{padding:0;max-width:100%;}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <span class="eyebrow">IEG · Global Business Division</span>
+      <span class="title">Commercial Building HVAC Digital Twin — Course Survey</span>
+    </div>
+    <div class="actions no-print"><button class="btn" onclick="window.print()">Print Survey</button></div>
+  </div>
+</header>
+<nav class="tabs"><div class="tabs-inner">
+  <button id="tab-pre" onclick="showPage('pre')" class="active">Pre-Training Survey</button>
+  <button id="tab-post" onclick="showPage('post')">Post-Training Evaluation</button>
+</div></nav>
+
+<main id="main"></main>
+<footer>IEG-HVAC AI Control System · Commercial Building HVAC Digital Twin · Course Survey</footer>
+
+<script>
+const topics = [
+  "Refrigeration cycle fundamentals (compressor, condenser, EXV, evaporator)",
+  "Reading and interpreting zone/duct sensors (temperature, humidity)",
+  "Compressor types & capacity control (fixed-stage vs. variable-speed)",
+  "Expansion valves & superheat control",
+  "Rooftop heat pump operation (reversing valve, coil roles)",
+  "Staged electric heat & defrost-assist strategy",
+  "Unit controller logic: interlocks, sequences, PID, BAS integration",
+  "Structured troubleshooting / diagnostic workflow",
+];
+
+function likertTable(prefix){
+  const header = `<tr><th class="topic-head"></th><th>1<br>Not confident</th><th>2</th><th>3</th><th>4</th><th>5<br>Very confident</th></tr>`;
+  const rows = topics.map((t,i)=>`<tr><td class="topic">${t}</td>` +
+    [1,2,3,4,5].map(n=>`<td class="opt"><span class="radio" title="${prefix}-topic${i}-${n}"></span></td>`).join('') + `</tr>`).join('');
+  return `<table class="likert">${header}${rows}</table>`;
+}
+
+function courseRatingRows(items){
+  return items.map(t=>`<tr><td class="topic">${t}</td>` +
+    [1,2,3,4,5].map(()=>`<td class="opt"><span class="radio"></span></td>`).join('') + `</tr>`).join('');
+}
+
+const main = document.getElementById('main');
+
+const pre = document.createElement('section');
+pre.className='page active'; pre.id='page-pre';
+pre.innerHTML = `
+  <div class="hero">
+    <div class="kicker">Before the Course Begins</div>
+    <h1>Pre-Training Self-Assessment Survey</h1>
+    <p>This survey establishes your starting point before the Commercial Building HVAC Digital Twin course. There are no wrong answers — it simply helps the instructor tailor pacing and emphasis, and gives you a baseline to compare against your Post-Training Evaluation.</p>
+    <div class="fields">
+      <div class="field"><label>Name</label><div class="line"></div></div>
+      <div class="field"><label>Date</label><div class="line"></div></div>
+      <div class="field"><label>Employer / Facility</label><div class="line"></div></div>
+      <div class="field"><label>Current Role</label><div class="line"></div></div>
+      <div class="field"><label>Years of HVAC / Facilities Experience</label><div class="line"></div></div>
+      <div class="field"><label>Cohort / Class</label><div class="line"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>1. Prior Experience</h3>
+    <p>Which of the following have you worked with directly? (Check all that apply)</p>
+    <div class="choice-row">
+      <span class="choice"><span class="radio sq"></span>Packaged rooftop units (RTUs)</span>
+      <span class="choice"><span class="radio sq"></span>Split systems</span>
+      <span class="choice"><span class="radio sq"></span>Chillers</span>
+      <span class="choice"><span class="radio sq"></span>VAV boxes / air distribution</span>
+      <span class="choice"><span class="radio sq"></span>Building Automation Systems (BAS)</span>
+      <span class="choice"><span class="radio sq"></span>Heat pumps</span>
+      <span class="choice"><span class="radio sq"></span>None of the above yet</span>
+    </div>
+    <p>Have you completed any prior HVAC or controls training/certification? If so, briefly describe.</p>
+    <div class="answer-block"></div>
+  </div>
+
+  <div class="card">
+    <h3>2. Self-Rated Confidence (Before the Course)</h3>
+    <p>Rate your current confidence in each topic area, 1 (Not confident) to 5 (Very confident).</p>
+    ${likertTable("pre")}
+  </div>
+
+  <div class="card">
+    <h3>3. Your Goals</h3>
+    <p>What specific challenges or questions do you hope this course addresses?</p>
+    <div class="answer-block"></div>
+    <div class="answer-block"></div>
+  </div>
+`;
+main.appendChild(pre);
+
+const post = document.createElement('section');
+post.className='page'; post.id='page-post';
+post.innerHTML = `
+  <div class="hero">
+    <div class="kicker">After the Course</div>
+    <h1>Post-Training Course Evaluation</h1>
+    <p>Your honest feedback helps IEG improve this course for future cohorts. Please complete this after finishing the Week 8 capstone.</p>
+    <div class="fields">
+      <div class="field"><label>Name (optional)</label><div class="line"></div></div>
+      <div class="field"><label>Date</label><div class="line"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>1. Self-Rated Confidence (After the Course)</h3>
+    <p>Rate your confidence in each topic area now, 1 (Not confident) to 5 (Very confident). Compare against your Pre-Training answers to see your progress.</p>
+    ${likertTable("post")}
+  </div>
+
+  <div class="card">
+    <h3>2. Course Content & Delivery</h3>
+    <table class="likert">
+      <tr><th class="topic-head"></th><th>1<br>Strongly Disagree</th><th>2</th><th>3</th><th>4</th><th>5<br>Strongly Agree</th></tr>
+      ${courseRatingRows([
+        "Course content was relevant to my job responsibilities",
+        "Pacing was appropriate (not too fast or too slow)",
+        "Hands-on digital twin time was sufficient",
+        "The Troubleshooting Guide was useful for diagnostic reasoning",
+        "Instructor explanations were clear",
+        "The Student Workbook exercises reinforced what I learned",
+        "I feel prepared to apply this knowledge on the job",
+      ])}
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>3. Likelihood to Recommend</h3>
+    <p>How likely are you to recommend this course to a colleague? (0 = Not at all likely, 10 = Extremely likely)</p>
+    <div class="nps">${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<span>${n}</span>`).join('')}</div>
+  </div>
+
+  <div class="card">
+    <h3>4. Open Feedback</h3>
+    <p>Which week or module was most valuable to you, and why?</p>
+    <div class="answer-block"></div>
+    <p>What would you improve about the course, workbook, or troubleshooting guide?</p>
+    <div class="answer-block"></div>
+    <p>Any additional comments?</p>
+    <div class="answer-block"></div>
+  </div>
+`;
+main.appendChild(post);
+
+function showPage(id){
+  document.querySelectorAll('section.page').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+</script>
+</body>
+</html>
