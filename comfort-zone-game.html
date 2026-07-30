@@ -1,0 +1,1042 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>쾌적존 지키기 · IEG HVAC</title>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap');
+
+:root{
+  --bg:#EEF1F4; --panel:#FFFFFF; --line:#D9DEE5; --line-soft:#E7EBF0;
+  --ink:#0F1A2E; --ink-2:#2E3A52; --ink-3:#5B6577; --ink-4:#8A93A4;
+  --primary:#14B8A6; --primary-d:#0E8A7C; --navy:#0F2D55;
+  --mint:#DCF1E6; --mint-d:#1F8A5B;
+  --sky:#DDEBFB; --sky-d:#2A6FDB;
+  --peach:#FBE3D5; --peach-d:#D97757;
+  --lilac:#E8E2F4; --lilac-d:#6B5BD2;
+  --lemon:#F6EDC8; --lemon-d:#9C7B14;
+  --rose:#FBD7DC; --rose-d:#C0364E;
+  --radius:16px; --radius-sm:10px;
+  --font-sans:'Pretendard','Pretendard Variable',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;min-height:100%;
+  background:
+    radial-gradient(circle at 14% -8%, rgba(20,184,166,.22) 0%, transparent 40%),
+    radial-gradient(circle at 88% 108%, rgba(58,110,255,.22) 0%, transparent 46%),
+    radial-gradient(circle at 50% 0%, #17399e 0%, #0a1c52 42%, #050c26 100%);
+}
+body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+button{font-family:inherit;cursor:pointer;}
+
+.wrap{max-width:1180px;margin:0 auto;padding:22px 18px 60px;}
+
+/* ── Header ─────────────────────────────────────────────── */
+.head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;color:#e7ecf5;}
+.head-left{display:flex;align-items:center;gap:12px;}
+.badge{width:38px;height:38px;border-radius:9px;background:#fff;
+  display:grid;place-items:center;padding:5px;
+  box-shadow:0 6px 16px rgba(0,0,0,.28);}
+.badge img{width:100%;height:100%;object-fit:contain;display:block;}
+.head h1{margin:0;font-size:17px;font-weight:700;letter-spacing:.01em;}
+.head p{margin:2px 0 0;font-size:12px;color:#9aa7c0;}
+.head-right{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);}
+.clock{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;
+  padding:8px 14px;font-size:13px;color:#e7ecf5;display:flex;align-items:center;gap:8px;}
+.clock .dot{width:7px;height:7px;border-radius:50%;background:var(--primary);box-shadow:0 0 8px var(--primary);}
+
+/* ── Layout ─────────────────────────────────────────────── */
+.grid{display:grid;grid-template-columns:1fr 300px;gap:16px;}
+@media (max-width:880px){.grid{grid-template-columns:1fr;}}
+
+.panel{background:var(--panel);border-radius:var(--radius);border:1px solid var(--line);
+  box-shadow:0 10px 30px rgba(10,17,32,.25);}
+
+/* ── Score strip ────────────────────────────────────────── */
+.scorebar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.score-card{padding:14px 16px;border-radius:14px;background:var(--panel);border:1px solid var(--line);}
+.score-card .lbl{font-size:11px;color:var(--ink-4);font-weight:600;letter-spacing:.03em;text-transform:uppercase;}
+.score-card .val{font-family:var(--font-mono);font-weight:800;font-size:24px;margin-top:4px;color:var(--ink);}
+.score-card .val small{font-size:13px;color:var(--ink-4);font-weight:600;margin-left:2px;}
+
+/* ── Room stage ─────────────────────────────────────────── */
+.stage{padding:20px;display:grid;gap:16px;}
+.stage-top{display:flex;align-items:center;justify-content:space-between;}
+.stage-title{font-size:14px;font-weight:700;color:var(--ink);}
+.occ{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);font-weight:600;}
+.occ .peeps{display:flex;gap:2px;}
+.peep{width:8px;height:8px;border-radius:50%;background:var(--sky-d);}
+.peep.off{background:var(--line);}
+
+.gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media (max-width:700px){.gauges{grid-template-columns:repeat(2,1fr);}}
+.gauge{border-radius:14px;padding:14px;position:relative;overflow:hidden;border:1px solid var(--line-soft);}
+.gauge .g-lbl{font-size:11px;font-weight:700;letter-spacing:.02em;}
+.gauge .g-val{font-family:var(--font-mono);font-weight:800;font-size:26px;margin-top:8px;}
+.gauge .g-unit{font-size:11px;font-weight:600;opacity:.65;margin-left:2px;}
+.gauge .g-bar{margin-top:10px;height:6px;border-radius:4px;background:rgba(0,0,0,.08);overflow:hidden;}
+.gauge .g-fill{height:100%;border-radius:4px;transition:width .35s ease, background .35s ease;}
+.gauge .g-state{margin-top:7px;font-size:10.5px;font-weight:700;letter-spacing:.02em;}
+
+.gauge.temp{background:var(--sky);color:#123a66;}
+.gauge.hum{background:var(--mint);color:#0f5334;}
+.gauge.co2{background:var(--lilac);color:#3a2d6e;}
+.gauge.pm{background:var(--peach);color:#6b3b23;}
+
+/* event log */
+.log{border-top:1px dashed var(--line);padding-top:12px;display:grid;gap:6px;max-height:96px;overflow:auto;}
+.log-row{font-size:12px;color:var(--ink-3);display:flex;gap:8px;align-items:baseline;}
+.log-row .t{font-family:var(--font-mono);color:var(--ink-4);width:44px;flex:none;}
+.log-row.warn{color:var(--rose-d);font-weight:600;}
+.log-row.good{color:var(--mint-d);font-weight:600;}
+
+/* ── Controls panel ─────────────────────────────────────── */
+.controls{padding:18px;display:grid;gap:16px;align-content:start;}
+.controls h2{margin:0;font-size:13px;font-weight:700;color:var(--ink);}
+.ctrl{display:grid;gap:8px;}
+.ctrl-h{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;color:var(--ink-2);}
+.ctrl-h .cur{font-family:var(--font-mono);color:var(--primary-d);font-weight:800;}
+/* nickname + save/leaderboard */
+input#nickname{width:100%;padding:9px 12px;border-radius:9px;border:1px solid var(--line);
+  background:#fbfcfe;font-size:13px;font-family:inherit;color:var(--ink);outline:none;}
+input#nickname:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(20,184,166,.15);}
+
+.savebar{margin-top:16px;padding:9px 12px;border-radius:10px;background:var(--bg);
+  font-size:11.5px;font-weight:700;color:var(--ink-3);text-align:center;}
+.savebar.ok{background:var(--mint);color:var(--mint-d);}
+.savebar.err{background:var(--rose);color:var(--rose-d);}
+
+.planets{margin-top:14px;padding:12px 14px;border-radius:12px;
+  background:linear-gradient(135deg,#0F2D55,#1a3a6e);text-align:center;}
+.planets .pl-title{font-size:11px;font-weight:700;color:#9fc4ea;margin-bottom:8px;}
+.planets .pl-row{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;}
+.planet-slot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:16px;
+  background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.25);}
+.planet-slot.got{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);
+  box-shadow:0 0 10px rgba(255,255,255,.25);}
+.planet-slot.locked{opacity:.35;filter:grayscale(1);}
+
+.lbwrap{margin-top:14px;text-align:left;}
+.lbtabs{display:flex;gap:6px;margin-bottom:8px;}
+.lbtab{flex:1;padding:7px;border-radius:8px;border:1px solid var(--line);background:#fff;
+  font-size:11.5px;font-weight:700;color:var(--ink-3);}
+.lbtab.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+.lblist{display:grid;gap:5px;max-height:170px;overflow:auto;}
+.lbrow{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:9px;background:var(--bg);font-size:12px;}
+.lbrow .rk{width:20px;font-family:var(--font-mono);font-weight:800;color:var(--ink-4);text-align:center;flex:none;}
+.lbrow.top1 .rk{color:var(--lemon-d);}
+.lbrow.top2 .rk{color:#8a93a4;}
+.lbrow.top3 .rk{color:var(--peach-d);}
+.lbrow .nm{flex:1;font-weight:700;color:var(--ink-2);text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.lbrow .sc{font-family:var(--font-mono);font-weight:800;color:var(--primary-d);}
+.lbempty{font-size:11.5px;color:var(--ink-4);text-align:center;padding:12px 0;}
+
+/* ── Range slider ───────────────────────────────────────── */
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:4px;background:var(--line-soft);outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+  background:var(--primary);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25);cursor:pointer;margin-top:-6px;}
+.seg{display:flex;gap:6px;}
+.seg button{flex:1;padding:8px 4px;border-radius:9px;border:1px solid var(--line);background:#fbfcfe;
+  font-size:12px;font-weight:700;color:var(--ink-3);transition:.15s;}
+.seg button.on{background:var(--primary);border-color:var(--primary-d);color:#fff;box-shadow:0 4px 10px rgba(20,184,166,.35);}
+.toggle{display:flex;align-items:center;justify-content:space-between;background:#fbfcfe;border:1px solid var(--line);
+  border-radius:10px;padding:10px 12px;}
+.toggle .t-lbl{font-size:12.5px;font-weight:700;color:var(--ink-2);}
+.toggle .t-sub{font-size:10.5px;color:var(--ink-4);margin-top:1px;}
+.switch{width:40px;height:22px;border-radius:99px;background:var(--line);position:relative;transition:.2s;flex:none;}
+.switch.on{background:var(--primary);}
+.switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:.2s;}
+.switch.on::after{left:20px;}
+.hint{font-size:10.5px;color:var(--ink-4);line-height:1.5;}
+
+/* comfort streak */
+.streak{padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,#0F2D55,#123a66);color:#fff;
+  display:flex;align-items:center;justify-content:space-between;}
+.streak .lbl{font-size:11px;color:#9fc4ea;font-weight:700;letter-spacing:.03em;text-transform:uppercase;}
+.streak .n{font-family:var(--font-mono);font-weight:800;font-size:22px;margin-top:3px;}
+
+.timeline{margin-top:16px;height:8px;border-radius:5px;background:rgba(255,255,255,.08);overflow:hidden;position:relative;}
+.timeline .fill{height:100%;background:linear-gradient(90deg,var(--primary),#8be3d6);}
+
+.btnrow{display:flex;gap:10px;margin-top:6px;}
+.btn{flex:1;padding:11px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:700;font-size:13px;color:var(--ink-2);}
+.btn.primary{background:var(--primary);border-color:var(--primary-d);color:#fff;box-shadow:0 6px 16px rgba(20,184,166,.35);}
+
+/* ── Avatar / quest track ───────────────────────────────── */
+.avatar-track{position:relative;height:64px;display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px dashed var(--line);}
+.station{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;padding-bottom:5px;cursor:pointer;user-select:none;}
+.station .s-icon{font-size:15px;line-height:1;filter:grayscale(.35);opacity:.75;transition:.15s;}
+.station .s-lbl{font-size:8.5px;font-weight:700;color:var(--ink-4);letter-spacing:.01em;}
+.station:hover .s-icon, .station:active .s-icon{opacity:1;filter:none;transform:translateY(-1px);}
+.avatar{position:absolute;top:-6px;width:25%;left:0%;text-align:center;transition:left .3s cubic-bezier(.34,1.56,.64,1);}
+.avatar .sprite{font-size:26px;display:inline-block;animation:bob 1.1s ease-in-out infinite;filter:drop-shadow(0 3px 4px rgba(0,0,0,.18));}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.avatar .bubble{position:relative;display:inline-block;max-width:170px;background:#fff;border:1px solid var(--line);
+  border-radius:10px;padding:6px 9px;font-size:10.5px;font-weight:600;color:var(--ink-2);
+  box-shadow:0 6px 14px rgba(10,17,32,.14);margin-bottom:6px;line-height:1.35;}
+.avatar .bubble::after{content:'';position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:#fff;}
+.avatar.mood-good .bubble{border-color:var(--mint-d);color:var(--mint-d);}
+.avatar.mood-warn .bubble{border-color:var(--lemon-d);color:var(--lemon-d);}
+.avatar.mood-bad  .bubble{border-color:var(--rose-d);color:var(--rose-d);}
+
+/* movement hint + D-pad */
+.movehint{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:2px 2px 0;}
+.movehint>span{font-size:10.5px;color:var(--ink-4);font-weight:600;}
+.dpad{display:grid;grid-template-columns:32px 32px 32px;grid-template-rows:26px 26px;gap:3px;align-items:center;flex:none;}
+.dpad button{grid-row:1 / span 2;width:32px;height:56px;border-radius:9px;border:1px solid var(--line);
+  background:#fbfcfe;color:var(--ink-3);font-size:12px;font-weight:800;cursor:pointer;transition:.12s;}
+.dpad button:active{background:var(--primary);border-color:var(--primary-d);color:#fff;transform:scale(.94);}
+.dpad #dpadLeft{grid-column:1;}
+.dpad #dpadRight{grid-column:3;}
+.dpad-mid{grid-column:2;display:grid;grid-template-rows:26px 26px;gap:3px;}
+.dpad-mid button{width:32px;height:26px;border-radius:7px;border:1px solid var(--line);background:#fbfcfe;
+  color:var(--ink-3);font-size:11px;font-weight:800;cursor:pointer;transition:.12s;}
+.dpad-mid button:active{background:var(--primary);border-color:var(--primary-d);color:#fff;transform:scale(.94);}
+
+.quest-panel{border-top:1px solid var(--line);padding-top:14px;display:grid;gap:10px;}
+.quest-list{display:grid;gap:8px;}
+.quest{display:flex;gap:9px;align-items:flex-start;padding:9px 10px;border-radius:10px;background:#fbfcfe;
+  border:1px solid var(--line);}
+.quest.done{background:var(--mint);border-color:var(--mint-d);}
+.quest .qchk{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);flex:none;margin-top:1px;
+  display:grid;place-items:center;font-size:10px;color:#fff;}
+.quest.done .qchk{background:var(--mint-d);border-color:var(--mint-d);}
+.quest .qbody{display:grid;gap:1px;}
+.quest .qt{font-size:12px;font-weight:700;color:var(--ink-2);}
+.quest.done .qt{color:var(--mint-d);}
+.quest .qd{font-size:10.5px;color:var(--ink-4);}
+.quest .qpts{font-family:var(--font-mono);font-size:10px;color:var(--primary-d);font-weight:700;margin-left:auto;flex:none;}
+
+/* ── Rule bot ───────────────────────────────────────────── */
+.botFab{position:fixed;right:20px;bottom:20px;width:54px;height:54px;border-radius:50%;
+  background:linear-gradient(135deg,var(--primary),var(--primary-d));border:none;color:#fff;
+  font-size:24px;box-shadow:0 10px 26px rgba(20,184,166,.45);z-index:60;
+  display:grid;place-items:center;transition:.15s;}
+.botFab:hover{transform:scale(1.06);}
+.botFab .pulse{position:absolute;inset:0;border-radius:50%;border:2px solid var(--primary);
+  animation:botpulse 2.2s ease-out infinite;}
+@keyframes botpulse{0%{transform:scale(1);opacity:.7;}100%{transform:scale(1.6);opacity:0;}}
+
+.botPanel{position:fixed;right:20px;bottom:86px;width:340px;max-width:calc(100vw - 32px);
+  height:440px;max-height:calc(100vh - 130px);background:#fff;border-radius:18px;
+  box-shadow:0 30px 80px rgba(10,17,32,.45);border:1px solid var(--line);
+  display:none;flex-direction:column;overflow:hidden;z-index:60;}
+.botPanel.show{display:flex;}
+.bot-head{background:var(--navy);color:#fff;padding:13px 16px;display:flex;align-items:center;gap:10px;}
+.bot-head .bh-ic{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.14);
+  display:grid;place-items:center;font-size:16px;flex:none;}
+.bot-head .bh-txt{flex:1;}
+.bot-head .bh-t{font-size:13px;font-weight:800;}
+.bot-head .bh-s{font-size:10px;color:#9fc4ea;}
+.bot-head button{background:none;border:none;color:#cdd8ea;font-size:16px;padding:4px;}
+
+.bot-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--bg);}
+.bmsg{max-width:84%;font-size:12.5px;line-height:1.55;padding:9px 12px;border-radius:13px;}
+.bmsg.bot{align-self:flex-start;background:#fff;border:1px solid var(--line);color:var(--ink-2);
+  border-bottom-left-radius:4px;}
+.bmsg.user{align-self:flex-end;background:var(--primary);color:#fff;border-bottom-right-radius:4px;}
+
+.bot-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px;background:var(--bg);}
+.bot-chips button{padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:#fff;
+  font-size:11px;font-weight:600;color:var(--ink-3);}
+.bot-chips button:hover{border-color:var(--primary);color:var(--primary-d);}
+
+.bot-inputrow{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);background:#fff;}
+.bot-inputrow input{flex:1;padding:9px 12px;border-radius:999px;border:1px solid var(--line);
+  background:var(--bg);font-size:12.5px;outline:none;}
+.bot-inputrow input:focus{border-color:var(--primary);}
+.bot-inputrow button{width:38px;height:38px;border-radius:50%;border:none;background:var(--primary);
+  color:#fff;font-size:14px;flex:none;}
+
+/* ── Result overlay ─────────────────────────────────────── */
+.overlay{position:fixed;inset:0;background:rgba(10,17,32,.72);backdrop-filter:blur(6px);
+  display:none;place-items:center;z-index:50;padding:20px;}
+.overlay.show{display:grid;}
+.result{width:100%;max-width:420px;background:#fff;border-radius:20px;padding:28px 26px;text-align:center;
+  box-shadow:0 40px 100px rgba(0,0,0,.5);}
+.result .grade{font-family:var(--font-mono);font-weight:800;font-size:64px;line-height:1;
+  background:linear-gradient(135deg,var(--primary-d),var(--primary));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.result h3{margin:8px 0 4px;font-size:16px;}
+.result p{margin:0 0 18px;font-size:12.5px;color:var(--ink-4);}
+.result .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.result .stats div{background:var(--bg);border-radius:10px;padding:10px;}
+.result .stats .l{font-size:10.5px;color:var(--ink-4);font-weight:700;}
+.result .stats .v{font-family:var(--font-mono);font-weight:800;font-size:17px;margin-top:2px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="head-left">
+      <div class="badge"><img src="data:image/png;base64,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" alt="IEG logo" /></div>
+      <div>
+        <h1>쾌적존 지키기 · Comfort Zone</h1>
+        <p>온도 · 습도 · CO₂ · 미세먼지를 살펴보며 실내를 쾌적하게 유지하세요</p>
+      </div>
+    </div>
+    <div class="head-right">
+      <div class="clock"><span class="dot"></span><span id="clockTxt">08:00</span></div>
+    </div>
+  </div>
+
+  <div class="scorebar">
+    <div class="score-card"><div class="lbl">쾌적 점수</div><div class="val" id="scoreVal">0</div></div>
+    <div class="score-card"><div class="lbl">쾌적 유지율</div><div class="val" id="ratioVal">0<small>%</small></div></div>
+    <div class="score-card"><div class="lbl">연속 쾌적</div><div class="val" id="streakVal">0<small>tick</small></div></div>
+    <div class="score-card"><div class="lbl">경과 시간</div><div class="val" id="timeVal">08:00</div></div>
+  </div>
+
+  <div class="grid">
+    <div class="panel stage">
+      <div class="stage-top">
+        <div class="stage-title">회의실 A · 4층</div>
+        <div class="occ"><span id="occTxt">재실 0명</span><span class="peeps" id="peeps"></span></div>
+      </div>
+
+      <div class="gauges">
+        <div class="gauge temp">
+          <div class="g-lbl">온도 TEMP</div>
+          <div class="g-val" id="tempVal">--<span class="g-unit">°C</span></div>
+          <div class="g-bar"><div class="g-fill" id="tempFill"></div></div>
+          <div class="g-state" id="tempState">쾌적</div>
+        </div>
+        <div class="gauge hum">
+          <div class="g-lbl">습도 RH</div>
+          <div class="g-val" id="humVal">--<span class="g-unit">%</span></div>
+          <div class="g-bar"><div class="g-fill" id="humFill"></div></div>
+          <div class="g-state" id="humState">쾌적</div>
+        </div>
+        <div class="gauge co2">
+          <div class="g-lbl">CO₂</div>
+          <div class="g-val" id="co2Val">--<span class="g-unit">ppm</span></div>
+          <div class="g-bar"><div class="g-fill" id="co2Fill"></div></div>
+          <div class="g-state" id="co2State">쾌적</div>
+        </div>
+        <div class="gauge pm">
+          <div class="g-lbl">미세먼지 PM2.5</div>
+          <div class="g-val" id="pmVal">--<span class="g-unit">㎍/㎥</span></div>
+          <div class="g-bar"><div class="g-fill" id="pmFill"></div></div>
+          <div class="g-state" id="pmState">쾌적</div>
+        </div>
+      </div>
+
+      <div class="avatar-track">
+        <div class="station" data-k="ac"><span class="s-icon">❄️</span><span class="s-lbl">냉/난방</span></div>
+        <div class="station" data-k="fan"><span class="s-icon">🌬️</span><span class="s-lbl">환기팬</span></div>
+        <div class="station" data-k="purifier"><span class="s-icon">🌀</span><span class="s-lbl">공기청정기</span></div>
+        <div class="station" data-k="humidity"><span class="s-icon">💧</span><span class="s-lbl">가습·제습</span></div>
+        <div class="avatar" id="avatar">
+          <div class="bubble" id="bubble">준비 완료! 시작을 눌러주세요</div>
+          <div class="sprite">🧑‍🔧</div>
+        </div>
+      </div>
+
+      <div class="movehint">
+        <span>← → 이동 · ↑ ↓ 조작 · 기기를 탭해도 동작합니다</span>
+        <div class="dpad">
+          <button id="dpadLeft" aria-label="왼쪽으로 이동">◀</button>
+          <div class="dpad-mid">
+            <button id="dpadUp" aria-label="켜기/올리기">▲</button>
+            <button id="dpadDown" aria-label="끄기/내리기">▼</button>
+          </div>
+          <button id="dpadRight" aria-label="오른쪽으로 이동">▶</button>
+        </div>
+      </div>
+
+      <div class="timeline"><div class="fill" id="tlFill" style="width:0%"></div></div>
+
+      <div class="log" id="log"></div>
+    </div>
+
+    <div class="panel controls">
+      <h2>제어 패널</h2>
+
+      <div class="ctrl">
+        <div class="ctrl-h"><span>닉네임</span></div>
+        <input type="text" id="nickname" maxlength="16" placeholder="리더보드에 표시될 닉네임" />
+        <div class="hint" id="nickHint">닉네임을 입력하면 플레이 종료 후 랭킹에 자동 등록됩니다</div>
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-h"><span>설정 온도</span><span class="cur" id="setTempTxt">24°C</span></div>
+        <input type="range" id="setTemp" min="20" max="27" step="1" value="24" />
+        <div class="hint">냉/난방이 이 온도를 목표로 작동합니다</div>
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-h"><span>환기(외기 도입) 팬</span></div>
+        <div class="seg" id="fanSeg">
+          <button data-v="0">정지</button>
+          <button data-v="1">약</button>
+          <button data-v="2">중</button>
+          <button data-v="3">강</button>
+        </div>
+        <div class="hint">CO₂는 빨리 낮아지지만 외기 온도·미세먼지의 영향을 더 받습니다</div>
+      </div>
+
+      <div class="toggle">
+        <div>
+          <div class="t-lbl">공기청정기</div>
+          <div class="t-sub">미세먼지 저감</div>
+        </div>
+        <div class="switch" id="purifierSw"></div>
+      </div>
+
+      <div class="toggle">
+        <div>
+          <div class="t-lbl">가습·제습 자동</div>
+          <div class="t-sub">습도를 50% 근처로 보정</div>
+        </div>
+        <div class="switch" id="humiditySw"></div>
+      </div>
+
+      <div class="streak">
+        <div>
+          <div class="lbl">현재 상태</div>
+          <div class="n" id="statusTxt">시작 대기</div>
+        </div>
+        <div style="font-size:26px" id="statusIcon">⏸</div>
+      </div>
+
+      <div class="quest-panel">
+        <h2>퀘스트 · 김쾌적 매니저</h2>
+        <div class="quest-list" id="questList"></div>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" id="startBtn">플레이 시작</button>
+        <button class="btn" id="resetBtn">리셋</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="result">
+    <div class="grade" id="gradeTxt">A</div>
+    <h3>하루 근무시간 종료</h3>
+    <p id="gradeDesc">회의실을 쾌적하게 잘 관리했어요.</p>
+    <div class="stats">
+      <div><div class="l">최종 점수</div><div class="v" id="finalScore">0</div></div>
+      <div><div class="l">쾌적 유지율</div><div class="v" id="finalRatio">0%</div></div>
+      <div><div class="l">최장 연속 쾌적</div><div class="v" id="finalStreak">0 tick</div></div>
+      <div><div class="l">경보 횟수</div><div class="v" id="finalAlerts">0</div></div>
+    </div>
+
+    <div class="savebar" id="saveStatus">기록을 저장하는 중…</div>
+
+    <div class="planets" id="planetStrip" style="display:none">
+      <div class="pl-title">🏆 이번 달 왕좌를 차지하면 행성 획득!</div>
+      <div class="pl-row" id="planetRow"></div>
+    </div>
+
+    <div class="lbwrap">
+      <div class="lbtabs">
+        <button class="lbtab on" id="lbTabMonth">이번 달</button>
+        <button class="lbtab" id="lbTabWeek">이번 주</button>
+        <button class="lbtab" id="lbTabAll">전체</button>
+      </div>
+      <div class="lblist" id="lbList"><div class="lbempty">불러오는 중…</div></div>
+    </div>
+
+    <button class="btn primary" style="width:100%" id="playAgainBtn">다시 플레이</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ── Leaderboard config ──────────────────────────────────────
+  // Paste the Google Apps Script Web App URL here after deploying it (see setup notes).
+  // Leave blank to run the game with the leaderboard/save features quietly disabled.
+  const SHEET_API_URL = '';
+
+  // ── Comfort bands ─────────────────────────────────────────
+  const BAND = {
+    temp:{lo:22, hi:26, warnLo:20, warnHi:28},
+    hum: {lo:40, hi:60, warnLo:30, warnHi:70},
+    co2: {hi:1000, warnHi:1500},
+    pm:  {hi:35,  warnHi:75},
+  };
+
+  // ── Game / sim state ──────────────────────────────────────
+  let running=false, tick=0, TOTAL_TICKS=144;         // 144 ticks = 08:00→20:00, 5 sim-min/tick
+  let room = { temp:24.5, hum:50, co2:480, pm:18 };
+  let outdoor = { temp:29, pm:40 };
+  let occ = 0;
+  let ctrl = { setTemp:24, fan:1, purifier:false, humidityAuto:true };
+
+  let score=0, comfortTicks=0, streak=0, bestStreak=0, alerts=0;
+  let timer=null;
+
+  // per-metric streaks + previous-tick states, used by quests & the avatar
+  let mStreak = { temp:0, hum:0, co2:0, pm:0 };
+  let prevStates = { temp:'good', hum:'good', co2:'good', pm:'good' };
+
+  const QUESTS = [
+    { id:'vent',      title:'환기팀장',     desc:'환기팬을 강(3)까지 올려보세요',
+      pts:10, done:false, check: ()=> ctrl.fan===3 },
+    { id:'purifier',  title:'청정 관리자',  desc:'미세먼지 경보를 공기청정기로 해결하세요',
+      pts:15, done:false, check: ()=> ctrl.purifier && prevStates.pm==='bad' && window.__states && window.__states.pm!=='bad' },
+    { id:'temp',      title:'온도 지킴이',  desc:'온도를 20틱 연속 쾌적 범위로 유지',
+      pts:15, done:false, check: ()=> mStreak.temp>=20 },
+    { id:'co2',       title:'CO₂ 마스터',   desc:'CO₂ 1000ppm 이하를 10틱 연속 유지',
+      pts:15, done:false, check: ()=> mStreak.co2>=10 },
+    { id:'perfect',   title:'완벽한 하루',  desc:'4개 지표 모두 30틱 연속 쾌적',
+      pts:25, done:false, check: ()=> streak>=30 },
+  ];
+
+  function renderQuests(){
+    const el = $('questList'); el.innerHTML='';
+    QUESTS.forEach(q=>{
+      const row=document.createElement('div');
+      row.className='quest'+(q.done?' done':'');
+      row.innerHTML = '<div class="qchk">'+(q.done?'✓':'')+'</div>'
+        + '<div class="qbody"><div class="qt">'+q.title+'</div><div class="qd">'+q.desc+'</div></div>'
+        + '<div class="qpts">+'+q.pts+'</div>';
+      el.appendChild(row);
+    });
+  }
+
+  function checkQuests(){
+    QUESTS.forEach(q=>{
+      if(!q.done && q.check()){
+        q.done=true; score += q.pts;
+        log('🏅 퀘스트 완료: '+q.title+' (+'+q.pts+'점)', 'good');
+      }
+    });
+    renderQuests();
+  }
+
+  // ── Avatar ── player-controlled: move with ←/→ or tap, act with ↑/↓ or tap ─
+  const STATIONS = [
+    { key:'ac',        icon:'❄️', label:'냉/난방' },
+    { key:'fan',       icon:'🌬️', label:'환기팬' },
+    { key:'purifier',  icon:'🌀', label:'공기청정기' },
+    { key:'humidity',  icon:'💧', label:'가습·제습' },
+  ];
+  let avatarIdx = 0;
+
+  function setTempVal(v){
+    ctrl.setTemp = clamp(v, 20, 27);
+    $('setTemp').value = ctrl.setTemp;
+    $('setTempTxt').textContent = ctrl.setTemp+'°C';
+  }
+  function setFanVal(v){
+    ctrl.fan = clamp(v, 0, 3);
+    document.querySelectorAll('#fanSeg button').forEach(b=>b.classList.toggle('on', +b.dataset.v===ctrl.fan));
+  }
+  function setPurifier(on){
+    ctrl.purifier = on;
+    $('purifierSw').classList.toggle('on', ctrl.purifier);
+  }
+  function setHumidityAuto(on){
+    ctrl.humidityAuto = on;
+    $('humiditySw').classList.toggle('on', ctrl.humidityAuto);
+  }
+
+  function moveAvatar(delta){
+    avatarIdx = clamp(avatarIdx+delta, 0, STATIONS.length-1);
+    renderAvatar();
+  }
+  // primary "operate" action at the current station — used by ↑/↓, the D-pad, and tapping the station
+  function stepStation(dir){
+    const key = STATIONS[avatarIdx].key;
+    if(key==='ac') setTempVal(ctrl.setTemp + dir);
+    else if(key==='fan') setFanVal(ctrl.fan + dir);
+    else if(key==='purifier') setPurifier(dir>0);
+    else if(key==='humidity') setHumidityAuto(dir>0);
+    renderAvatar();
+  }
+  function tapStation(i){
+    avatarIdx = i;
+    const key = STATIONS[i].key;
+    // tapping toggles switches, and nudges sliders up one step — one tap = one action
+    if(key==='purifier') setPurifier(!ctrl.purifier);
+    else if(key==='humidity') setHumidityAuto(!ctrl.humidityAuto);
+    else stepStation(+1);
+    renderAvatar();
+  }
+
+  function stationInfoText(){
+    const st = STATIONS[avatarIdx];
+    if(st.key==='ac') return st.label+' '+ctrl.setTemp+'°C — ↑/↓ 로 조절';
+    if(st.key==='fan') return st.label+' '+['정지','약','중','강'][ctrl.fan]+' — ↑/↓ 로 조절';
+    if(st.key==='purifier') return st.label+' '+(ctrl.purifier?'켜짐':'꺼짐')+' — ↑ 켜기 / ↓ 끄기';
+    return st.label+' '+(ctrl.humidityAuto?'켜짐':'꺼짐')+' — ↑ 켜기 / ↓ 끄기';
+  }
+
+  function renderAvatar(){
+    const av = $('avatar');
+    av.style.left = (avatarIdx*25)+'%';
+    $('bubble').textContent = stationInfoText();
+
+    // mood still reflects the worst reading right now, so it's visible wherever the avatar stands
+    const s = window.__states || {};
+    const rank={bad:2,warn:1,good:0};
+    let worstRank=0;
+    ['temp','hum','co2','pm'].forEach(k=>{ worstRank = Math.max(worstRank, rank[s[k]]||0); });
+    av.classList.remove('mood-good','mood-warn','mood-bad');
+    av.classList.add(worstRank===2?'mood-bad':worstRank===1?'mood-warn':'mood-good');
+  }
+
+  const $=id=>document.getElementById(id);
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+  // ── Occupancy schedule (fraction of tick index 0..TOTAL_TICKS) ─
+  function scheduledOcc(t){
+    const hourFrac = t/TOTAL_TICKS; // 0..1 across the day
+    // baseline low, two meeting spikes, lunch dip, quiet afternoon tail
+    if(hourFrac<0.06) return 1;
+    if(hourFrac<0.20) return 10;     // morning meeting
+    if(hourFrac<0.28) return 4;
+    if(hourFrac<0.36) return 1;      // lunch
+    if(hourFrac<0.55) return 12;     // afternoon big meeting
+    if(hourFrac<0.65) return 6;
+    if(hourFrac<0.85) return 3;
+    return 1;
+  }
+
+  function fmtClock(t){
+    const totalMin = 8*60 + Math.round(t/TOTAL_TICKS*12*60);
+    const h = Math.floor(totalMin/60), m = totalMin%60;
+    return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+  }
+
+  function log(msg, cls){
+    const row=document.createElement('div');
+    row.className='log-row'+(cls?(' '+cls):'');
+    row.innerHTML='<span class="t">'+fmtClock(tick)+'</span><span>'+msg+'</span>';
+    $('log').prepend(row);
+    while($('log').children.length>18) $('log').removeChild($('log').lastChild);
+  }
+
+  // ── Controls wiring ───────────────────────────────────────
+  $('setTemp').addEventListener('input', e=> setTempVal(+e.target.value));
+  document.querySelectorAll('#fanSeg button').forEach(b=>{
+    b.addEventListener('click', ()=> setFanVal(+b.dataset.v));
+  });
+  document.querySelectorAll('#fanSeg button')[1].classList.add('on');
+
+  $('purifierSw').addEventListener('click', ()=> setPurifier(!ctrl.purifier));
+  $('humiditySw').addEventListener('click', ()=> setHumidityAuto(!ctrl.humidityAuto));
+  $('humiditySw').classList.add('on');
+
+  // ── Avatar input: arrow keys, on-screen D-pad, or tap the station ──
+  document.addEventListener('keydown', e=>{
+    if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)) e.preventDefault();
+    if(e.key==='ArrowLeft') moveAvatar(-1);
+    else if(e.key==='ArrowRight') moveAvatar(+1);
+    else if(e.key==='ArrowUp') stepStation(+1);
+    else if(e.key==='ArrowDown') stepStation(-1);
+  });
+  $('dpadLeft').addEventListener('click', ()=> moveAvatar(-1));
+  $('dpadRight').addEventListener('click', ()=> moveAvatar(+1));
+  $('dpadUp').addEventListener('click', ()=> stepStation(+1));
+  $('dpadDown').addEventListener('click', ()=> stepStation(-1));
+  document.querySelectorAll('.station').forEach((el,i)=>{
+    el.addEventListener('click', ()=> tapStation(i));
+  });
+
+  // ── Simulation step ───────────────────────────────────────
+  function step(){
+    tick++;
+
+    // outdoor drifts across the day (peaks midday) + small noise
+    const dayPos = tick/TOTAL_TICKS;
+    outdoor.temp = 27 + 6*Math.sin(dayPos*Math.PI) + (Math.random()-0.5)*0.6;
+    outdoor.pm   = clamp(35 + 30*Math.sin(dayPos*Math.PI*1.3+1) + (Math.random()-0.5)*10, 8, 140);
+
+    // occupancy toward schedule (+ small random wobble), with event logs on big jumps
+    const target = scheduledOcc(tick) + Math.round((Math.random()-0.5)*2);
+    if(Math.abs(target-occ) >= 5){
+      if(target>occ) log('회의 시작 — 재실 '+target+'명으로 증가', 'warn');
+      else log('회의 종료 — 인원이 빠져나갔습니다', 'good');
+    }
+    occ = clamp(occ + (target-occ)*0.5, 0, 16);
+
+    // ── temperature: AC pulls toward setTemp, outdoor+fan pulls toward outdoor temp
+    const acPull = 0.16;
+    const ventPull = ctrl.fan*0.045;
+    room.temp += (ctrl.setTemp - room.temp)*acPull + (outdoor.temp - room.temp)*ventPull
+               + occ*0.012 + (Math.random()-0.5)*0.12;
+
+    // ── humidity: occupants add moisture; auto system pulls to 50; vent pulls toward outdoor-ish 65
+    room.hum += occ*0.35 - (ctrl.humidityAuto ? (room.hum-50)*0.18 : 0)
+              + (65-room.hum)*ctrl.fan*0.01 + (Math.random()-0.5)*0.8;
+    room.hum = clamp(room.hum, 15, 90);
+
+    // ── CO2: occupants generate, ventilation removes, baseline decay toward outdoor 420
+    room.co2 += occ*26 - ctrl.fan*70 - (room.co2-420)*0.02 + (Math.random()-0.5)*15;
+    room.co2 = clamp(room.co2, 400, 3000);
+
+    // ── PM2.5: purifier removes, ventilation brings outdoor air in
+    room.pm += (ctrl.fan>0 ? (outdoor.pm-room.pm)*ctrl.fan*0.05 : 0)
+             - (ctrl.purifier ? room.pm*0.12 : 0) + (Math.random()-0.5)*1.2;
+    room.pm = clamp(room.pm, 3, 200);
+
+    evaluate();
+    render();
+
+    if(tick>=TOTAL_TICKS){ endGame(); return; }
+  }
+
+  function stateOf(kind,val){
+    const b=BAND[kind];
+    if(kind==='co2'||kind==='pm'){
+      if(val<=b.hi) return 'good';
+      if(val<=b.warnHi) return 'warn';
+      return 'bad';
+    }
+    if(val>=b.lo && val<=b.hi) return 'good';
+    if(val>=b.warnLo && val<=b.warnHi) return 'warn';
+    return 'bad';
+  }
+
+  function evaluate(){
+    const states = {
+      temp: stateOf('temp',room.temp),
+      hum:  stateOf('hum',room.hum),
+      co2:  stateOf('co2',room.co2),
+      pm:   stateOf('pm',room.pm),
+    };
+    const good = Object.values(states).filter(s=>s==='good').length;
+    const bad  = Object.values(states).filter(s=>s==='bad').length;
+
+    score += good*2 - bad*1;
+    if(good===4){ comfortTicks++; streak++; bestStreak=Math.max(bestStreak,streak); }
+    else streak=0;
+
+    if(bad>0 && tick%6===0){
+      alerts++;
+      const names={temp:'온도',hum:'습도',co2:'CO₂',pm:'미세먼지'};
+      const worst=Object.keys(states).find(k=>states[k]==='bad');
+      if(worst) log('⚠ '+names[worst]+' 경보 — 쾌적 범위를 벗어났습니다', 'warn');
+    }
+
+    ['temp','hum','co2','pm'].forEach(k=>{
+      mStreak[k] = states[k]==='good' ? mStreak[k]+1 : 0;
+    });
+
+    window.__states = states;
+    checkQuests();
+    prevStates = states;
+  }
+
+  // ── Rendering ─────────────────────────────────────────────
+  function pct(val,min,max){ return clamp((val-min)/(max-min)*100,0,100); }
+  const stateColor = { good:'#1F8A5B', warn:'#9C7B14', bad:'#C0364E' };
+  const stateLabel = { good:'쾌적', warn:'주의', bad:'경보' };
+
+  function render(){
+    $('clockTxt').textContent = fmtClock(tick);
+    $('timeVal').textContent = fmtClock(tick);
+    $('tlFill').style.width = (tick/TOTAL_TICKS*100)+'%';
+
+    $('occTxt').textContent = '재실 '+Math.round(occ)+'명';
+    const peepsEl=$('peeps'); peepsEl.innerHTML='';
+    for(let i=0;i<16;i++){
+      const d=document.createElement('span');
+      d.className='peep'+(i<Math.round(occ)?'':' off');
+      peepsEl.appendChild(d);
+    }
+
+    const s = window.__states || {};
+    $('tempVal').innerHTML = room.temp.toFixed(1)+'<span class="g-unit">°C</span>';
+    $('humVal').innerHTML  = room.hum.toFixed(0)+'<span class="g-unit">%</span>';
+    $('co2Val').innerHTML  = Math.round(room.co2)+'<span class="g-unit">ppm</span>';
+    $('pmVal').innerHTML   = Math.round(room.pm)+'<span class="g-unit">㎍/㎥</span>';
+
+    $('tempFill').style.width = pct(room.temp,16,32)+'%'; $('tempFill').style.background = stateColor[s.temp];
+    $('humFill').style.width  = pct(room.hum,15,90)+'%';  $('humFill').style.background  = stateColor[s.hum];
+    $('co2Fill').style.width  = pct(room.co2,400,2200)+'%'; $('co2Fill').style.background = stateColor[s.co2];
+    $('pmFill').style.width   = pct(room.pm,0,150)+'%';   $('pmFill').style.background   = stateColor[s.pm];
+
+    $('tempState').textContent = stateLabel[s.temp]; $('tempState').style.color = stateColor[s.temp];
+    $('humState').textContent  = stateLabel[s.hum];  $('humState').style.color  = stateColor[s.hum];
+    $('co2State').textContent  = stateLabel[s.co2];  $('co2State').style.color  = stateColor[s.co2];
+    $('pmState').textContent   = stateLabel[s.pm];   $('pmState').style.color   = stateColor[s.pm];
+
+    $('scoreVal').textContent = Math.max(0,score);
+    $('ratioVal').innerHTML = (tick? Math.round(comfortTicks/tick*100):0)+'<small>%</small>';
+    $('streakVal').innerHTML = streak+'<small>tick</small>';
+
+    const allGood = s.temp==='good'&&s.hum==='good'&&s.co2==='good'&&s.pm==='good';
+    $('statusTxt').textContent = allGood ? '완벽한 쾌적존' : '조정 필요';
+    $('statusIcon').textContent = allGood ? '😊' : '🛠️';
+
+    renderAvatar();
+  }
+
+  // ── Game control ──────────────────────────────────────────
+  function startGame(){
+    if(running) return;
+    running=true;
+    $('startBtn').textContent='진행 중…';
+    log('플레이 시작 — 08:00, 회의실 A', 'good');
+    timer=setInterval(step, 450);
+  }
+
+  function resetGame(){
+    clearInterval(timer); running=false;
+    tick=0; score=0; comfortTicks=0; streak=0; bestStreak=0; alerts=0;
+    room={temp:24.5,hum:50,co2:480,pm:18}; occ=0;
+    mStreak={temp:0,hum:0,co2:0,pm:0};
+    prevStates={temp:'good',hum:'good',co2:'good',pm:'good'};
+    avatarIdx=0;
+    QUESTS.forEach(q=>q.done=false);
+    $('log').innerHTML='';
+    $('startBtn').textContent='플레이 시작';
+    $('overlay').classList.remove('show');
+    evaluate(); render();
+  }
+
+  function endGame(){
+    clearInterval(timer); running=false;
+    const ratio = Math.round(comfortTicks/tick*100);
+    let grade='C', desc='공간 관리가 조금 아쉬웠어요. 환기·냉방 밸런스를 다시 잡아보세요.';
+    if(ratio>=85){ grade='S'; desc='완벽에 가까운 실내 환경 관리! IEG 스마트 빌딩 매니저 자격 있음.'; }
+    else if(ratio>=65){ grade='A'; desc='회의실을 쾌적하게 잘 관리했어요.'; }
+    else if(ratio>=45){ grade='B'; desc='나쁘지 않아요. 다음엔 CO₂와 미세먼지 밸런스에 신경써 보세요.'; }
+
+    $('gradeTxt').textContent=grade;
+    $('gradeDesc').textContent=desc;
+    $('finalScore').textContent=Math.max(0,score);
+    $('finalRatio').textContent=ratio+'%';
+    $('finalStreak').textContent=bestStreak+' tick';
+    $('finalAlerts').textContent=alerts;
+    $('overlay').classList.add('show');
+    $('startBtn').textContent='플레이 시작';
+
+    submitScore({ nickname:getNickname(), score:Math.max(0,score), ratio, streak:bestStreak, grade, alerts });
+  }
+
+  // ── Leaderboard: Google Sheets via Apps Script Web App ──────
+  let lbScope = 'month';
+
+  function getNickname(){
+    let v = $('nickname').value.trim();
+    if(!v){
+      v = 'Guest-'+Math.floor(1000+Math.random()*9000);
+      $('nickname').value = v;
+    }
+    return v.slice(0,16);
+  }
+
+  function submitScore(payload){
+    const bar = $('saveStatus');
+    if(!SHEET_API_URL){
+      bar.textContent = '리더보드 미연동 — 관리자가 시트 연동 URL을 설정하면 자동 저장됩니다';
+      bar.className = 'savebar';
+      fetchLeaderboard(lbScope);
+      return;
+    }
+    bar.textContent = '기록을 저장하는 중…';
+    bar.className = 'savebar';
+    // text/plain avoids a CORS preflight against the Apps Script endpoint
+    fetch(SHEET_API_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+    }).then(r=>r.json()).then(res=>{
+      if(res && res.ok){
+        bar.textContent = '리더보드에 저장 완료 ✅ ('+payload.nickname+')';
+        bar.className = 'savebar ok';
+      } else {
+        bar.textContent = '저장 실패 — 잠시 후 다시 시도해 주세요';
+        bar.className = 'savebar err';
+      }
+      fetchLeaderboard(lbScope);
+      fetchPlanets(payload.nickname);
+    }).catch(()=>{
+      bar.textContent = '저장 실패 — 네트워크를 확인해 주세요';
+      bar.className = 'savebar err';
+      fetchLeaderboard(lbScope);
+      fetchPlanets(payload.nickname);
+    });
+  }
+
+  function fetchLeaderboard(scope){
+    lbScope = scope;
+    $('lbTabMonth').classList.toggle('on', scope==='month');
+    $('lbTabWeek').classList.toggle('on', scope==='week');
+    $('lbTabAll').classList.toggle('on', scope==='all');
+    const list = $('lbList');
+    if(!SHEET_API_URL){
+      list.innerHTML = '<div class="lbempty">관리자가 구글 시트 연동을 설정하면 랭킹이 표시됩니다</div>';
+      return;
+    }
+    list.innerHTML = '<div class="lbempty">불러오는 중…</div>';
+    fetch(SHEET_API_URL+'?action=leaderboard&scope='+scope+'&limit=10')
+      .then(r=>r.json())
+      .then(res=> renderLeaderboard(res && res.ok ? res.rows : []))
+      .catch(()=>{ list.innerHTML = '<div class="lbempty">랭킹을 불러오지 못했습니다</div>'; });
+  }
+
+  // ── Planet collection: this month's #1 wins the throne + a planet ──
+  function fetchPlanets(nickname){
+    const strip = $('planetStrip');
+    if(!SHEET_API_URL || !nickname){ strip.style.display='none'; return; }
+    fetch(SHEET_API_URL+'?action=planets&nickname='+encodeURIComponent(nickname))
+      .then(r=>r.json())
+      .then(res=>{
+        if(!res || !res.ok){ strip.style.display='none'; return; }
+        renderPlanets(res.planets || []);
+        strip.style.display = '';
+      })
+      .catch(()=>{ strip.style.display='none'; });
+  }
+
+  function renderPlanets(planets){
+    const collected = {};
+    planets.forEach(p=>{ collected[p.planetIndex] = p; });
+    let html = '';
+    for(let i=0;i<8;i++){
+      if(collected[i]){
+        const p = collected[i];
+        html += '<div class="planet-slot got" title="'+p.month+' 왕좌 · '+p.planetName+'">'+p.planetEmoji+'</div>';
+      } else {
+        html += '<div class="planet-slot locked">?</div>';
+      }
+    }
+    $('planetRow').innerHTML = html;
+    const wins = planets.length;
+    document.querySelector('#planetStrip .pl-title').textContent =
+      wins>0 ? '🏆 왕좌 '+wins+'회 달성 — 나의 행성 컬렉션' : '🏆 이번 달 왕좌를 차지하면 행성 획득!';
+  }
+
+  function renderLeaderboard(rows){
+    const list = $('lbList');
+    if(!rows || !rows.length){
+      list.innerHTML = '<div class="lbempty">아직 기록이 없습니다 — 첫 기록의 주인공이 되어보세요!</div>';
+      return;
+    }
+    list.innerHTML = rows.map((r,i)=>{
+      const rankCls = i===0?'top1':i===1?'top2':i===2?'top3':'';
+      return '<div class="lbrow '+rankCls+'"><div class="rk">'+(i+1)+'</div>'
+        + '<div class="nm">'+String(r.nickname||'').slice(0,16)+'</div>'
+        + '<div class="sc">'+r.score+'</div></div>';
+    }).join('');
+  }
+
+  $('lbTabMonth').addEventListener('click', ()=> fetchLeaderboard('month'));
+  $('lbTabWeek').addEventListener('click', ()=> fetchLeaderboard('week'));
+  $('lbTabAll').addEventListener('click', ()=> fetchLeaderboard('all'));
+
+  $('startBtn').addEventListener('click', startGame);
+  $('resetBtn').addEventListener('click', resetGame);
+  $('playAgainBtn').addEventListener('click', resetGame);
+
+  evaluate(); render();
+})();
+</script>
+<button class="botFab" id="botFab" aria-label="게임 룰 챗봇 열기"><span class="pulse"></span>❓</button>
+
+<div class="botPanel" id="botPanel">
+  <div class="bot-head">
+    <div class="bh-ic">🤖</div>
+    <div class="bh-txt">
+      <div class="bh-t">룰봇 · Comfort Zone Quest</div>
+      <div class="bh-s">게임 규칙이 궁금하면 물어보세요</div>
+    </div>
+    <button id="botCloseBtn" aria-label="닫기">✕</button>
+  </div>
+  <div class="bot-msgs" id="botMsgs"></div>
+  <div class="bot-chips" id="botChips"></div>
+  <div class="bot-inputrow">
+    <input type="text" id="botInput" placeholder="예: 조작법 알려줘" />
+    <button id="botSendBtn" aria-label="보내기">➤</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+
+  const KB = [
+    { kws:['목표','뭐하는','무엇을','게임 방법','플레이 방법','어떻게 시작','룰','규칙'],
+      a:'회의실의 온도·습도·CO₂·미세먼지 4가지를 쾌적 범위 안에 최대한 오래 유지하는 게임이에요. 08:00~20:00 하루가 압축돼서 진행되고, 끝나면 등급(S/A/B/C)이 매겨집니다.' },
+    { kws:['조작','컨트롤','방향키','d패드','dpad','터치','움직','이동','키보드'],
+      a:'← → 로 4개 기기(❄️냉/난방·🌬️환기팬·🌀공기청정기·💧가습제습) 사이를 이동하고, ↑ ↓ 로 그 기기를 조작해요. 화면의 D패드 버튼을 눌러도 되고, 기기 아이콘을 직접 탭하면 그 자리에서 바로 한 번 동작합니다.' },
+    { kws:['범위','쾌적','기준','온도 몇','습도 몇','co2 몇','미세먼지 몇','pm2.5'],
+      a:'쾌적 기준은 온도 22~26°C, 습도 40~60%, CO₂ 1000ppm 이하, 미세먼지(PM2.5) 35㎍/㎥ 이하예요. 벗어나면 주의(노랑)→경보(빨강) 순으로 표시됩니다.' },
+    { kws:['점수','스코어','계산','채점'],
+      a:'매 틱마다 쾌적한 지표 1개당 +2점, 경보 상태인 지표 1개당 -1점이 더해져요. 4개 지표가 모두 쾌적이면 "연속 쾌적(streak)"이 쌓이고, 퀘스트를 완료하면 보너스 점수도 붙습니다.' },
+    { kws:['등급','s등급','a등급','b등급','c등급','평가','성적'],
+      a:'쾌적 유지율(전체 시간 중 4개 지표가 모두 쾌적했던 비율) 기준이에요. 85% 이상 S, 65% 이상 A, 45% 이상 B, 그 미만은 C 등급입니다.' },
+    { kws:['퀘스트','미션','환기팀장','청정 관리자','co2 마스터','완벽한 하루','온도 지킴이'],
+      a:'퀘스트는 5개예요 — 환기팀장(환기팬 강 사용), 청정 관리자(미세먼지 경보를 공기청정기로 해결), 온도 지킴이(온도 20틱 연속 유지), CO₂ 마스터(CO₂ 1000ppm 이하 10틱 유지), 완벽한 하루(4개 지표 30틱 연속 쾌적). 완료하면 보너스 점수를 받아요.' },
+    { kws:['기기','장치','냉난방','환기팬','공기청정기','가습','제습','역할'],
+      a:'❄️ 냉/난방은 설정온도를 조절하고, 🌬️ 환기팬은 CO₂를 빨리 낮추지만 외기 온도·미세먼지 영향을 더 받아요. 🌀 공기청정기는 미세먼지를 줄이고, 💧 가습·제습 자동은 습도를 50% 근처로 맞춰줍니다.' },
+    { kws:['닉네임','리더보드','랭킹','순위'],
+      a:'닉네임을 입력하고 플레이하면 결과가 자동 저장돼서 이번 달/이번 주/전체 랭킹에 반영돼요. 닉네임을 비워두면 Guest-1234 같은 임시 이름이 자동으로 붙습니다.' },
+    { kws:['행성','왕좌','컬렉션','리워드','보상'],
+      a:'매달 1등(왕좌)을 차지한 닉네임은 행성을 하나씩 획득해요. 수성→금성→지구→화성→목성→토성→천왕성→해왕성 순으로 모으고, 8개를 다 모으면 다음 왕좌부터 새 주기가 시작됩니다.' },
+    { kws:['인원','재실','회의','왜 바뀌','사람'],
+      a:'재실 인원은 하루 일정(오전 회의·점심시간·오후 회의 등)에 따라 자동으로 바뀌어요. 인원이 늘면 CO₂와 습도가 더 빨리 올라갑니다.' },
+    { kws:['시간','얼마나','언제 끝','플레이 시간'],
+      a:'실제 시계로는 약 1분 정도지만, 게임 속에서는 08:00~20:00 하루 전체가 빠르게 흘러가는 방식이에요.' },
+  ];
+  const FALLBACK = '음, 정확히 이해하지 못했어요. "조작법", "점수", "쾌적 범위", "퀘스트", "리더보드", "행성" 같은 키워드로 다시 물어봐 주실래요?';
+  const CHIPS = ['조작법 알려줘','점수는 어떻게 매겨져?','쾌적 범위가 뭐야?','퀘스트 종류 알려줘','행성은 어떻게 모아?'];
+
+  function matchAnswer(query){
+    const q = query.toLowerCase();
+    let best=null, bestScore=0;
+    KB.forEach(entry=>{
+      let score=0;
+      entry.kws.forEach(k=>{ if(q.includes(k.toLowerCase())) score++; });
+      if(score>bestScore){ bestScore=score; best=entry; }
+    });
+    return best ? best.a : FALLBACK;
+  }
+
+  function addMsg(text, who){
+    const el = document.createElement('div');
+    el.className = 'bmsg '+who;
+    el.textContent = text;
+    $('botMsgs').appendChild(el);
+    $('botMsgs').scrollTop = $('botMsgs').scrollHeight;
+  }
+
+  function renderChips(){
+    $('botChips').innerHTML = '';
+    CHIPS.forEach(c=>{
+      const b = document.createElement('button');
+      b.textContent = c;
+      b.addEventListener('click', ()=> ask(c));
+      $('botChips').appendChild(b);
+    });
+  }
+
+  function ask(text){
+    if(!text.trim()) return;
+    addMsg(text, 'user');
+    $('botInput').value = '';
+    setTimeout(()=> addMsg(matchAnswer(text), 'bot'), 250);
+  }
+
+  let opened = false;
+  function openBot(){
+    $('botPanel').classList.add('show');
+    if(!opened){
+      opened = true;
+      addMsg('안녕하세요! 저는 Comfort Zone Quest 룰봇이에요 🤖 게임 규칙, 조작법, 퀘스트, 리더보드, 행성 리워드까지 뭐든 물어보세요.', 'bot');
+      renderChips();
+    }
+  }
+
+  $('botFab').addEventListener('click', openBot);
+  $('botCloseBtn').addEventListener('click', ()=> $('botPanel').classList.remove('show'));
+  $('botSendBtn').addEventListener('click', ()=> ask($('botInput').value));
+  $('botInput').addEventListener('keydown', e=>{ if(e.key==='Enter') ask($('botInput').value); });
+})();
+</script>
+</body>
+</html>
