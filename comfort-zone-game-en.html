@@ -1,0 +1,898 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Comfort Zone Quest · IEG HVAC</title>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap');
+
+:root{
+  --bg:#EEF1F4; --panel:#FFFFFF; --line:#D9DEE5; --line-soft:#E7EBF0;
+  --ink:#0F1A2E; --ink-2:#2E3A52; --ink-3:#5B6577; --ink-4:#8A93A4;
+  --primary:#14B8A6; --primary-d:#0E8A7C; --navy:#0F2D55;
+  --mint:#DCF1E6; --mint-d:#1F8A5B;
+  --sky:#DDEBFB; --sky-d:#2A6FDB;
+  --peach:#FBE3D5; --peach-d:#D97757;
+  --lilac:#E8E2F4; --lilac-d:#6B5BD2;
+  --lemon:#F6EDC8; --lemon-d:#9C7B14;
+  --rose:#FBD7DC; --rose-d:#C0364E;
+  --radius:16px; --radius-sm:10px;
+  --font-sans:'Pretendard','Pretendard Variable',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;min-height:100%;
+  background:
+    radial-gradient(circle at 14% -8%, rgba(20,184,166,.22) 0%, transparent 40%),
+    radial-gradient(circle at 88% 108%, rgba(58,110,255,.22) 0%, transparent 46%),
+    radial-gradient(circle at 50% 0%, #17399e 0%, #0a1c52 42%, #050c26 100%);
+}
+body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+button{font-family:inherit;cursor:pointer;}
+
+.wrap{max-width:1180px;margin:0 auto;padding:22px 18px 60px;}
+
+/* ── Header ─────────────────────────────────────────────── */
+.head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;color:#e7ecf5;}
+.head-left{display:flex;align-items:center;gap:12px;}
+.badge{width:38px;height:38px;border-radius:9px;background:linear-gradient(180deg,#14B8A6,#0E8A7C);
+  display:grid;place-items:center;color:#fff;font-weight:800;font-size:14px;letter-spacing:.02em;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4), 0 6px 16px rgba(20,184,166,.35);}
+.head h1{margin:0;font-size:17px;font-weight:700;letter-spacing:.01em;}
+.head p{margin:2px 0 0;font-size:12px;color:#9aa7c0;}
+.head-right{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);}
+.clock{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;
+  padding:8px 14px;font-size:13px;color:#e7ecf5;display:flex;align-items:center;gap:8px;}
+.clock .dot{width:7px;height:7px;border-radius:50%;background:var(--primary);box-shadow:0 0 8px var(--primary);}
+
+/* ── Layout ─────────────────────────────────────────────── */
+.grid{display:grid;grid-template-columns:1fr 300px;gap:16px;}
+@media (max-width:880px){.grid{grid-template-columns:1fr;}}
+
+.panel{background:var(--panel);border-radius:var(--radius);border:1px solid var(--line);
+  box-shadow:0 10px 30px rgba(10,17,32,.25);}
+
+/* ── Score strip ────────────────────────────────────────── */
+.scorebar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.score-card{padding:14px 16px;border-radius:14px;background:var(--panel);border:1px solid var(--line);}
+.score-card .lbl{font-size:11px;color:var(--ink-4);font-weight:600;letter-spacing:.03em;text-transform:uppercase;}
+.score-card .val{font-family:var(--font-mono);font-weight:800;font-size:24px;margin-top:4px;color:var(--ink);}
+.score-card .val small{font-size:13px;color:var(--ink-4);font-weight:600;margin-left:2px;}
+
+/* ── Room stage ─────────────────────────────────────────── */
+.stage{padding:20px;display:grid;gap:16px;}
+.stage-top{display:flex;align-items:center;justify-content:space-between;}
+.stage-title{font-size:14px;font-weight:700;color:var(--ink);}
+.occ{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);font-weight:600;}
+.occ .peeps{display:flex;gap:2px;}
+.peep{width:8px;height:8px;border-radius:50%;background:var(--sky-d);}
+.peep.off{background:var(--line);}
+
+.gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media (max-width:700px){.gauges{grid-template-columns:repeat(2,1fr);}}
+.gauge{border-radius:14px;padding:14px;position:relative;overflow:hidden;border:1px solid var(--line-soft);}
+.gauge .g-lbl{font-size:11px;font-weight:700;letter-spacing:.02em;}
+.gauge .g-val{font-family:var(--font-mono);font-weight:800;font-size:26px;margin-top:8px;}
+.gauge .g-unit{font-size:11px;font-weight:600;opacity:.65;margin-left:2px;}
+.gauge .g-bar{margin-top:10px;height:6px;border-radius:4px;background:rgba(0,0,0,.08);overflow:hidden;}
+.gauge .g-fill{height:100%;border-radius:4px;transition:width .35s ease, background .35s ease;}
+.gauge .g-state{margin-top:7px;font-size:10.5px;font-weight:700;letter-spacing:.02em;}
+
+.gauge.temp{background:var(--sky);color:#123a66;}
+.gauge.hum{background:var(--mint);color:#0f5334;}
+.gauge.co2{background:var(--lilac);color:#3a2d6e;}
+.gauge.pm{background:var(--peach);color:#6b3b23;}
+
+/* event log */
+.log{border-top:1px dashed var(--line);padding-top:12px;display:grid;gap:6px;max-height:96px;overflow:auto;}
+.log-row{font-size:12px;color:var(--ink-3);display:flex;gap:8px;align-items:baseline;}
+.log-row .t{font-family:var(--font-mono);color:var(--ink-4);width:44px;flex:none;}
+.log-row.warn{color:var(--rose-d);font-weight:600;}
+.log-row.good{color:var(--mint-d);font-weight:600;}
+
+/* ── Controls panel ─────────────────────────────────────── */
+.controls{padding:18px;display:grid;gap:16px;align-content:start;}
+.controls h2{margin:0;font-size:13px;font-weight:700;color:var(--ink);}
+.ctrl{display:grid;gap:8px;}
+.ctrl-h{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;color:var(--ink-2);}
+.ctrl-h .cur{font-family:var(--font-mono);color:var(--primary-d);font-weight:800;}
+/* nickname + save/leaderboard */
+input#nickname{width:100%;padding:9px 12px;border-radius:9px;border:1px solid var(--line);
+  background:#fbfcfe;font-size:13px;font-family:inherit;color:var(--ink);outline:none;}
+input#nickname:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(20,184,166,.15);}
+
+.savebar{margin-top:16px;padding:9px 12px;border-radius:10px;background:var(--bg);
+  font-size:11.5px;font-weight:700;color:var(--ink-3);text-align:center;}
+.savebar.ok{background:var(--mint);color:var(--mint-d);}
+.savebar.err{background:var(--rose);color:var(--rose-d);}
+
+.planets{margin-top:14px;padding:12px 14px;border-radius:12px;
+  background:linear-gradient(135deg,#0F2D55,#1a3a6e);text-align:center;}
+.planets .pl-title{font-size:11px;font-weight:700;color:#9fc4ea;margin-bottom:8px;}
+.planets .pl-row{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;}
+.planet-slot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:16px;
+  background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.25);}
+.planet-slot.got{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);
+  box-shadow:0 0 10px rgba(255,255,255,.25);}
+.planet-slot.locked{opacity:.35;filter:grayscale(1);}
+
+.lbwrap{margin-top:14px;text-align:left;}
+.lbtabs{display:flex;gap:6px;margin-bottom:8px;}
+.lbtab{flex:1;padding:7px;border-radius:8px;border:1px solid var(--line);background:#fff;
+  font-size:11.5px;font-weight:700;color:var(--ink-3);}
+.lbtab.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+.lblist{display:grid;gap:5px;max-height:170px;overflow:auto;}
+.lbrow{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:9px;background:var(--bg);font-size:12px;}
+.lbrow .rk{width:20px;font-family:var(--font-mono);font-weight:800;color:var(--ink-4);text-align:center;flex:none;}
+.lbrow.top1 .rk{color:var(--lemon-d);}
+.lbrow.top2 .rk{color:#8a93a4;}
+.lbrow.top3 .rk{color:var(--peach-d);}
+.lbrow .nm{flex:1;font-weight:700;color:var(--ink-2);text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.lbrow .sc{font-family:var(--font-mono);font-weight:800;color:var(--primary-d);}
+.lbempty{font-size:11.5px;color:var(--ink-4);text-align:center;padding:12px 0;}
+
+/* ── Range slider ───────────────────────────────────────── */
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:4px;background:var(--line-soft);outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+  background:var(--primary);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25);cursor:pointer;margin-top:-6px;}
+.seg{display:flex;gap:6px;}
+.seg button{flex:1;padding:8px 4px;border-radius:9px;border:1px solid var(--line);background:#fbfcfe;
+  font-size:12px;font-weight:700;color:var(--ink-3);transition:.15s;}
+.seg button.on{background:var(--primary);border-color:var(--primary-d);color:#fff;box-shadow:0 4px 10px rgba(20,184,166,.35);}
+.toggle{display:flex;align-items:center;justify-content:space-between;background:#fbfcfe;border:1px solid var(--line);
+  border-radius:10px;padding:10px 12px;}
+.toggle .t-lbl{font-size:12.5px;font-weight:700;color:var(--ink-2);}
+.toggle .t-sub{font-size:10.5px;color:var(--ink-4);margin-top:1px;}
+.switch{width:40px;height:22px;border-radius:99px;background:var(--line);position:relative;transition:.2s;flex:none;}
+.switch.on{background:var(--primary);}
+.switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:.2s;}
+.switch.on::after{left:20px;}
+.hint{font-size:10.5px;color:var(--ink-4);line-height:1.5;}
+
+/* comfort streak */
+.streak{padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,#0F2D55,#123a66);color:#fff;
+  display:flex;align-items:center;justify-content:space-between;}
+.streak .lbl{font-size:11px;color:#9fc4ea;font-weight:700;letter-spacing:.03em;text-transform:uppercase;}
+.streak .n{font-family:var(--font-mono);font-weight:800;font-size:22px;margin-top:3px;}
+
+.timeline{margin-top:16px;height:8px;border-radius:5px;background:rgba(255,255,255,.08);overflow:hidden;position:relative;}
+.timeline .fill{height:100%;background:linear-gradient(90deg,var(--primary),#8be3d6);}
+
+.btnrow{display:flex;gap:10px;margin-top:6px;}
+.btn{flex:1;padding:11px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:700;font-size:13px;color:var(--ink-2);}
+.btn.primary{background:var(--primary);border-color:var(--primary-d);color:#fff;box-shadow:0 6px 16px rgba(20,184,166,.35);}
+
+/* ── Avatar / quest track ───────────────────────────────── */
+.avatar-track{position:relative;height:64px;display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px dashed var(--line);}
+.station{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;padding-bottom:5px;cursor:pointer;user-select:none;}
+.station .s-icon{font-size:15px;line-height:1;filter:grayscale(.35);opacity:.75;transition:.15s;}
+.station .s-lbl{font-size:8.5px;font-weight:700;color:var(--ink-4);letter-spacing:.01em;}
+.station:hover .s-icon, .station:active .s-icon{opacity:1;filter:none;transform:translateY(-1px);}
+.avatar{position:absolute;top:-6px;width:25%;left:0%;text-align:center;transition:left .3s cubic-bezier(.34,1.56,.64,1);}
+.avatar .sprite{font-size:26px;display:inline-block;animation:bob 1.1s ease-in-out infinite;filter:drop-shadow(0 3px 4px rgba(0,0,0,.18));}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.avatar .bubble{position:relative;display:inline-block;max-width:170px;background:#fff;border:1px solid var(--line);
+  border-radius:10px;padding:6px 9px;font-size:10.5px;font-weight:600;color:var(--ink-2);
+  box-shadow:0 6px 14px rgba(10,17,32,.14);margin-bottom:6px;line-height:1.35;}
+.avatar .bubble::after{content:'';position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:#fff;}
+.avatar.mood-good .bubble{border-color:var(--mint-d);color:var(--mint-d);}
+.avatar.mood-warn .bubble{border-color:var(--lemon-d);color:var(--lemon-d);}
+.avatar.mood-bad  .bubble{border-color:var(--rose-d);color:var(--rose-d);}
+
+/* movement hint + D-pad */
+.movehint{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:2px 2px 0;}
+.movehint>span{font-size:10.5px;color:var(--ink-4);font-weight:600;}
+.dpad{display:grid;grid-template-columns:32px 32px 32px;grid-template-rows:26px 26px;gap:3px;align-items:center;flex:none;}
+.dpad button{grid-row:1 / span 2;width:32px;height:56px;border-radius:9px;border:1px solid var(--line);
+  background:#fbfcfe;color:var(--ink-3);font-size:12px;font-weight:800;cursor:pointer;transition:.12s;}
+.dpad button:active{background:var(--primary);border-color:var(--primary-d);color:#fff;transform:scale(.94);}
+.dpad #dpadLeft{grid-column:1;}
+.dpad #dpadRight{grid-column:3;}
+.dpad-mid{grid-column:2;display:grid;grid-template-rows:26px 26px;gap:3px;}
+.dpad-mid button{width:32px;height:26px;border-radius:7px;border:1px solid var(--line);background:#fbfcfe;
+  color:var(--ink-3);font-size:11px;font-weight:800;cursor:pointer;transition:.12s;}
+.dpad-mid button:active{background:var(--primary);border-color:var(--primary-d);color:#fff;transform:scale(.94);}
+
+.quest-panel{border-top:1px solid var(--line);padding-top:14px;display:grid;gap:10px;}
+.quest-list{display:grid;gap:8px;}
+.quest{display:flex;gap:9px;align-items:flex-start;padding:9px 10px;border-radius:10px;background:#fbfcfe;
+  border:1px solid var(--line);}
+.quest.done{background:var(--mint);border-color:var(--mint-d);}
+.quest .qchk{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);flex:none;margin-top:1px;
+  display:grid;place-items:center;font-size:10px;color:#fff;}
+.quest.done .qchk{background:var(--mint-d);border-color:var(--mint-d);}
+.quest .qbody{display:grid;gap:1px;}
+.quest .qt{font-size:12px;font-weight:700;color:var(--ink-2);}
+.quest.done .qt{color:var(--mint-d);}
+.quest .qd{font-size:10.5px;color:var(--ink-4);}
+.quest .qpts{font-family:var(--font-mono);font-size:10px;color:var(--primary-d);font-weight:700;margin-left:auto;flex:none;}
+
+/* ── Result overlay ─────────────────────────────────────── */
+.overlay{position:fixed;inset:0;background:rgba(10,17,32,.72);backdrop-filter:blur(6px);
+  display:none;place-items:center;z-index:50;padding:20px;}
+.overlay.show{display:grid;}
+.result{width:100%;max-width:420px;background:#fff;border-radius:20px;padding:28px 26px;text-align:center;
+  box-shadow:0 40px 100px rgba(0,0,0,.5);}
+.result .grade{font-family:var(--font-mono);font-weight:800;font-size:64px;line-height:1;
+  background:linear-gradient(135deg,var(--primary-d),var(--primary));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.result h3{margin:8px 0 4px;font-size:16px;}
+.result p{margin:0 0 18px;font-size:12.5px;color:var(--ink-4);}
+.result .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.result .stats div{background:var(--bg);border-radius:10px;padding:10px;}
+.result .stats .l{font-size:10.5px;color:var(--ink-4);font-weight:700;}
+.result .stats .v{font-family:var(--font-mono);font-weight:800;font-size:17px;margin-top:2px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="head-left">
+      <div class="badge">IEG</div>
+      <div>
+        <h1>Comfort Zone Quest</h1>
+        <p>Watch temperature, humidity, CO2 and PM2.5 to keep the room comfortable</p>
+      </div>
+    </div>
+    <div class="head-right">
+      <div class="clock"><span class="dot"></span><span id="clockTxt">08:00</span></div>
+    </div>
+  </div>
+
+  <div class="scorebar">
+    <div class="score-card"><div class="lbl">Comfort Score</div><div class="val" id="scoreVal">0</div></div>
+    <div class="score-card"><div class="lbl">Comfort Ratio</div><div class="val" id="ratioVal">0<small>%</small></div></div>
+    <div class="score-card"><div class="lbl">Comfort Streak</div><div class="val" id="streakVal">0<small>tick</small></div></div>
+    <div class="score-card"><div class="lbl">Elapsed Time</div><div class="val" id="timeVal">08:00</div></div>
+  </div>
+
+  <div class="grid">
+    <div class="panel stage">
+      <div class="stage-top">
+        <div class="stage-title">Meeting Room A · 4F</div>
+        <div class="occ"><span id="occTxt">0 occupants</span><span class="peeps" id="peeps"></span></div>
+      </div>
+
+      <div class="gauges">
+        <div class="gauge temp">
+          <div class="g-lbl">TEMPERATURE</div>
+          <div class="g-val" id="tempVal">--<span class="g-unit">°C</span></div>
+          <div class="g-bar"><div class="g-fill" id="tempFill"></div></div>
+          <div class="g-state" id="tempState">Good</div>
+        </div>
+        <div class="gauge hum">
+          <div class="g-lbl">HUMIDITY (RH)</div>
+          <div class="g-val" id="humVal">--<span class="g-unit">%</span></div>
+          <div class="g-bar"><div class="g-fill" id="humFill"></div></div>
+          <div class="g-state" id="humState">Good</div>
+        </div>
+        <div class="gauge co2">
+          <div class="g-lbl">CO2</div>
+          <div class="g-val" id="co2Val">--<span class="g-unit">ppm</span></div>
+          <div class="g-bar"><div class="g-fill" id="co2Fill"></div></div>
+          <div class="g-state" id="co2State">Good</div>
+        </div>
+        <div class="gauge pm">
+          <div class="g-lbl">PM2.5</div>
+          <div class="g-val" id="pmVal">--<span class="g-unit">㎍/㎥</span></div>
+          <div class="g-bar"><div class="g-fill" id="pmFill"></div></div>
+          <div class="g-state" id="pmState">Good</div>
+        </div>
+      </div>
+
+      <div class="avatar-track">
+        <div class="station" data-k="ac"><span class="s-icon">❄️</span><span class="s-lbl">AC/Heat</span></div>
+        <div class="station" data-k="fan"><span class="s-icon">🌬️</span><span class="s-lbl">Vent Fan</span></div>
+        <div class="station" data-k="purifier"><span class="s-icon">🌀</span><span class="s-lbl">Purifier</span></div>
+        <div class="station" data-k="humidity"><span class="s-icon">💧</span><span class="s-lbl">Humidity</span></div>
+        <div class="avatar" id="avatar">
+          <div class="bubble" id="bubble">Ready! Press Start to begin</div>
+          <div class="sprite">🧑‍🔧</div>
+        </div>
+      </div>
+
+      <div class="movehint">
+        <span>← → move · ↑ ↓ operate · tap a station to act</span>
+        <div class="dpad">
+          <button id="dpadLeft" aria-label="Move left">◀</button>
+          <div class="dpad-mid">
+            <button id="dpadUp" aria-label="Turn on / increase">▲</button>
+            <button id="dpadDown" aria-label="Turn off / decrease">▼</button>
+          </div>
+          <button id="dpadRight" aria-label="Move right">▶</button>
+        </div>
+      </div>
+
+      <div class="timeline"><div class="fill" id="tlFill" style="width:0%"></div></div>
+
+      <div class="log" id="log"></div>
+    </div>
+
+    <div class="panel controls">
+      <h2>Control Panel</h2>
+
+      <div class="ctrl">
+        <div class="ctrl-h"><span>Nickname</span></div>
+        <input type="text" id="nickname" maxlength="16" placeholder="Nickname shown on the leaderboard" />
+        <div class="hint" id="nickHint">Enter a nickname and your result is added to the ranking automatically when you finish</div>
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-h"><span>Setpoint Temp</span><span class="cur" id="setTempTxt">24°C</span></div>
+        <input type="range" id="setTemp" min="20" max="27" step="1" value="24" />
+        <div class="hint">Heating/cooling targets this temperature</div>
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-h"><span>Ventilation (Fresh-air) Fan</span></div>
+        <div class="seg" id="fanSeg">
+          <button data-v="0">Off</button>
+          <button data-v="1">Low</button>
+          <button data-v="2">Mid</button>
+          <button data-v="3">High</button>
+        </div>
+        <div class="hint">CO2 drops faster, but outdoor temperature &amp; PM2.5 affect the room more</div>
+      </div>
+
+      <div class="toggle">
+        <div>
+          <div class="t-lbl">Air Purifier</div>
+          <div class="t-sub">Reduces PM2.5</div>
+        </div>
+        <div class="switch" id="purifierSw"></div>
+      </div>
+
+      <div class="toggle">
+        <div>
+          <div class="t-lbl">Auto Humidity Control</div>
+          <div class="t-sub">Pulls humidity toward 50%</div>
+        </div>
+        <div class="switch" id="humiditySw"></div>
+      </div>
+
+      <div class="streak">
+        <div>
+          <div class="lbl">Current Status</div>
+          <div class="n" id="statusTxt">Waiting to start</div>
+        </div>
+        <div style="font-size:26px" id="statusIcon">⏸</div>
+      </div>
+
+      <div class="quest-panel">
+        <h2>Quests · Manager Kim</h2>
+        <div class="quest-list" id="questList"></div>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" id="startBtn">Start Playing</button>
+        <button class="btn" id="resetBtn">Reset</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="result">
+    <div class="grade" id="gradeTxt">A</div>
+    <h3>Workday Complete</h3>
+    <p id="gradeDesc">You managed the room comfort well.</p>
+    <div class="stats">
+      <div><div class="l">Final Score</div><div class="v" id="finalScore">0</div></div>
+      <div><div class="l">Comfort Ratio</div><div class="v" id="finalRatio">0%</div></div>
+      <div><div class="l">Best Streak</div><div class="v" id="finalStreak">0 tick</div></div>
+      <div><div class="l">Alerts</div><div class="v" id="finalAlerts">0</div></div>
+    </div>
+
+    <div class="savebar" id="saveStatus">Saving your result…</div>
+
+    <div class="planets" id="planetStrip" style="display:none">
+      <div class="pl-title">🏆 Win this month's throne to earn a planet!</div>
+      <div class="pl-row" id="planetRow"></div>
+    </div>
+
+    <div class="lbwrap">
+      <div class="lbtabs">
+        <button class="lbtab on" id="lbTabMonth">This Month</button>
+        <button class="lbtab" id="lbTabWeek">This Week</button>
+        <button class="lbtab" id="lbTabAll">All-Time</button>
+      </div>
+      <div class="lblist" id="lbList"><div class="lbempty">Loading…</div></div>
+    </div>
+
+    <button class="btn primary" style="width:100%" id="playAgainBtn">Play Again</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ── Leaderboard config ──────────────────────────────────────
+  // Paste the Google Apps Script Web App URL here after deploying it (see setup notes).
+  // Leave blank to run the game with the leaderboard/save features quietly disabled.
+  const SHEET_API_URL = '';
+
+  // ── Comfort bands ─────────────────────────────────────────
+  const BAND = {
+    temp:{lo:22, hi:26, warnLo:20, warnHi:28},
+    hum: {lo:40, hi:60, warnLo:30, warnHi:70},
+    co2: {hi:1000, warnHi:1500},
+    pm:  {hi:35,  warnHi:75},
+  };
+
+  // ── Game / sim state ──────────────────────────────────────
+  let running=false, tick=0, TOTAL_TICKS=144;         // 144 ticks = 08:00→20:00, 5 sim-min/tick
+  let room = { temp:24.5, hum:50, co2:480, pm:18 };
+  let outdoor = { temp:29, pm:40 };
+  let occ = 0;
+  let ctrl = { setTemp:24, fan:1, purifier:false, humidityAuto:true };
+
+  let score=0, comfortTicks=0, streak=0, bestStreak=0, alerts=0;
+  let timer=null;
+
+  // per-metric streaks + previous-tick states, used by quests & the avatar
+  let mStreak = { temp:0, hum:0, co2:0, pm:0 };
+  let prevStates = { temp:'good', hum:'good', co2:'good', pm:'good' };
+
+  const QUESTS = [
+    { id:'vent',      title:'Ventilation Chief',  desc:'Raise the ventilation fan to High (3)',
+      pts:10, done:false, check: ()=> ctrl.fan===3 },
+    { id:'purifier',  title:'Purity Manager',     desc:'Clear a PM2.5 alert using the air purifier',
+      pts:15, done:false, check: ()=> ctrl.purifier && prevStates.pm==='bad' && window.__states && window.__states.pm!=='bad' },
+    { id:'temp',      title:'Temperature Guardian', desc:'Keep temperature in the comfort range for 20 consecutive ticks',
+      pts:15, done:false, check: ()=> mStreak.temp>=20 },
+    { id:'co2',       title:'CO2 Master',         desc:'Keep CO2 at or below 1000ppm for 10 consecutive ticks',
+      pts:15, done:false, check: ()=> mStreak.co2>=10 },
+    { id:'perfect',   title:'Perfect Day',        desc:'Keep all 4 metrics comfortable for 30 consecutive ticks',
+      pts:25, done:false, check: ()=> streak>=30 },
+  ];
+
+  function renderQuests(){
+    const el = $('questList'); el.innerHTML='';
+    QUESTS.forEach(q=>{
+      const row=document.createElement('div');
+      row.className='quest'+(q.done?' done':'');
+      row.innerHTML = '<div class="qchk">'+(q.done?'✓':'')+'</div>'
+        + '<div class="qbody"><div class="qt">'+q.title+'</div><div class="qd">'+q.desc+'</div></div>'
+        + '<div class="qpts">+'+q.pts+'</div>';
+      el.appendChild(row);
+    });
+  }
+
+  function checkQuests(){
+    QUESTS.forEach(q=>{
+      if(!q.done && q.check()){
+        q.done=true; score += q.pts;
+        log('🏅 Quest complete: '+q.title+' (+'+q.pts+' pts)', 'good');
+      }
+    });
+    renderQuests();
+  }
+
+  // ── Avatar ── player-controlled: move with ←/→ or tap, act with ↑/↓ or tap ─
+  const STATIONS = [
+    { key:'ac',        icon:'❄️', label:'AC/Heat' },
+    { key:'fan',       icon:'🌬️', label:'Vent Fan' },
+    { key:'purifier',  icon:'🌀', label:'Purifier' },
+    { key:'humidity',  icon:'💧', label:'Humidity' },
+  ];
+  let avatarIdx = 0;
+
+  function setTempVal(v){
+    ctrl.setTemp = clamp(v, 20, 27);
+    $('setTemp').value = ctrl.setTemp;
+    $('setTempTxt').textContent = ctrl.setTemp+'°C';
+  }
+  function setFanVal(v){
+    ctrl.fan = clamp(v, 0, 3);
+    document.querySelectorAll('#fanSeg button').forEach(b=>b.classList.toggle('on', +b.dataset.v===ctrl.fan));
+  }
+  function setPurifier(on){
+    ctrl.purifier = on;
+    $('purifierSw').classList.toggle('on', ctrl.purifier);
+  }
+  function setHumidityAuto(on){
+    ctrl.humidityAuto = on;
+    $('humiditySw').classList.toggle('on', ctrl.humidityAuto);
+  }
+
+  function moveAvatar(delta){
+    avatarIdx = clamp(avatarIdx+delta, 0, STATIONS.length-1);
+    renderAvatar();
+  }
+  // primary "operate" action at the current station — used by ↑/↓, the D-pad, and tapping the station
+  function stepStation(dir){
+    const key = STATIONS[avatarIdx].key;
+    if(key==='ac') setTempVal(ctrl.setTemp + dir);
+    else if(key==='fan') setFanVal(ctrl.fan + dir);
+    else if(key==='purifier') setPurifier(dir>0);
+    else if(key==='humidity') setHumidityAuto(dir>0);
+    renderAvatar();
+  }
+  function tapStation(i){
+    avatarIdx = i;
+    const key = STATIONS[i].key;
+    // tapping toggles switches, and nudges sliders up one step — one tap = one action
+    if(key==='purifier') setPurifier(!ctrl.purifier);
+    else if(key==='humidity') setHumidityAuto(!ctrl.humidityAuto);
+    else stepStation(+1);
+    renderAvatar();
+  }
+
+  function stationInfoText(){
+    const st = STATIONS[avatarIdx];
+    if(st.key==='ac') return st.label+' '+ctrl.setTemp+'°C — use ↑/↓';
+    if(st.key==='fan') return st.label+' '+['Off','Low','Mid','High'][ctrl.fan]+' — use ↑/↓';
+    if(st.key==='purifier') return st.label+' '+(ctrl.purifier?'ON':'OFF')+' — ↑ on / ↓ off';
+    return st.label+' '+(ctrl.humidityAuto?'ON':'OFF')+' — ↑ on / ↓ off';
+  }
+
+  function renderAvatar(){
+    const av = $('avatar');
+    av.style.left = (avatarIdx*25)+'%';
+    $('bubble').textContent = stationInfoText();
+
+    // mood still reflects the worst reading right now, so it's visible wherever the avatar stands
+    const s = window.__states || {};
+    const rank={bad:2,warn:1,good:0};
+    let worstRank=0;
+    ['temp','hum','co2','pm'].forEach(k=>{ worstRank = Math.max(worstRank, rank[s[k]]||0); });
+    av.classList.remove('mood-good','mood-warn','mood-bad');
+    av.classList.add(worstRank===2?'mood-bad':worstRank===1?'mood-warn':'mood-good');
+  }
+
+  const $=id=>document.getElementById(id);
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+  // ── Occupancy schedule (fraction of tick index 0..TOTAL_TICKS) ─
+  function scheduledOcc(t){
+    const hourFrac = t/TOTAL_TICKS; // 0..1 across the day
+    // baseline low, two meeting spikes, lunch dip, quiet afternoon tail
+    if(hourFrac<0.06) return 1;
+    if(hourFrac<0.20) return 10;     // morning meeting
+    if(hourFrac<0.28) return 4;
+    if(hourFrac<0.36) return 1;      // lunch
+    if(hourFrac<0.55) return 12;     // afternoon big meeting
+    if(hourFrac<0.65) return 6;
+    if(hourFrac<0.85) return 3;
+    return 1;
+  }
+
+  function fmtClock(t){
+    const totalMin = 8*60 + Math.round(t/TOTAL_TICKS*12*60);
+    const h = Math.floor(totalMin/60), m = totalMin%60;
+    return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+  }
+
+  function log(msg, cls){
+    const row=document.createElement('div');
+    row.className='log-row'+(cls?(' '+cls):'');
+    row.innerHTML='<span class="t">'+fmtClock(tick)+'</span><span>'+msg+'</span>';
+    $('log').prepend(row);
+    while($('log').children.length>18) $('log').removeChild($('log').lastChild);
+  }
+
+  // ── Controls wiring ───────────────────────────────────────
+  $('setTemp').addEventListener('input', e=> setTempVal(+e.target.value));
+  document.querySelectorAll('#fanSeg button').forEach(b=>{
+    b.addEventListener('click', ()=> setFanVal(+b.dataset.v));
+  });
+  document.querySelectorAll('#fanSeg button')[1].classList.add('on');
+
+  $('purifierSw').addEventListener('click', ()=> setPurifier(!ctrl.purifier));
+  $('humiditySw').addEventListener('click', ()=> setHumidityAuto(!ctrl.humidityAuto));
+  $('humiditySw').classList.add('on');
+
+  // ── Avatar input: arrow keys, on-screen D-pad, or tap the station ──
+  document.addEventListener('keydown', e=>{
+    if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)) e.preventDefault();
+    if(e.key==='ArrowLeft') moveAvatar(-1);
+    else if(e.key==='ArrowRight') moveAvatar(+1);
+    else if(e.key==='ArrowUp') stepStation(+1);
+    else if(e.key==='ArrowDown') stepStation(-1);
+  });
+  $('dpadLeft').addEventListener('click', ()=> moveAvatar(-1));
+  $('dpadRight').addEventListener('click', ()=> moveAvatar(+1));
+  $('dpadUp').addEventListener('click', ()=> stepStation(+1));
+  $('dpadDown').addEventListener('click', ()=> stepStation(-1));
+  document.querySelectorAll('.station').forEach((el,i)=>{
+    el.addEventListener('click', ()=> tapStation(i));
+  });
+
+  // ── Simulation step ───────────────────────────────────────
+  function step(){
+    tick++;
+
+    // outdoor drifts across the day (peaks midday) + small noise
+    const dayPos = tick/TOTAL_TICKS;
+    outdoor.temp = 27 + 6*Math.sin(dayPos*Math.PI) + (Math.random()-0.5)*0.6;
+    outdoor.pm   = clamp(35 + 30*Math.sin(dayPos*Math.PI*1.3+1) + (Math.random()-0.5)*10, 8, 140);
+
+    // occupancy toward schedule (+ small random wobble), with event logs on big jumps
+    const target = scheduledOcc(tick) + Math.round((Math.random()-0.5)*2);
+    if(Math.abs(target-occ) >= 5){
+      if(target>occ) log('Meeting started — occupancy rises to '+target, 'warn');
+      else log('Meeting ended — people are leaving', 'good');
+    }
+    occ = clamp(occ + (target-occ)*0.5, 0, 16);
+
+    // ── temperature: AC pulls toward setTemp, outdoor+fan pulls toward outdoor temp
+    const acPull = 0.16;
+    const ventPull = ctrl.fan*0.045;
+    room.temp += (ctrl.setTemp - room.temp)*acPull + (outdoor.temp - room.temp)*ventPull
+               + occ*0.012 + (Math.random()-0.5)*0.12;
+
+    // ── humidity: occupants add moisture; auto system pulls to 50; vent pulls toward outdoor-ish 65
+    room.hum += occ*0.35 - (ctrl.humidityAuto ? (room.hum-50)*0.18 : 0)
+              + (65-room.hum)*ctrl.fan*0.01 + (Math.random()-0.5)*0.8;
+    room.hum = clamp(room.hum, 15, 90);
+
+    // ── CO2: occupants generate, ventilation removes, baseline decay toward outdoor 420
+    room.co2 += occ*26 - ctrl.fan*70 - (room.co2-420)*0.02 + (Math.random()-0.5)*15;
+    room.co2 = clamp(room.co2, 400, 3000);
+
+    // ── PM2.5: purifier removes, ventilation brings outdoor air in
+    room.pm += (ctrl.fan>0 ? (outdoor.pm-room.pm)*ctrl.fan*0.05 : 0)
+             - (ctrl.purifier ? room.pm*0.12 : 0) + (Math.random()-0.5)*1.2;
+    room.pm = clamp(room.pm, 3, 200);
+
+    evaluate();
+    render();
+
+    if(tick>=TOTAL_TICKS){ endGame(); return; }
+  }
+
+  function stateOf(kind,val){
+    const b=BAND[kind];
+    if(kind==='co2'||kind==='pm'){
+      if(val<=b.hi) return 'good';
+      if(val<=b.warnHi) return 'warn';
+      return 'bad';
+    }
+    if(val>=b.lo && val<=b.hi) return 'good';
+    if(val>=b.warnLo && val<=b.warnHi) return 'warn';
+    return 'bad';
+  }
+
+  function evaluate(){
+    const states = {
+      temp: stateOf('temp',room.temp),
+      hum:  stateOf('hum',room.hum),
+      co2:  stateOf('co2',room.co2),
+      pm:   stateOf('pm',room.pm),
+    };
+    const good = Object.values(states).filter(s=>s==='good').length;
+    const bad  = Object.values(states).filter(s=>s==='bad').length;
+
+    score += good*2 - bad*1;
+    if(good===4){ comfortTicks++; streak++; bestStreak=Math.max(bestStreak,streak); }
+    else streak=0;
+
+    if(bad>0 && tick%6===0){
+      alerts++;
+      const names={temp:'Temperature',hum:'Humidity',co2:'CO2',pm:'PM2.5'};
+      const worst=Object.keys(states).find(k=>states[k]==='bad');
+      if(worst) log('⚠ '+names[worst]+' alert — outside the comfort range', 'warn');
+    }
+
+    ['temp','hum','co2','pm'].forEach(k=>{
+      mStreak[k] = states[k]==='good' ? mStreak[k]+1 : 0;
+    });
+
+    window.__states = states;
+    checkQuests();
+    prevStates = states;
+  }
+
+  // ── Rendering ─────────────────────────────────────────────
+  function pct(val,min,max){ return clamp((val-min)/(max-min)*100,0,100); }
+  const stateColor = { good:'#1F8A5B', warn:'#9C7B14', bad:'#C0364E' };
+  const stateLabel = { good:'Good', warn:'Caution', bad:'Alert' };
+
+  function render(){
+    $('clockTxt').textContent = fmtClock(tick);
+    $('timeVal').textContent = fmtClock(tick);
+    $('tlFill').style.width = (tick/TOTAL_TICKS*100)+'%';
+
+    $('occTxt').textContent = Math.round(occ)+' occupants';
+    const peepsEl=$('peeps'); peepsEl.innerHTML='';
+    for(let i=0;i<16;i++){
+      const d=document.createElement('span');
+      d.className='peep'+(i<Math.round(occ)?'':' off');
+      peepsEl.appendChild(d);
+    }
+
+    const s = window.__states || {};
+    $('tempVal').innerHTML = room.temp.toFixed(1)+'<span class="g-unit">°C</span>';
+    $('humVal').innerHTML  = room.hum.toFixed(0)+'<span class="g-unit">%</span>';
+    $('co2Val').innerHTML  = Math.round(room.co2)+'<span class="g-unit">ppm</span>';
+    $('pmVal').innerHTML   = Math.round(room.pm)+'<span class="g-unit">㎍/㎥</span>';
+
+    $('tempFill').style.width = pct(room.temp,16,32)+'%'; $('tempFill').style.background = stateColor[s.temp];
+    $('humFill').style.width  = pct(room.hum,15,90)+'%';  $('humFill').style.background  = stateColor[s.hum];
+    $('co2Fill').style.width  = pct(room.co2,400,2200)+'%'; $('co2Fill').style.background = stateColor[s.co2];
+    $('pmFill').style.width   = pct(room.pm,0,150)+'%';   $('pmFill').style.background   = stateColor[s.pm];
+
+    $('tempState').textContent = stateLabel[s.temp]; $('tempState').style.color = stateColor[s.temp];
+    $('humState').textContent  = stateLabel[s.hum];  $('humState').style.color  = stateColor[s.hum];
+    $('co2State').textContent  = stateLabel[s.co2];  $('co2State').style.color  = stateColor[s.co2];
+    $('pmState').textContent   = stateLabel[s.pm];   $('pmState').style.color   = stateColor[s.pm];
+
+    $('scoreVal').textContent = Math.max(0,score);
+    $('ratioVal').innerHTML = (tick? Math.round(comfortTicks/tick*100):0)+'<small>%</small>';
+    $('streakVal').innerHTML = streak+'<small>tick</small>';
+
+    const allGood = s.temp==='good'&&s.hum==='good'&&s.co2==='good'&&s.pm==='good';
+    $('statusTxt').textContent = allGood ? 'Perfect comfort zone' : 'Needs adjustment';
+    $('statusIcon').textContent = allGood ? '😊' : '🛠️';
+
+    renderAvatar();
+  }
+
+  // ── Game control ──────────────────────────────────────────
+  function startGame(){
+    if(running) return;
+    running=true;
+    $('startBtn').textContent='In progress…';
+    log('Play started — 08:00, Meeting Room A', 'good');
+    timer=setInterval(step, 450);
+  }
+
+  function resetGame(){
+    clearInterval(timer); running=false;
+    tick=0; score=0; comfortTicks=0; streak=0; bestStreak=0; alerts=0;
+    room={temp:24.5,hum:50,co2:480,pm:18}; occ=0;
+    mStreak={temp:0,hum:0,co2:0,pm:0};
+    prevStates={temp:'good',hum:'good',co2:'good',pm:'good'};
+    avatarIdx=0;
+    QUESTS.forEach(q=>q.done=false);
+    $('log').innerHTML='';
+    $('startBtn').textContent='Start Playing';
+    $('overlay').classList.remove('show');
+    evaluate(); render();
+  }
+
+  function endGame(){
+    clearInterval(timer); running=false;
+    const ratio = Math.round(comfortTicks/tick*100);
+    let grade='C', desc='Room management was a bit shaky. Try rebalancing ventilation and cooling.';
+    if(ratio>=85){ grade='S'; desc='Near-perfect indoor environment control! You qualify as an IEG Smart Building Manager.'; }
+    else if(ratio>=65){ grade='A'; desc='You kept the meeting room comfortable.'; }
+    else if(ratio>=45){ grade='B'; desc='Not bad. Next time, watch the CO2 / PM2.5 balance more closely.'; }
+
+    $('gradeTxt').textContent=grade;
+    $('gradeDesc').textContent=desc;
+    $('finalScore').textContent=Math.max(0,score);
+    $('finalRatio').textContent=ratio+'%';
+    $('finalStreak').textContent=bestStreak+' ticks';
+    $('finalAlerts').textContent=alerts;
+    $('overlay').classList.add('show');
+    $('startBtn').textContent='Start Playing';
+
+    submitScore({ nickname:getNickname(), score:Math.max(0,score), ratio, streak:bestStreak, grade, alerts });
+  }
+
+  // ── Leaderboard: Google Sheets via Apps Script Web App ──────
+  let lbScope = 'month';
+
+  function getNickname(){
+    let v = $('nickname').value.trim();
+    if(!v){
+      v = 'Guest-'+Math.floor(1000+Math.random()*9000);
+      $('nickname').value = v;
+    }
+    return v.slice(0,16);
+  }
+
+  function submitScore(payload){
+    const bar = $('saveStatus');
+    if(!SHEET_API_URL){
+      bar.textContent = 'Leaderboard not connected yet — an admin needs to set the sheet URL';
+      bar.className = 'savebar';
+      fetchLeaderboard(lbScope);
+      return;
+    }
+    bar.textContent = 'Saving your result…';
+    bar.className = 'savebar';
+    // text/plain avoids a CORS preflight against the Apps Script endpoint
+    fetch(SHEET_API_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+    }).then(r=>r.json()).then(res=>{
+      if(res && res.ok){
+        bar.textContent = 'Saved to the leaderboard ✅ ('+payload.nickname+')';
+        bar.className = 'savebar ok';
+      } else {
+        bar.textContent = 'Save failed — please try again shortly';
+        bar.className = 'savebar err';
+      }
+      fetchLeaderboard(lbScope);
+      fetchPlanets(payload.nickname);
+    }).catch(()=>{
+      bar.textContent = 'Save failed — please check your network';
+      bar.className = 'savebar err';
+      fetchLeaderboard(lbScope);
+      fetchPlanets(payload.nickname);
+    });
+  }
+
+  function fetchLeaderboard(scope){
+    lbScope = scope;
+    $('lbTabMonth').classList.toggle('on', scope==='month');
+    $('lbTabWeek').classList.toggle('on', scope==='week');
+    $('lbTabAll').classList.toggle('on', scope==='all');
+    const list = $('lbList');
+    if(!SHEET_API_URL){
+      list.innerHTML = '<div class="lbempty">Rankings will appear once an admin connects Google Sheets</div>';
+      return;
+    }
+    list.innerHTML = '<div class="lbempty">Loading…</div>';
+    fetch(SHEET_API_URL+'?action=leaderboard&scope='+scope+'&limit=10')
+      .then(r=>r.json())
+      .then(res=> renderLeaderboard(res && res.ok ? res.rows : []))
+      .catch(()=>{ list.innerHTML = '<div class="lbempty">Could not load rankings</div>'; });
+  }
+
+  // ── Planet collection: this month's #1 wins the throne + a planet ──
+  function fetchPlanets(nickname){
+    const strip = $('planetStrip');
+    if(!SHEET_API_URL || !nickname){ strip.style.display='none'; return; }
+    fetch(SHEET_API_URL+'?action=planets&nickname='+encodeURIComponent(nickname))
+      .then(r=>r.json())
+      .then(res=>{
+        if(!res || !res.ok){ strip.style.display='none'; return; }
+        renderPlanets(res.planets || []);
+        strip.style.display = '';
+      })
+      .catch(()=>{ strip.style.display='none'; });
+  }
+
+  function renderPlanets(planets){
+    const collected = {};
+    planets.forEach(p=>{ collected[p.planetIndex] = p; });
+    let html = '';
+    for(let i=0;i<8;i++){
+      if(collected[i]){
+        const p = collected[i];
+        html += '<div class="planet-slot got" title="'+p.month+' champion · '+p.planetName+'">'+p.planetEmoji+'</div>';
+      } else {
+        html += '<div class="planet-slot locked">?</div>';
+      }
+    }
+    $('planetRow').innerHTML = html;
+    const wins = planets.length;
+    document.querySelector('#planetStrip .pl-title').textContent =
+      wins>0 ? '🏆 '+wins+'-time champion — My planet collection' : "🏆 Win this month's throne to earn a planet!";
+  }
+
+  function renderLeaderboard(rows){
+    const list = $('lbList');
+    if(!rows || !rows.length){
+      list.innerHTML = '<div class="lbempty">No results yet — be the first on the board!</div>';
+      return;
+    }
+    list.innerHTML = rows.map((r,i)=>{
+      const rankCls = i===0?'top1':i===1?'top2':i===2?'top3':'';
+      return '<div class="lbrow '+rankCls+'"><div class="rk">'+(i+1)+'</div>'
+        + '<div class="nm">'+String(r.nickname||'').slice(0,16)+'</div>'
+        + '<div class="sc">'+r.score+'</div></div>';
+    }).join('');
+  }
+
+  $('lbTabMonth').addEventListener('click', ()=> fetchLeaderboard('month'));
+  $('lbTabWeek').addEventListener('click', ()=> fetchLeaderboard('week'));
+  $('lbTabAll').addEventListener('click', ()=> fetchLeaderboard('all'));
+
+  $('startBtn').addEventListener('click', startGame);
+  $('resetBtn').addEventListener('click', resetGame);
+  $('playAgainBtn').addEventListener('click', resetGame);
+
+  evaluate(); render();
+})();
+</script>
+</body>
+</html>
