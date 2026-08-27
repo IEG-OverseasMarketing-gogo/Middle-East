@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KMSTTH Meeting Checklist & Time Track</title>
+  <style>
+    :root {
+      --bg: #0f1722;
+      --panel: #142132;
+      --panel-2: #1a2c43;
+      --ink: #e9f0f7;
+      --muted: #aebed1;
+      --line: rgba(173, 197, 222, 0.18);
+      --accent: #67d6c3;
+      --accent-2: #ffd37a;
+      --risk: #ff9f8f;
+      --ok: #8ee6a8;
+      --shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(103, 214, 195, 0.16), transparent 28%),
+        radial-gradient(circle at left 20%, rgba(255, 211, 122, 0.10), transparent 24%),
+        linear-gradient(180deg, #0d1520 0%, #0f1722 100%);
+      line-height: 1.55;
+    }
+
+    .page {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 36px 24px 48px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .hero-card, .meta-card, .section, .timeline-card, .note-card {
+      background: linear-gradient(180deg, rgba(26, 44, 67, 0.96), rgba(20, 33, 50, 0.96));
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 30px 30px 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      top: -30px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 1px solid rgba(103, 214, 195, 0.24);
+      opacity: 0.7;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(103, 214, 195, 0.12);
+      color: var(--accent);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 42px;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-copy {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 90%;
+      margin: 0 0 22px;
+    }
+
+    .thesis {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .thesis-label {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      padding-top: 4px;
+    }
+
+    .thesis p {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .meta-card {
+      padding: 24px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .meta-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-2);
+      margin-bottom: 4px;
+    }
+
+    .meta-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .meta-box strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .meta-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .section {
+      padding: 24px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-intro {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 12px;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 12px;
+      padding: 14px 14px 14px 12px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+    }
+
+    .box {
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      border: 2px solid var(--accent);
+      border-radius: 5px;
+      background: rgba(103, 214, 195, 0.08);
+    }
+
+    .item strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 15px;
+    }
+
+    .item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 12px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(255, 211, 122, 0.12);
+      color: var(--accent-2);
+    }
+
+    .timeline-wrap {
+      display: grid;
+      gap: 18px;
+    }
+
+    .timeline-card {
+      padding: 22px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timeline-card::before {
+      content: "";
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      bottom: 20px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent), rgba(103, 214, 195, 0.08));
+      opacity: 0.9;
+    }
+
+    .phase {
+      position: relative;
+      padding-left: 34px;
+      margin-bottom: 20px;
+    }
+
+    .phase:last-child {
+      margin-bottom: 0;
+    }
+
+    .phase::before {
+      content: "";
+      position: absolute;
+      left: -6px;
+      top: 5px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(103, 214, 195, 0.13);
+    }
+
+    .phase h3 {
+      margin: 0 0 6px;
+      font-size: 19px;
+    }
+
+    .phase small {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: var(--accent-2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 11px;
+    }
+
+    .phase ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .phase li { margin-bottom: 8px; }
+
+    .note-card {
+      padding: 24px;
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .note-block {
+      padding: 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.025);
+    }
+
+    .note-block h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .note-block p, .note-block li {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .risk { color: var(--risk); }
+    .ok { color: var(--ok); }
+
+    .footer {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: right;
+    }
+
+    @media (max-width: 980px) {
+      .hero, .grid, .note-card {
+        grid-template-columns: 1fr;
+      }
+      .hero-copy { max-width: 100%; }
+      h1 { font-size: 34px; }
+      .thesis { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">Today’s Meeting Brief</div>
+        <h1>KMSTTH: meeting checklist and time-track action plan</h1>
+        <p class="hero-copy">
+          Use this page to keep the conversation disciplined: show interest in principle,
+          verify legal and financial substance, and steer the discussion toward a limited pilot
+          instead of an open-ended commitment.
+        </p>
+        <div class="thesis">
+          <div class="thesis-label">Meeting stance</div>
+          <p>
+            <strong>Do not treat this as a full partnership decision today.</strong>
+            Treat it as a validation meeting: confirm whether KMSTTH has real legal structure,
+            funding credibility, and partner substance, then decide whether a one-country pilot
+            is worth exploring.
+          </p>
+        </div>
+      </div>
+
+      <aside class="meta-card">
+        <div class="meta-title">Decision lens</div>
+        <div class="meta-box">
+          <strong>What KMSTTH appears to need</strong>
+          <p>IEG’s credibility, execution capability, curriculum, training systems, and track record.</p>
+        </div>
+        <div class="meta-box">
+          <strong>What IEG may gain</strong>
+          <p>Access to new institutional channels and funded pilot opportunities — but only if those channels are real.</p>
+        </div>
+        <div class="meta-box">
+          <strong>Best practical outcome today</strong>
+          <p>Agreement to exchange documents and explore a tightly scoped pilot in a stable Gulf market.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <div class="section">
+        <h2>Live meeting checklist</h2>
+        <p class="section-intro">Questions and control points to cover during the call.</p>
+        <div class="checklist">
+          <div class="item">
+            <div class="box"></div>
+            <div>
+              <strong>Confirm legal substance</strong>
+              <p>Ask whether KMSTTH is already legally incorporated, under which jurisdiction, and in what legal form.</p>
+              <span class="tag">Must confirm today</span>
+            </div>
+          </div>
+          <div class="item">
+            <div class="box"></div>
+            <div>
+              <strong>Ask who is funding Phase 1</strong>
+              <p>Clarify who pays for feasibility, legal setup, and initial operations: founder, investors, donors, or government-linked sponsors.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="box"></div>
+            <div>
+              <strong>Separate real partners from aspirational names</strong>
+              <p>Ask which governments, universities, or organizations are already committed and which are still only targets.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="box"></div>
+            <div>
+              <strong>Define the exact role expected from IEG</strong>
+              <p>Pin down whether IEG is being asked to serve as advisor, technical partner, or implementation partner.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="box"></div>
+            <div>
+              <strong>Clarify geographic scope and exposure</strong>
+              <p>Ask whether the true early focus is UAE / Saudi Arabia / other Gulf markets, and whether Iran is in the near-term operating plan.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="box"></div>
+            <div>
+              <strong>Control brand and IP use</strong>
+              <p>State that any use of IEG’s name, logo, curriculum, or institutional profile must require prior written approval.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="box"></div>
+            <div>
+              <strong>Push for a pilot-first structure</strong>
+              <p>Say that IEG would be more comfortable exploring one country and one pilot project before discussing broader regional partnership.</p>
+              <span class="tag">Preferred negotiation line</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Documents to request right after the meeting</h2>
+        <p class="section-intro">If these do not exist or cannot be shared, that is itself a signal.</p>
+        <div class="checklist">
+          <div class="item">
+            <div class="box"></div>
+            <div>
+              <strong>Full concept note</strong>
+              <p>A written project concept, not only slides.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="box"></div>
+            <div>
+              <strong>Preliminary financial model or budget</strong>
+              <p>At minimum: setup cost, funding assumptions, operating cost, and pilot budget structure.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="box"></div>
+            <div>
+              <strong>Legal registration materials</strong>
+              <p>Certificate of incorporation, legal entity details, governance outline, or expected incorporation schedule.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="box"></div>
+            <div>
+              <strong>Confirmed partner list</strong>
+              <p>Ask for actual institutions with status labels: confirmed, in negotiation, or target.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="box"></div>
+            <div>
+              <strong>Evidence of commitment</strong>
+              <p>LOIs, MOUs, support letters, institutional emails, or other written proof.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="box"></div>
+            <div>
+              <strong>Draft scope for IEG involvement</strong>
+              <p>A short note that defines what KMSTTH wants from IEG, by workstream and expected resource level.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="timeline-card">
+      <h2>Time-track action items</h2>
+      <p class="section-intro">A disciplined path from conversation to decision. Each phase reduces uncertainty before the next one begins.</p>
+      <div class="timeline-wrap">
+        <div class="phase">
+          <small>Immediate · today to this week</small>
+          <h3>Secure facts before signaling any commitment</h3>
+          <ul>
+            <li>Confirm KMSTTH’s legal status, founder structure, and current stage of establishment.</li>
+            <li>Request the concept note, budget / funding outline, partner list, and any written proof of commitment.</li>
+            <li>Clarify whether IEG is being approached for credibility only, technical content, execution capacity, or all three.</li>
+            <li>State clearly that any next step depends on documentation and internal review.</li>
+          </ul>
+        </div>
+
+        <div class="phase">
+          <small>Short term · next 2 to 4 weeks</small>
+          <h3>Evaluate the proposal and shape a safer structure</h3>
+          <ul>
+            <li>Review the received documents and test whether partner claims and funding assumptions are credible.</li>
+            <li>Assess geopolitical, compliance, and reputational exposure, especially if Iran appears in the operating scope.</li>
+            <li>Prepare a counter-proposal for a one-country pilot in a more stable Gulf market such as the UAE or Saudi Arabia.</li>
+            <li>Define IEG’s resource cap: number of meetings, staffing level, budget ceiling, and approval pathway.</li>
+          </ul>
+        </div>
+
+        <div class="phase">
+          <small>Medium term · 3 to 6 months</small>
+          <h3>If the concept survives review, move only through a pilot</h3>
+          <ul>
+            <li>Negotiate a non-binding MOU or framework note with a clear exit clause.</li>
+            <li>Define pilot scope, cost-sharing, deliverables, timeline, and named responsibilities.</li>
+            <li>Bring the opportunity into IEG’s formal internal approval process with supporting documentation.</li>
+            <li>Use the pilot to test whether KMSTTH brings real institutional leverage, not just presentation value.</li>
+          </ul>
+        </div>
+
+        <div class="phase">
+          <small>Long term · after 6 months</small>
+          <h3>Expand only after proof of execution</h3>
+          <ul>
+            <li>Review pilot outcomes against concrete metrics: funding closed, counterpart engagement, operational delivery, and reputational impact.</li>
+            <li>Consider wider regional expansion only if KMSTTH proves it can convert vision into funded execution.</li>
+            <li>Keep higher-risk markets outside the active plan until geopolitical and compliance conditions improve.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="note-card">
+      <div class="note-block">
+        <h3 class="risk">Red lines</h3>
+        <ul>
+          <li>Do not allow open-ended use of IEG’s name or logo.</li>
+          <li>Do not verbally commit to implementation support without scope, budget, and authority lines.</li>
+          <li>Do not let a slide deck substitute for legal or financial documentation.</li>
+          <li>Do not accept high-risk geography in the near-term plan without formal review.</li>
+        </ul>
+      </div>
+      <div class="note-block">
+        <h3 class="ok">Best closing message</h3>
+        <p>
+          “We see potential in the concept and would be open to reviewing the concrete materials.
+          From our side, the most practical next step would be to evaluate the documentation and then
+          explore whether there is a well-defined pilot opportunity that makes sense for both parties.”
+        </p>
+      </div>
+    </section>
+
+    <div class="footer">Prepared as an English HTML meeting brief for immediate use.</div>
+  </div>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
+</body>
+</html>
